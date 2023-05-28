@@ -208,7 +208,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={true}
             >
@@ -235,7 +234,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -262,7 +260,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -289,7 +286,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -327,7 +323,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -354,7 +349,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -381,7 +375,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -408,7 +401,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -448,7 +440,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -477,7 +468,6 @@ export default function Layout({ children }) {
               }}
               sx={{
                 justifyContent: open ? "initial" : "center",
-                px: 2.5,
               }}
               active={false}
             >
@@ -513,12 +503,12 @@ const DRAWER_WIDTH = 280;
 
 const CustomListItemButton = styled(ListItemButton)(({ theme, active }) => ({
   borderRadius: "200px",
-  marginLeft: 20,
-  marginRight: 20,
+  marginLeft: 30,
+  marginRight: 30,
   backgroundColor: active ? "#f8e8ff" : "transparent",
   border: "none",
   marginTop: "5px",
-
+  height: "38px",
   svg: {
     fontSize: 22,
     color: active
