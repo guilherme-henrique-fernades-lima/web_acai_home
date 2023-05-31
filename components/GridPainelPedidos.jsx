@@ -16,7 +16,7 @@ const CustomBox = styled(Box)((props) => ({
   border: "1px solid #ccc",
   width: "100%",
   height: "100%",
-  borderRadius: "14px",
+  borderRadius: "4px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
