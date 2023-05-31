@@ -15,10 +15,11 @@ import IconButton from "@mui/material/IconButton";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
+import Container from "@mui/material/Container";
+
 import FormGroup from "@mui/material/FormGroup";
 
 //Ícones
-import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -32,6 +33,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import DvrIcon from "@mui/icons-material/Dvr";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import MenuIcon from "@mui/icons-material/Menu";
 
 //Contexto
 import { ThemeContext } from "../context/ThemeContext";
@@ -40,8 +42,10 @@ import { ThemeContext } from "../context/ThemeContext";
 import BodyText from "./BodyText";
 import TitleText from "./TitleText";
 
-export default function Layout({ children }) {
+export default function Layout(props) {
   const theme = useTheme();
+
+  const { children } = props;
 
   const { changeThemePalette } = useContext(ThemeContext);
   const [open, setOpen] = useState(true);
@@ -87,31 +91,41 @@ export default function Layout({ children }) {
               justifyContent: "space-between",
             }}
           >
-            <IconButton
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              size="small"
-              sx={{
-                backgroundColor: "#fff",
-                // boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-                boxShadow:
-                  "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
-                // border: `1px solid ${theme.palette.colors.brand}`,
-                marginLeft: open ? "-40px" : "-20px",
-                "&:hover": {
-                  backgroundColor: theme.palette.colors.brand_hover,
-                },
-                // ...(open && { display: "none" }),
-              }}
-            >
-              {open ? (
+            {open ? (
+              <IconButton
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                size="small"
+                sx={{
+                  backgroundColor: "#fff",
+                  boxShadow:
+                    "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+                  marginLeft: open ? "-40px" : "-20px",
+                  "&:hover": {
+                    backgroundColor: theme.palette.colors.brand_hover,
+                  },
+                }}
+              >
                 <ChevronLeftIcon sx={{ color: theme.palette.colors.brand }} />
-              ) : (
-                <ChevronRightIcon sx={{ color: theme.palette.colors.brand }} />
-              )}
-            </IconButton>
+              </IconButton>
+            ) : (
+              <IconButton
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                size="small"
+                sx={{
+                  marginLeft: "-10px",
+                  "&:hover": {
+                    opacity: 0.7,
+                  },
+                }}
+              >
+                <MenuIcon sx={{ color: "#fff", fontSize: 28 }} />
+              </IconButton>
+            )}
+
             <Typography variant="h6" noWrap component="div" sx={{ ml: 3 }}>
-              Template Açai Home
+              AÇAI HOME
             </Typography>
           </Box>
 
@@ -127,9 +141,9 @@ export default function Layout({ children }) {
             width: "100%",
             padding: 5,
             justifyContent: "center",
-            display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            display: open ? "flex" : "none",
           }}
         >
           <Box
@@ -181,6 +195,28 @@ export default function Layout({ children }) {
           </Box>
         </Box>
 
+        {!open && <Toolbar />}
+
+        <Box
+          sx={{
+            display: open ? "none" : "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: 120,
+          }}
+        >
+          <Box
+            sx={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "50%",
+              backgroundColor: theme.palette.primary.main,
+            }}
+          />
+        </Box>
+
+        {!open && <Divider sx={{ margin: "0px 10px 20px 10px" }} />}
+
         <Box
           sx={{
             borderBottom: "1px solid #ECECEC",
@@ -209,7 +245,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={true}
+              active="true"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -222,7 +259,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={true}>Painel</CustomTypography>
+                  <CustomTypography active="true">Painel</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -235,7 +272,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -248,7 +286,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -261,7 +299,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -274,7 +313,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -287,7 +326,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -300,7 +340,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -324,7 +364,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -337,7 +378,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -350,7 +391,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -363,7 +405,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -376,7 +418,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -389,7 +432,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -402,7 +445,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -415,7 +459,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Starred</CustomTypography>
+                  <CustomTypography active="false">Starred</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -441,7 +485,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -454,7 +499,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>
+                  <CustomTypography active="false">
                     Configurações
                   </CustomTypography>
                 }
@@ -469,7 +514,8 @@ export default function Layout({ children }) {
               sx={{
                 justifyContent: open ? "initial" : "center",
               }}
-              active={false}
+              active="false"
+              open={open}
             >
               <ListItemIcon
                 sx={{
@@ -482,7 +528,7 @@ export default function Layout({ children }) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active={false}>Sair</CustomTypography>
+                  <CustomTypography active="false">Sair</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -491,8 +537,12 @@ export default function Layout({ children }) {
         </List>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, backgroundColor: "#F8F8F8" }}
+      >
         <DrawerHeader />
+        {/* <Container>{children}</Container> */}
         {children}
       </Box>
     </Box>
@@ -501,40 +551,44 @@ export default function Layout({ children }) {
 
 const DRAWER_WIDTH = 280;
 
-const CustomListItemButton = styled(ListItemButton)(({ theme, active }) => ({
-  borderRadius: "200px",
-  marginLeft: 30,
-  marginRight: 30,
-  backgroundColor: active ? "#f8e8ff" : "transparent",
-  border: "none",
-  marginTop: "5px",
-  height: "38px",
-  svg: {
-    fontSize: 22,
-    color: active
-      ? theme.palette.colors.brand
-      : theme.palette.colors.inactive_text,
-  },
+const CustomListItemButton = styled(ListItemButton)(
+  ({ theme, active, open }) => ({
+    borderRadius: "200px",
+    marginLeft: open ? 30 : 10,
+    marginRight: open ? 30 : 10,
+    backgroundColor: active == "true" ? "#f8e8ff" : "transparent",
+    border: "none",
+    marginTop: "5px",
+    height: "38px",
+    svg: {
+      fontSize: 22,
+      color:
+        active == "true"
+          ? theme.palette.colors.brand
+          : theme.palette.colors.inactive_text,
+    },
 
-  "&:hover": {
-    backgroundColor: theme.palette.colors.brand_hover,
-  },
+    "&:hover": {
+      backgroundColor: theme.palette.colors.brand_hover,
+    },
 
-  "&:hover p": {
-    color: theme.palette.colors.brand,
-  },
+    "&:hover p": {
+      color: theme.palette.colors.brand,
+    },
 
-  "&:hover svg": {
-    color: theme.palette.colors.brand,
-  },
-}));
+    "&:hover svg": {
+      color: theme.palette.colors.brand,
+    },
+  })
+);
 
 const CustomTypography = styled(Typography)(({ theme, active }) => ({
   fontFamily: "Lato, sans-serif",
   fontWeight: 400,
-  color: active
-    ? theme.palette.colors.brand
-    : theme.palette.colors.inactive_text,
+  color:
+    active == "true"
+      ? theme.palette.colors.brand
+      : theme.palette.colors.inactive_text,
   fontSize: 14,
 }));
 
@@ -593,6 +647,7 @@ const Drawer = styled(MuiDrawer, {
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
+
   ...(open && {
     ...openedMixin(theme),
     "& .MuiDrawer-paper": openedMixin(theme),
