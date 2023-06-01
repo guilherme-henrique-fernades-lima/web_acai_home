@@ -10,9 +10,9 @@ function MyApp({ Component, pageProps }) {
     <>
       <GlobalStyles />
       <ThemeContext>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        {/* <Layout> */}
+        <Component {...pageProps} />
+        {/* </Layout> */}
       </ThemeContext>
     </>
   );

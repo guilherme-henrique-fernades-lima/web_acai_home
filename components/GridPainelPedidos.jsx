@@ -48,13 +48,17 @@ export default function GridPainelPedidos() {
               sx={{ fontSize: 38, marginRight: "10px", color: "#B83E94" }}
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
-              <Typography sx={{ color: "#B83E94" }}>PEDIDOS</Typography>
-              <Typography sx={{ color: "#B83E94" }}>ABERTOS</Typography>
+              <Typography sx={{ color: "#B83E94", fontSize: 14 }}>
+                PEDIDOS
+              </Typography>
+              <Typography sx={{ color: "#B83E94", fontSize: 14 }}>
+                ABERTOS
+              </Typography>
             </Box>
           </Stack>
           <Typography
             sx={{
-              fontSize: 44,
+              fontSize: 40,
               fontWeight: "bold",
               marginLeft: "20px",
               color: "#B83E94",
@@ -79,13 +83,17 @@ export default function GridPainelPedidos() {
               sx={{ fontSize: 38, marginRight: "10px", color: "#FF8000" }}
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
-              <Typography sx={{ color: "#FF8000" }}>PEDIDOS</Typography>
-              <Typography sx={{ color: "#FF8000" }}>PENDENTES</Typography>
+              <Typography sx={{ color: "#FF8000", fontSize: 14 }}>
+                PEDIDOS
+              </Typography>
+              <Typography sx={{ color: "#FF8000", fontSize: 14 }}>
+                PENDENTES
+              </Typography>
             </Box>
           </Stack>
           <Typography
             sx={{
-              fontSize: 44,
+              fontSize: 40,
               fontWeight: "bold",
               marginLeft: "20px",
               color: "#FF8000",
@@ -110,13 +118,17 @@ export default function GridPainelPedidos() {
               sx={{ fontSize: 38, marginRight: "10px", color: "#076E29" }}
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
-              <Typography sx={{ color: "#076E29" }}>PEDIDOS</Typography>
-              <Typography sx={{ color: "#076E29" }}>CONCLUÍDOS</Typography>
+              <Typography sx={{ color: "#076E29", fontSize: 14 }}>
+                PEDIDOS
+              </Typography>
+              <Typography sx={{ color: "#076E29", fontSize: 14 }}>
+                CONCLUÍDOS
+              </Typography>
             </Box>
           </Stack>
           <Typography
             sx={{
-              fontSize: 44,
+              fontSize: 40,
               fontWeight: "bold",
               marginLeft: "20px",
               color: "#076E29",
@@ -142,13 +154,17 @@ export default function GridPainelPedidos() {
               sx={{ fontSize: 38, marginRight: "10px", color: "#c51010" }}
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
-              <Typography sx={{ color: "#c51010" }}>PEDIDOS</Typography>
-              <Typography sx={{ color: "#c51010" }}>CANCELADOS</Typography>
+              <Typography sx={{ color: "#c51010", fontSize: 14 }}>
+                PEDIDOS
+              </Typography>
+              <Typography sx={{ color: "#c51010", fontSize: 14 }}>
+                CANCELADOS
+              </Typography>
             </Box>
           </Stack>
           <Typography
             sx={{
-              fontSize: 44,
+              fontSize: 40,
               fontWeight: "bold",
               marginLeft: "20px",
               color: "#c51010",
@@ -174,13 +190,17 @@ export default function GridPainelPedidos() {
               sx={{ fontSize: 38, marginRight: "10px", color: "#000000" }}
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
-              <Typography sx={{ color: "#000" }}>TOTAL DE</Typography>
-              <Typography sx={{ color: "#000" }}>PEDIDOS</Typography>
+              <Typography sx={{ color: "#000", fontSize: 14 }}>
+                TOTAL DE
+              </Typography>
+              <Typography sx={{ color: "#000", fontSize: 14 }}>
+                PEDIDOS
+              </Typography>
             </Box>
           </Stack>
           <Typography
             sx={{
-              fontSize: 44,
+              fontSize: 40,
               fontWeight: "bold",
               marginLeft: "20px",
               color: "#000000",
@@ -205,13 +225,17 @@ export default function GridPainelPedidos() {
               sx={{ fontSize: 38, marginRight: "10px", color: "#858585" }}
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
-              <Typography sx={{ color: "#858585" }}>TOTAL DE</Typography>
-              <Typography sx={{ color: "#858585" }}>ENTREGADORES</Typography>
+              <Typography sx={{ color: "#858585", fontSize: 14 }}>
+                TOTAL DE
+              </Typography>
+              <Typography sx={{ color: "#858585", fontSize: 14 }}>
+                ENTREGADORES
+              </Typography>
             </Box>
           </Stack>
           <Typography
             sx={{
-              fontSize: 44,
+              fontSize: 40,
               fontWeight: "bold",
               marginLeft: "20px",
               color: "#858585",
