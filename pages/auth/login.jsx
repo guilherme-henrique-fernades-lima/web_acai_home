@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import Image from "next/image";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,26 +9,28 @@ import Typography from "@mui/material/Typography";
 const CustomTextField = styled(TextField)((props) => ({}));
 
 const CssTextField = styled(TextField)({
-  "& label.Mui-focused": {
-    color: "#A0AAB4",
-  },
-  "& .MuiInput-underline:after": {
-    borderBottomColor: "#B2BAC2",
-  },
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: "#E0E3E7",
-    },
-    "&:hover fieldset": {
-      borderColor: "#B2BAC2",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "#6F7E8C",
-    },
-  },
+  // "& label.Mui-focused": {
+  //   color: "#A0AAB4",
+  // },
+  // "& .MuiInput-underline:after": {
+  //   borderBottomColor: "#B2BAC2",
+  // },
+  // "& .MuiOutlinedInput-root": {
+  //   "& fieldset": {
+  //     borderColor: "#E0E3E7",
+  //   },
+  //   "&:hover fieldset": {
+  //     borderColor: "#B2BAC2",
+  //   },
+  //   "&.Mui-focused fieldset": {
+  //     borderColor: "#6F7E8C",
+  //   },
+  // },
 });
 
 export default function Login() {
+  const [typeField, setTypeField] = useState("password");
+
   return (
     <Box
       sx={{
@@ -37,7 +39,7 @@ export default function Login() {
         height: "100vh",
         flexGrow: 1,
         background:
-          "linear-gradient(to bottom, rgba(117, 19, 93, 0.8), rgba(117, 19, 93, 0.8)), url(/img/background_login_page.jpg) center center/cover no-repeat",
+          "linear-gradient(to bottom, rgba(117, 19, 93, 0.9), rgba(117, 19, 93, 0.9)), url(/img/background_login_page.jpg) center center/cover no-repeat",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -56,11 +58,12 @@ export default function Login() {
           justifyContent: "flex-start",
           flexDirection: "column",
           width: "100%",
-          maxWidth: 530,
-          height: 680,
+          maxWidth: 500,
+          height: 580,
           backgroundColor: "#fff",
-          borderRadius: "14px",
+          borderRadius: "12px",
           padding: "20px",
+          boxShadow: "rgb(38, 57, 77) 0px 20px 30px -10px",
         }}
       >
         <Image
@@ -72,28 +75,14 @@ export default function Login() {
           height="220"
         />
 
-        <CssTextField
-          size="small"
-          placeholder="Matrícula"
-          type="text"
-          sx={{
-            backgroundColor: "#F8F8F8",
-            padding: "10px 0",
-            margin: "10px",
-            width: 240,
-            height: 30,
-          }}
-        />
-        <CssTextField
-          size="small"
+        <TextField placeholder="Matrícula" type="text" size="small" />
+        <TextField
           placeholder="Senha"
           sx={{
-            backgroundColor: "#F8F8F8",
-            padding: "10px 0",
-            margin: "10px",
-            width: 240,
-            height: 30,
+            marginTop: 1,
           }}
+          size="small"
+          type={typeField}
         />
 
         <Typography
@@ -101,7 +90,8 @@ export default function Login() {
             fontSize: 10,
             color: "#B83E94",
             fontWeight: "bold",
-            "&:hover": { cursor: "pointer" },
+            mt: 1,
+            "&:hover": { cursor: "pointer", textDecoration: "underline" },
           }}
         >
           Esqueci minha senha

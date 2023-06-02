@@ -1,6 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 
 //Ícones
@@ -18,7 +19,7 @@ const CustomGrid = styled(Grid)((props) => ({
   padding: "5px",
 }));
 
-const CustomBox = styled(Box)((props) => ({
+const CustomBox = styled(Paper)((props) => ({
   // border: "1px solid #ccc",
   width: "100%",
   height: "100%",
@@ -26,8 +27,6 @@ const CustomBox = styled(Box)((props) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-
-  boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
 }));
 
 export default function GridPainelPedidos() {
