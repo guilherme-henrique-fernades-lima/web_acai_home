@@ -1,6 +1,6 @@
 // import "../styles/global.css";
 import Layout from "../components/Layout";
-import { SessionProvider } from "next-auth/react"
+import { SessionProvider } from "next-auth/react";
 
 //Contexto para temas e dados para mandar entre as páginas
 import ThemeContext from "../context/ThemeContext";
@@ -11,11 +11,11 @@ function MyApp({ Component, pageProps }) {
     <>
       <GlobalStyles />
       <ThemeContext>
-        {/* <Layout> */}
-        <SessionProvider session={pageProps.session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-        {/* </Layout> */}
+        <Layout>
+          <SessionProvider session={pageProps.session}>
+            <Component {...pageProps} />
+          </SessionProvider>
+        </Layout>
       </ThemeContext>
     </>
   );
