@@ -5,7 +5,7 @@ export default function LoginPage() {
     const session = useSession();
   
     const handleLogin = () => {
-      signIn('credentials', { username: '', password: '' });
+      signIn('credentials', { username: '123', password: 'admin123' });
     };
   
     const handleLogout = () => {

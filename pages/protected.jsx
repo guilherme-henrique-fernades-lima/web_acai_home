@@ -3,7 +3,7 @@ import { useSession, getSession } from 'next-auth/react';
 export default function ProtectedPage() {
     const session = useSession();
 
-  if (loading) {
+  if (session.loading) {
     return <div>Carregando...</div>;
   }
 
@@ -13,8 +13,9 @@ export default function ProtectedPage() {
 
   return (
     <div>
+      {console.log("SESSION>>>", session.data)}
       <h1>Página Protegida</h1>
-      <p>Bem-vindo, {session.user.username}!</p>
+      <p>Bem-vindo, {session.data.user}!</p>
     </div>
   );
 }
