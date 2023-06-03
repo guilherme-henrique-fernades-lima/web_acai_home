@@ -1,12 +1,13 @@
 import Router from "next/router";
-import { createContext, useState, useEffect } from 'react';
+import Layout from "@/components/Layout";
+import { createContext, useState, useEffect, useLayoutEffect } from 'react';
 import { createCookies, getCookie, hasCookie } from '@/helpers/handleCookies';
 import { encryptData, decryptData} from '@/helpers/hash';
 
 export const AuthContext = createContext({});
 
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -18,8 +19,8 @@ export default function AuthProvider({ children }) {
         console.log("Não autenticado!")
         logout();
     }
-  }, [])
-
+  }, []);
+  
   const login = async (credenciais) => {
 
     const result = await fetch('/api/auth/sign-in', {
@@ -41,7 +42,7 @@ export default function AuthProvider({ children }) {
         );
         
         setUser(data);
-        Router.push('/');
+        Router.push('/home');
 
     } else {
         setError({'status_code': result.status, 'message': "Falha na autenticação!"});
@@ -61,7 +62,11 @@ export default function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, error, login, logout }}>
-      {children}
+      {user && Object.keys(user) ? (
+        <Layout>
+          {children}
+        </Layout>
+      ) : children}
     </AuthContext.Provider>
   );
 }
