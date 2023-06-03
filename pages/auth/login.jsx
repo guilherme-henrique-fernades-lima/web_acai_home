@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
+
+//Context
+import { AuthContext } from '@/context/AuthContext';
+
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -28,7 +32,8 @@ const CssTextField = styled(TextField)({
   // },
 });
 
-export default function Login() {
+export default function SingIn() {
+  const { login, error } = useContext(AuthContext);
   const [typeField, setTypeField] = useState("password");
   const [nr_matricula, setNrMatricula] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +44,11 @@ export default function Login() {
 
   const handlePassword = (event) => {
     setPassword(event.target.value)
+  }
+
+  const handleLogin = () => {
+    login(JSON.stringify({'nr_matricula': nr_matricula, 'password': password}))
+
   }
 
   return (
@@ -85,9 +95,10 @@ export default function Login() {
           height="220"
         />
 
-        <TextField placeholder="Matrícula" type="text" size="small" value={nr_matricula} onChange={handleMatricula} />
+        <TextField placeholder="Matrícula" type="text" size="small" value={nr_matricula} onChange={handleMatricula} error={Boolean(error)} />
         <TextField
           value={password} onChange={handlePassword}
+          error={Boolean(error)}
           placeholder="Senha"
           sx={{
             marginTop: 1,
@@ -95,6 +106,17 @@ export default function Login() {
           size="small"
           type={typeField}
         />
+
+        {error && <Typography
+          sx={{
+            fontSize: 10,
+            color: "red",
+            fontWeight: "bold",
+            mt: 1,
+          }}
+        >
+          * {error.message}
+        </Typography>}
 
         <Typography
           sx={{
