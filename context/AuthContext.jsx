@@ -1,0 +1,67 @@
+import Router from "next/router";
+import { createContext, useState, useEffect } from 'react';
+import { createCookies, getCookie, hasCookie } from '@/helpers/handleCookies';
+import { encryptData, decryptData} from '@/helpers/hash';
+
+export const AuthContext = createContext({});
+
+export default function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    //Rotina para checar autenticação
+    if (hasCookie('@acai:user')){
+        console.log("Autenticado!")
+        userRecover();
+    } else {
+        console.log("Não autenticado!")
+        logout();
+    }
+  }, [])
+
+  const login = async (credenciais) => {
+
+    const result = await fetch('/api/auth/sign-in', {
+        method: 'POST',
+        body: credenciais
+    });
+
+    if (result.status == 200){
+        const data = await result.json();
+        
+        var exp_token = JSON.parse(atob(data.token.split('.')[1]))
+        
+        //diff micro -> milliseconds -> seconds - 3 hours UTC
+        var MaxAge_seconds = ((Math.abs(new Date() - new Date(exp_token.exp * 1000)) / 1000) - 10800)
+        
+        createCookies('@acai:user',
+        encryptData(data),
+        MaxAge_seconds,
+        );
+        
+        setUser(data);
+        Router.push('/');
+
+    } else {
+        setError({'status_code': result.status, 'message': "Falha na autenticação!"});
+    }
+
+  };
+
+  const logout = () => {
+    setUser(null);
+    Router.push('/auth/login');
+  };
+
+  const userRecover = () => {
+    const data = getCookie('@acai:user');
+    setUser(decryptData(data));
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, error, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
