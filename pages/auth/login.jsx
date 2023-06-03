@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -30,6 +30,16 @@ const CssTextField = styled(TextField)({
 
 export default function Login() {
   const [typeField, setTypeField] = useState("password");
+  const [nr_matricula, setNrMatricula] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleMatricula = (event) => {
+    setNrMatricula(event.target.value)
+  }
+
+  const handlePassword = (event) => {
+    setPassword(event.target.value)
+  }
 
   return (
     <Box
@@ -75,8 +85,9 @@ export default function Login() {
           height="220"
         />
 
-        <TextField placeholder="Matrícula" type="text" size="small" />
+        <TextField placeholder="Matrícula" type="text" size="small" value={nr_matricula} onChange={handleMatricula} />
         <TextField
+          value={password} onChange={handlePassword}
           placeholder="Senha"
           sx={{
             marginTop: 1,
@@ -102,6 +113,7 @@ export default function Login() {
           disableElevation
           sx={{ borderRadius: 28, width: 240, height: 40, marginTop: 6 }}
           color="success"
+          onClick={handleLogin}
         >
           ACESSAR
         </Button>
