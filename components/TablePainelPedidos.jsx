@@ -11,7 +11,14 @@ export default function TablePainelPedidos(props) {
     <TableContainer>
       <Table
         size="small"
-        sx={{ width: "100%", minWidth: 900, borderRadius: "8px" }}
+        sx={{
+          width: "100%",
+          minWidth: 900,
+          borderRadius: "8px",
+          "& .tableCellClasses.root": {
+            borderBottom: "none",
+          },
+        }}
       >
         <TableHead
           sx={{
@@ -20,13 +27,14 @@ export default function TablePainelPedidos(props) {
             overflow: "hidden",
           }}
         >
-          <TableRow>
+          <TableRow sx={{ "& td": { border: 0 } }}>
             <TableCell
               align="center"
               sx={{
                 fontFamily: "Lato, sans-serif",
                 fontWeight: 900,
                 color: "#2e2e2e",
+                borderBottom: "none",
               }}
             >
               N°
