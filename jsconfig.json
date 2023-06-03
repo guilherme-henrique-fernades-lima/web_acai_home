@@ -5,6 +5,7 @@
         "@/hooks/*": ["hooks/*"],
         "@/context/*": ["context/*"],
         "@/helpers/*": ["helpers/*"],
+        "@/components/*": ["components/*"],
       }
     }
   }
