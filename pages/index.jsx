@@ -1,5 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import useWebSocket from "@/hooks/useWebSocket";
+
+//Context
+import { AuthContext } from '@/context/AuthContext';
 
 import GridPainelPedidos from "components/GridPainelPedidos";
 import TablePainelPedidos from "components/TablePainelPedidos";
@@ -8,6 +11,9 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 
 export default function index() {
+  const { user } = useContext(AuthContext);
+
+  console.log("USER>>>>", user);
   // const { evento } = useWebSocket();
 
   // useEffect(() => {
