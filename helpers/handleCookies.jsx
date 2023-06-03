@@ -28,3 +28,8 @@ export function hasCookie(name) {
     return next_hasCookie(name);
 
 }
+
+export function getCookiesServerSide(name, {req, res}){
+    return next_getCookie(name, { req, res });
+
+}
