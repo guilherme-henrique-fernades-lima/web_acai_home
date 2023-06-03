@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 
 //Context
 import { AuthContext } from '@/context/AuthContext';
+import { getCookiesServerSide } from '@/helpers/handleCookies';
 
 import Image from "next/image";
 import Box from "@mui/material/Box";
@@ -142,4 +143,24 @@ export default function SingIn() {
       </Box>
     </Box>
   );
+}
+
+
+export const getServerSideProps = ({ req, res }) => {
+
+  const token = getCookiesServerSide('@acai:user', { req, res });
+
+  if (token) {
+
+    return {
+      redirect: {
+        permanent: true,
+        destination: "/home",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 }
