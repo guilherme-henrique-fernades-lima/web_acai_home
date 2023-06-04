@@ -36,7 +36,8 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import MenuIcon from "@mui/icons-material/Menu";
 
 //Contexto
-import { ThemeContext } from "../context/ThemeContext";
+import { ThemeContext } from "@/context/ThemeContext";
+import { AuthContext } from "@/context/AuthContext";
 
 //Custom componentes
 import BodyText from "./BodyText";
@@ -48,6 +49,7 @@ export default function Layout(props) {
   const { children } = props;
 
   const { changeThemePalette } = useContext(ThemeContext);
+  const { logout } = useContext(AuthContext);
   const [open, setOpen] = useState(true);
 
   const [openRelatorios, setOpenRelatorios] = useState(false);
@@ -528,7 +530,7 @@ export default function Layout(props) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active="false">Sair</CustomTypography>
+                  <CustomTypography active="false" onClick={logout}>Sair</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />

@@ -1,7 +1,7 @@
 import Router from "next/router";
 import Layout from "@/components/Layout";
-import { createContext, useState, useEffect, useLayoutEffect } from 'react';
-import { createCookies, getCookie, hasCookie } from '@/helpers/handleCookies';
+import { createContext, useState, useEffect } from 'react';
+import { createCookies, getCookie, hasCookie, deleteCookie } from '@/helpers/handleCookies';
 import { encryptData, decryptData} from '@/helpers/hash';
 
 export const AuthContext = createContext({});
@@ -52,6 +52,7 @@ export default function AuthProvider({ children }) {
 
   const logout = () => {
     setUser(null);
+    deleteCookie('@acai:user');
     Router.push('/auth/login');
   };
 
