@@ -1,10 +1,7 @@
-import Login from './auth/login';
 import { getCookiesServerSide } from '@/helpers/handleCookies';
 
 export default function Home() {
-
-  return <Login />
-
+  return <></>
 }
 
 export const getServerSideProps = ({ req, res }) => {
@@ -19,9 +16,13 @@ export const getServerSideProps = ({ req, res }) => {
         destination: "/home",
       },
     };
-  }
+  } 
 
   return {
-    props: {},
+    redirect: {
+      permanent: true,
+      destination: "/auth/login",
+    },
   };
+
 }
