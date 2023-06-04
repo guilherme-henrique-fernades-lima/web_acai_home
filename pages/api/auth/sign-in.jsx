@@ -2,7 +2,7 @@ async function signInRequest(req, res) {
 
     const payload = req.body
 
-    const result = await fetch(`http://127.0.0.1:8005/integration/auth/login/`, {
+    const result = await fetch(`${process.env.NEXT_URL_BACKEND}/auth/login/`, {
         method: 'POST',
         headers: {
             "X-Requested-With": "XMLHttpRequest",
