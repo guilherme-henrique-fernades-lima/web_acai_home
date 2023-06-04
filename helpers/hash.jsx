@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-const secretKey = "TeStE.KeY" //TO-DO: Adicionar no .env a chave real
+const secretKey = 'J^4b7G!nL#sO9Y%5mP&t' //TO-DO: Adicionar no .env a chave real
 
 // Função para criptografar os dados
 export function encryptData(data) {
