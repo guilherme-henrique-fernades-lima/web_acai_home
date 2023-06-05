@@ -96,7 +96,13 @@ export default function SingIn() {
           height="220"
         />
 
-        <TextField placeholder="Matrícula" type="text" size="small" value={nr_matricula} onChange={handleMatricula} error={Boolean(error)} />
+        <TextField placeholder="Matrícula" type="text" size="small" value={nr_matricula} onChange={handleMatricula} error={Boolean(error)} InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                        style: {
+                            backgroundColor: "#ccc",
+                            borderRadius: 60,
+                        },
+                    }}/>
         <TextField
           value={password} onChange={handlePassword}
           error={Boolean(error)}
@@ -106,6 +112,12 @@ export default function SingIn() {
           }}
           size="small"
           type={typeField}
+          InputProps={{
+            style: {
+                backgroundColor: "#ccc",
+                borderRadius: 60,
+            },
+        }}
         />
 
         {error && <Typography
