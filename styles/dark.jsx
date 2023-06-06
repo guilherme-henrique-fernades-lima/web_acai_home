@@ -15,6 +15,7 @@ export const dark = createTheme({
       primary: "#424242",
       secondary: "",
       inactive_text: "#ccc",
+      text_title: "#141414",
     },
   },
 });

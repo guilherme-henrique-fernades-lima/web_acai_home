@@ -2,7 +2,7 @@ import { useEffect, useContext } from "react";
 import useWebSocket from "@/hooks/useWebSocket";
 
 //Context
-import { AuthContext } from '@/context/AuthContext';
+import { AuthContext } from "@/context/AuthContext";
 
 import GridPainelPedidos from "components/GridPainelPedidos";
 import TablePainelPedidos from "components/TablePainelPedidos";
@@ -52,6 +52,7 @@ export default function index() {
             sx={{
               width: "100%",
               boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+              padding: "10px 20px",
             }}
             elevation={0}
           >

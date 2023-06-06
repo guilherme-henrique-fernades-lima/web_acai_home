@@ -15,6 +15,7 @@ export const light = createTheme({
       primary: "#424242",
       secondary: "",
       inactive_text: "#B7B7B7",
+      text_title: "#141414",
     },
   },
 });

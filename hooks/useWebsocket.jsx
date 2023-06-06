@@ -2,40 +2,36 @@ import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
 const WebSocket = () => {
-  const [evento, setEvento] = useState({});
+    const [evento, setEvento] = useState({});
 
-  let socket;
+    let socket;
 
-  useEffect(() => {
-    // Start WebSocket
-    const socketInitializer = async () => {
-      await fetch("/api/websocket");
-      socket = io();
+    useEffect(() => {
 
-      console.log("SOCKET>>>", socket);
+        // Start WebSocket
+        const socketInitializer = async () => {
+            await fetch("/api/websocket");
+            socket = io();
 
-      socket.on("connect", () => {
-        console.log("Socket Conectado!");
-      });
+            socket.on("connect", () => {
+                console.log("Socket Conectado!");
+            });
 
-      socket.on("EVENT", (value) => {
-        console.log("recebendo new event...", value);
-        setEvento({ EVENT: value });
-      });
+            socket.on("NOVO_PEDIDO", (value) => {
+                console.log("recebendo new event...", value);
+                setEvento({ 'NOVO_PEDIDO': value })
+            });
+
+        };
+
+        // End WebSocket
+        socketInitializer();
+
+    }, [])
+
+    return {
+        evento,
     };
-
-    // End WebSocket
-    socketInitializer();
-
-    return () => {
-      console.log("Socket Desconectado!");
-      socket.close();
-    };
-  }, []);
-
-  return {
-    evento,
-  };
 };
 
 export default WebSocket;

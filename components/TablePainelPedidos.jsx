@@ -5,6 +5,40 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import { styled } from "@mui/material/styles";
+
+//Icons
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+
+const CustomTableCellHeader = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 900,
+}));
+
+const CustomTableCellBody = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 400,
+}));
+
+const TextStatusPedido = styled(Typography)((props) => ({
+  fontSize: 10,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 400,
+  padding: "5px 10px",
+  borderRadius: "30px",
+
+  ...(props.status == 4 && {
+    color: "#45B802",
+    // border: "1px solid #9bf7c4",
+    backgroundColor: "#c3ffa1",
+  }),
+}));
 
 export default function TablePainelPedidos(props) {
   return (
@@ -22,93 +56,31 @@ export default function TablePainelPedidos(props) {
       >
         <TableHead
           sx={{
-            height: 80,
+            height: 50,
             borderBottom: "1px solid #ccc",
             overflow: "hidden",
           }}
         >
           <TableRow sx={{ "& td": { border: 0 } }}>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-                borderBottom: "none",
-              }}
-            >
-              N°
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
+            <CustomTableCellHeader align="center">N°</CustomTableCellHeader>
+
+            <CustomTableCellHeader align="center">
               PRODUTO
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
-              ML. AÇAI
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
+            </CustomTableCellHeader>
+            <CustomTableCellHeader align="center">
+              ML. DO AÇAI
+            </CustomTableCellHeader>
+            <CustomTableCellHeader align="center">
               N° PEDIDO
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
-              VALOR
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
-              ZONA
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
-              STATUS
-            </TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 900,
-                color: "#2e2e2e",
-              }}
-            >
-              AÇÕES
-            </TableCell>
+            </CustomTableCellHeader>
+            <CustomTableCellHeader align="center">VALOR</CustomTableCellHeader>
+            <CustomTableCellHeader align="center">
+              FORM. PAGAMENTO
+            </CustomTableCellHeader>
+            <CustomTableCellHeader align="center">ZONA</CustomTableCellHeader>
+            <CustomTableCellHeader align="center">STATUS</CustomTableCellHeader>
+            <CustomTableCellHeader align="center">DATA</CustomTableCellHeader>
+            <CustomTableCellHeader align="center">AÇÕES</CustomTableCellHeader>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -117,7 +89,10 @@ export default function TablePainelPedidos(props) {
               transition: "all 0.3s ease",
               height: 50,
               border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
+              //"&:hover": { backgroundColor: "#f8e8ff" },
+              ".MuiTableCell-root": {
+                borderBottom: "none",
+              },
             }}
           >
             <TableCell
@@ -129,219 +104,41 @@ export default function TablePainelPedidos(props) {
             >
               1
             </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
+            <CustomTableCellBody align="center">
+              Açai de maça com abacaxi
+            </CustomTableCellBody>
+            <CustomTableCellBody align="center">100ml</CustomTableCellBody>
+            <CustomTableCellBody align="center">#PD0002</CustomTableCellBody>
+            <CustomTableCellBody align="center">R$ 25,36</CustomTableCellBody>
+            <CustomTableCellBody align="center">CARTÃO</CustomTableCellBody>
+            <CustomTableCellBody align="center">NORTE</CustomTableCellBody>
+            <CustomTableCellBody align="center">6</CustomTableCellBody>
+            <CustomTableCellBody align="center">
+              <TextStatusPedido status={4} component="span">
+                CANCELADO
+              </TextStatusPedido>
+            </CustomTableCellBody>
+            <CustomTableCellBody
               align="center"
               sx={{
                 borderTopRightRadius: "30px",
                 borderBottomRightRadius: "30px",
               }}
             >
-              6
-            </TableCell>
-          </TableRow>
-          <TableRow
-            sx={{
-              transition: "all 0.3s ease",
-              height: 50,
-              border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
-            }}
-          >
-            <TableCell
-              align="center"
-              sx={{
-                borderTopLeftRadius: "30px",
-                borderBottomLeftRadius: "30px",
-              }}
-            >
-              1
-            </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                borderTopRightRadius: "30px",
-                borderBottomRightRadius: "30px",
-              }}
-            >
-              6
-            </TableCell>
-          </TableRow>
-          <TableRow
-            sx={{
-              transition: "all 0.3s ease",
-              height: 50,
-              border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
-            }}
-          >
-            <TableCell
-              align="center"
-              sx={{
-                borderTopLeftRadius: "30px",
-                borderBottomLeftRadius: "30px",
-              }}
-            >
-              1
-            </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                borderTopRightRadius: "30px",
-                borderBottomRightRadius: "30px",
-              }}
-            >
-              6
-            </TableCell>
-          </TableRow>
-          <TableRow
-            sx={{
-              transition: "all 0.3s ease",
-              height: 50,
-              border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
-            }}
-          >
-            <TableCell
-              align="center"
-              sx={{
-                borderTopLeftRadius: "30px",
-                borderBottomLeftRadius: "30px",
-              }}
-            >
-              1
-            </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                borderTopRightRadius: "30px",
-                borderBottomRightRadius: "30px",
-              }}
-            >
-              6
-            </TableCell>
-          </TableRow>
-          <TableRow
-            sx={{
-              transition: "all 0.3s ease",
-              height: 50,
-              border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
-            }}
-          >
-            <TableCell
-              align="center"
-              sx={{
-                borderTopLeftRadius: "30px",
-                borderBottomLeftRadius: "30px",
-              }}
-            >
-              1
-            </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                borderTopRightRadius: "30px",
-                borderBottomRightRadius: "30px",
-              }}
-            >
-              6
-            </TableCell>
-          </TableRow>
-          <TableRow
-            sx={{
-              transition: "all 0.3s ease",
-              height: 50,
-              border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
-            }}
-          >
-            <TableCell
-              align="center"
-              sx={{
-                borderTopLeftRadius: "30px",
-                borderBottomLeftRadius: "30px",
-              }}
-            >
-              1
-            </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                borderTopRightRadius: "30px",
-                borderBottomRightRadius: "30px",
-              }}
-            >
-              6
-            </TableCell>
-          </TableRow>
-          <TableRow
-            sx={{
-              transition: "all 0.3s ease",
-              height: 50,
-              border: "none",
-              "&:hover": { backgroundColor: "#f8e8ff" },
-            }}
-          >
-            <TableCell
-              align="center"
-              sx={{
-                borderTopLeftRadius: "30px",
-                borderBottomLeftRadius: "30px",
-              }}
-            >
-              1
-            </TableCell>
-            <TableCell align="center">2</TableCell>
-            <TableCell align="center">3</TableCell>
-            <TableCell align="center">4</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell align="center">6</TableCell>
-            <TableCell align="center">5</TableCell>
-            <TableCell
-              align="center"
-              sx={{
-                borderTopRightRadius: "30px",
-                borderBottomRightRadius: "30px",
-              }}
-            >
-              6
-            </TableCell>
+              <IconButton
+                sx={{
+                  transition: "all 0.3s ease",
+                  cursor: "pointer",
+                  "&:hover": { color: "#B83E94", backgroundColor: "#f8e8ff" },
+                }}
+              >
+                <ArticleOutlinedIcon
+                  sx={{
+                    fontSize: 24,
+                  }}
+                />
+              </IconButton>
+            </CustomTableCellBody>
           </TableRow>
         </TableBody>
       </Table>
