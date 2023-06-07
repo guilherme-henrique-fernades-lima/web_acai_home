@@ -131,9 +131,9 @@ export default function Layout(props) {
             </Typography>
           </Box>
 
-          {/* <FormGroup>
+          <FormGroup>
             <MaterialUISwitch onChange={changeThemePalette} />
-          </FormGroup> */}
+          </FormGroup>
         </Toolbar>
       </AppBar>
 
@@ -530,7 +530,9 @@ export default function Layout(props) {
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active="false" onClick={logout}>Sair</CustomTypography>
+                  <CustomTypography active="false" onClick={logout}>
+                    Sair
+                  </CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
