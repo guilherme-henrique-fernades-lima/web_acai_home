@@ -48,6 +48,7 @@ const TextStatusPedido = styled(Typography)((props) => ({
 }));
 
 export default function TablePainelPedidos(props) {
+  const { pedidos } = props;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -102,6 +103,12 @@ export default function TablePainelPedidos(props) {
             </TableRow>
           </TableHead>
           <TableBody>
+
+            {pedidos.map((item, index) => {
+              console.log("ITEM>>>", item)
+              return (<></>
+              )})}
+
             <TableRow
               sx={{
                 transition: "all 0.3s ease",

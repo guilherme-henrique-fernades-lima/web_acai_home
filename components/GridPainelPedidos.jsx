@@ -30,7 +30,10 @@ const CustomBox = styled(Paper)((props) => ({
   boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
 }));
 
-export default function GridPainelPedidos() {
+export default function GridPainelPedidos(props) {
+
+  const { status } = props;
+
   return (
     <Grid container>
       <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
@@ -64,7 +67,7 @@ export default function GridPainelPedidos() {
               color: "#B83E94",
             }}
           >
-            88
+            {status.ABERTO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -99,7 +102,7 @@ export default function GridPainelPedidos() {
               color: "#FF8000",
             }}
           >
-            88
+             {status.EM_PRODUCAO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -134,7 +137,7 @@ export default function GridPainelPedidos() {
               color: "#076E29",
             }}
           >
-            88
+             {status.CONCLUIDO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -170,7 +173,7 @@ export default function GridPainelPedidos() {
               color: "#c51010",
             }}
           >
-            88
+             {status.CANCELADO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -206,7 +209,7 @@ export default function GridPainelPedidos() {
               color: "#000000",
             }}
           >
-            88
+            {status.TOTAL ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
