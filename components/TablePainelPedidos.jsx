@@ -19,6 +19,8 @@ import Divider from "@mui/material/Divider";
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 
+import { StatusPedido, BadgeZonaEntrega } from "@/helpers/utils";
+
 const CustomTableCellHeader = styled(TableCell)((props) => ({
   fontSize: 12,
   color: props.theme.palette.colors.text_title,
@@ -31,20 +33,6 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   color: props.theme.palette.colors.text_title,
   fontFamily: "Lato, sans-serif",
   fontWeight: 400,
-}));
-
-const TextStatusPedido = styled(Typography)((props) => ({
-  fontSize: 10,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 400,
-  padding: "5px 10px",
-  borderRadius: "30px",
-
-  ...(props.status == 4 && {
-    color: "#45B802",
-    // border: "1px solid #9bf7c4",
-    backgroundColor: "#c3ffa1",
-  }),
 }));
 
 export default function TablePainelPedidos(props) {
@@ -103,11 +91,10 @@ export default function TablePainelPedidos(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-
             {pedidos.map((item, index) => {
-              console.log("ITEM>>>", item)
-              return (<></>
-              )})}
+              console.log("ITEM>>>", item);
+              return <></>;
+            })}
 
             <TableRow
               sx={{
@@ -139,9 +126,7 @@ export default function TablePainelPedidos(props) {
               <CustomTableCellBody align="center">NORTE</CustomTableCellBody>
               <CustomTableCellBody align="center">6</CustomTableCellBody>
               <CustomTableCellBody align="center">
-                <TextStatusPedido status={4} component="span">
-                  CANCELADO
-                </TextStatusPedido>
+                <StatusPedido status={4}>CANCELADO</StatusPedido>
               </CustomTableCellBody>
               <CustomTableCellBody
                 align="center"
@@ -211,11 +196,95 @@ export default function TablePainelPedidos(props) {
               Ações
             </Typography>
 
-            <Divider sx={{ width: "100%" }} />
+            <Divider sx={{ width: "100%", marginBottom: 1 }} />
 
-            <Typography sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "100%",
+                height: 170,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  width: "50%",
+                  height: "100%",
+                }}
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                  flexDirection: "column",
+                  width: "50%",
+                  height: "100%",
+                  padding: "10px",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  component="span"
+                  sx={{ color: "#212529", fontWeight: 700, fontSize: 10 }}
+                >
+                  N° Pedido
+                </Typography>
+
+                <Typography
+                  variant="h6"
+                  component="h3"
+                  sx={{
+                    color: "#B7B7B7",
+                    fontWeight: 700,
+                    fontSize: 14,
+                    padding: "0px 25px",
+                    backgroundColor: "#FAFAFA",
+                    borderRadius: "28px",
+                    border: "1px solid #b7b7b7",
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                  }}
+                >
+                  PD00001
+                </Typography>
+
+                <Typography
+                  variant="h6"
+                  component="span"
+                  sx={{ color: "#B7B7B7", fontWeight: 300, fontSize: 10 }}
+                >
+                  25/06/2023 19:23:53
+                </Typography>
+
+                <Typography
+                  variant="h6"
+                  component="span"
+                  sx={{ color: "#000", fontWeight: 900, fontSize: 16 }}
+                >
+                  Nome do produto
+                </Typography>
+              </Box>
+            </Box>
+
+            <Divider sx={{ width: "100%", marginTop: 1, marginBottom: 1 }} />
+
+            <Typography
+              variant="h6"
+              component="span"
+              sx={{ color: "#000", fontWeight: 900, fontSize: 26 }}
+            >
+              R$ 25,36
             </Typography>
+
+            <Box>
+              <BadgeZonaEntrega zona="norte">ZONA NORTE</BadgeZonaEntrega>
+              <StatusPedido status={4}>PENDENTE</StatusPedido>
+            </Box>
           </Box>
         </Fade>
       </Modal>
