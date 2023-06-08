@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import useWebSocket from "@/hooks/useWebSocket";
 
 //Context
@@ -23,9 +23,39 @@ export default function index() {
   //   }
   // }, [evento]);
 
+  const [pedidos, setPedidos] = useState([]);
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+
+    const getPedidos = async () => {
+
+      const req = await fetch('/api/pedidos', {
+        method: 'GET',
+        headers: {
+          Authorization: user.token
+        }
+      })
+
+      if(req.status == 200){
+        const res = await req.json();
+
+        console.log("RES>>>", res)
+
+        setPedidos(res.data);
+        setCards(res.status);
+
+      }
+
+    }
+
+    user.token && getPedidos();
+
+  }, [user])
+
   return (
     <>
-      <GridPainelPedidos />
+      <GridPainelPedidos status={cards}/>
 
       <Grid container spacing={1} sx={{ marginTop: 0, padding: "5px" }}>
         {/* <Grid item xs={12}>
@@ -56,7 +86,7 @@ export default function index() {
             }}
             elevation={0}
           >
-            <TablePainelPedidos />
+            <TablePainelPedidos pedidos={pedidos}/>
           </Paper>
         </Grid>
         <Grid item xs={3}>
