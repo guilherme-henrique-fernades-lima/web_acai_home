@@ -35,6 +35,81 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   fontWeight: 400,
 }));
 
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import PixIcon from "@mui/icons-material/Pix";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+
+function RenderModoPagamento() {
+  const [] = useState();
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid red",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <PixIcon sx={{ color: "red" }} />
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #20202033",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <CreditCardIcon sx={{ color: "#20202033" }} />
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #20202033",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <CreditCardIcon sx={{ color: "#20202033" }} />
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #20202033",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <LocalAtmIcon sx={{ color: "#20202033" }} />
+      </Box>
+    </Box>
+  );
+}
+
 export default function TablePainelPedidos(props) {
   const { pedidos } = props;
   const [open, setOpen] = useState(false);
@@ -175,9 +250,8 @@ export default function TablePainelPedidos(props) {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: 400,
+              width: 360,
               bgcolor: "background.paper",
-              // border: "2px solid #000",
               boxShadow: 24,
               borderRadius: "8px",
               padding: "20px 30px",
@@ -191,12 +265,12 @@ export default function TablePainelPedidos(props) {
             <Typography
               variant="h6"
               component="h3"
-              sx={{ color: "#B83E94", fontWeight: 700 }}
+              sx={{ color: "#B83E94", fontWeight: 900, fontSize: 16 }}
             >
               Ações
             </Typography>
 
-            <Divider sx={{ width: "100%", marginBottom: 1 }} />
+            <Divider sx={{ width: "100%", marginBottom: 2, marginTop: 2 }} />
 
             <Box
               sx={{
@@ -204,18 +278,21 @@ export default function TablePainelPedidos(props) {
                 alignItems: "center",
                 justifyContent: "flex-start",
                 width: "100%",
-                height: 170,
+                //height: 170,
               }}
             >
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "flex-start",
+                  justifyContent: "center",
                   width: "50%",
                   height: "100%",
+                  backgroundColor: "#ccc",
                 }}
-              />
+              >
+                FOTO
+              </Box>
               <Box
                 sx={{
                   display: "flex",
@@ -271,7 +348,7 @@ export default function TablePainelPedidos(props) {
               </Box>
             </Box>
 
-            <Divider sx={{ width: "100%", marginTop: 1, marginBottom: 1 }} />
+            <Divider sx={{ width: "100%", marginTop: 1, marginBottom: 2 }} />
 
             <Typography
               variant="h6"
@@ -281,10 +358,42 @@ export default function TablePainelPedidos(props) {
               R$ 25,36
             </Typography>
 
-            <Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+                marginTop: "20px",
+                marginBottom: "10px",
+              }}
+            >
               <BadgeZonaEntrega zona="norte">ZONA NORTE</BadgeZonaEntrega>
-              <StatusPedido status={4}>PENDENTE</StatusPedido>
+              <Box sx={{ marginRight: "5px", marginLeft: "5px" }} />
+              <StatusPedido status={1}>PENDENTE</StatusPedido>
             </Box>
+
+            <Box>
+              <RenderModoPagamento />
+            </Box>
+
+            <Divider sx={{ width: "100%", marginTop: 2, marginBottom: 2 }} />
+
+            <Typography
+              variant="h6"
+              component="p"
+              sx={{
+                color: "#20202033",
+                fontWeight: 400,
+                fontSize: 12,
+                textAlign: "left",
+              }}
+            >
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book.
+            </Typography>
           </Box>
         </Fade>
       </Modal>

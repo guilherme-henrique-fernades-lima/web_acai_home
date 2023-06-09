@@ -4,14 +4,29 @@ import Typography from "@mui/material/Typography";
 const TextStatusPedido = styled(Typography)((props) => ({
   fontSize: 10,
   fontFamily: "Lato, sans-serif",
-  fontWeight: 400,
+  fontWeight: 700,
   padding: "3px 10px",
   borderRadius: "30px",
   textAlign: "center",
 
+  ...(props.status == 1 && {
+    color: "#B83E94",
+    backgroundColor: "#f8e8ff",
+  }),
+
+  ...(props.status == 2 && {
+    color: "#FF8000",
+    backgroundColor: "#ffdebd",
+  }),
+
+  ...(props.status == 3 && {
+    color: "#0563CE",
+    backgroundColor: "#b0d5ff",
+  }),
+
   ...(props.status == 4 && {
-    color: "#45B802",
-    backgroundColor: "#c3ffa1",
+    color: "#e81f10",
+    backgroundColor: "#ffbab5",
   }),
 }));
 

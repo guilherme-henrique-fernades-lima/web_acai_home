@@ -34,6 +34,8 @@ import DvrIcon from "@mui/icons-material/Dvr";
 import SettingsIcon from "@mui/icons-material/Settings";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import MenuIcon from "@mui/icons-material/Menu";
+import HomeIcon from "@mui/icons-material/Home";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 //Contexto
 import { ThemeContext } from "@/context/ThemeContext";
@@ -257,11 +259,11 @@ export default function Layout(props) {
                   justifyContent: "center",
                 }}
               >
-                <DvrIcon />
+                <HomeIcon />
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active="true">Painel</CustomTypography>
+                  <CustomTypography active="true">Início</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
@@ -284,11 +286,11 @@ export default function Layout(props) {
                   justifyContent: "center",
                 }}
               >
-                <DvrIcon />
+                <GroupAddIcon />
               </ListItemIcon>
               <ListItemText
                 primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
+                  <CustomTypography active="false">Cadastros</CustomTypography>
                 }
                 sx={{ opacity: open ? 1 : 0 }}
               />
