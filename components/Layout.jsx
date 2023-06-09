@@ -133,9 +133,9 @@ export default function Layout(props) {
             </Typography>
           </Box>
 
-          <FormGroup>
+          {/* <FormGroup>
             <MaterialUISwitch onChange={changeThemePalette} />
-          </FormGroup>
+          </FormGroup> */}
         </Toolbar>
       </AppBar>
 

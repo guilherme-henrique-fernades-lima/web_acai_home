@@ -44,6 +44,20 @@ const TextZonaEntregaPedido = styled(Typography)((props) => ({
   }),
 }));
 
+const TextStatusEntregador = styled(Typography)((props) => ({
+  fontSize: 10,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 700,
+  padding: "3px 10px",
+  borderRadius: "30px",
+  textAlign: "center",
+
+  ...(props.status == "aguardando" && {
+    color: "#FF8000",
+    backgroundColor: "#ffdebd",
+  }),
+}));
+
 export function StatusPedido(props) {
   const { children } = props;
 
@@ -55,5 +69,15 @@ export function BadgeZonaEntrega(props) {
 
   return (
     <TextZonaEntregaPedido zona={props.zona}>{children}</TextZonaEntregaPedido>
+  );
+}
+
+export function BadgeStatusEntregador(props) {
+  const { children } = props;
+
+  return (
+    <TextStatusEntregador status={props.status}>
+      {children}
+    </TextStatusEntregador>
   );
 }
