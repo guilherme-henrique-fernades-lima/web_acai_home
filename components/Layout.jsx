@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 //Mui components
 import { styled, useTheme } from "@mui/material/styles";
@@ -49,6 +50,38 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 //Contexto
 import { ThemeContext } from "@/context/ThemeContext";
 import { AuthContext } from "@/context/AuthContext";
+
+function BrandImageAcai() {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        ml: 3,
+        cursor: "pointer",
+        "&:hover": { opacity: 0.8 },
+      }}
+    >
+      <Image
+        src="/img/acai_login.svg"
+        alt="Imagem logo de uma fruta açai"
+        // layout="fill"
+        // objectFit="contain"
+        width="60"
+        height="60"
+      />
+      <Typography
+        variant="h4"
+        component="h4"
+        sx={{ ml: 1, fontSize: 22, fontWeight: 900 }}
+      >
+        AÇAI HOME
+      </Typography>
+    </Box>
+  );
+}
 
 export default function Layout(props) {
   const theme = useTheme();
@@ -120,14 +153,16 @@ export default function Layout(props) {
               </IconButton>
             )}
             <Link href="/home">
-              <Typography
+              {/* <Typography
                 variant="h6"
                 noWrap
                 component="div"
                 sx={{ ml: 3, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
               >
                 AÇAI HOME
-              </Typography>
+              </Typography> */}
+
+              <BrandImageAcai />
             </Link>
           </Box>
 

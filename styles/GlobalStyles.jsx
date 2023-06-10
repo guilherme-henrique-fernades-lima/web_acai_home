@@ -6,6 +6,7 @@ const useStyles = makeStyles(() =>
       html: {
         height: "100%",
         width: "100%",
+        fontFamily: "Lato, sans-serif",
       },
       "*, *::before, *::after": {
         textDecoration: "none",
