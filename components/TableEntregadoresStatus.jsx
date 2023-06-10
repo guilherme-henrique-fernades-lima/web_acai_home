@@ -174,9 +174,10 @@ export default function TableEntregadoresStatus() {
                     variant="h6"
                     component="h3"
                     sx={{
-                      color: "#000000",
-                      fontWeight: 700,
-                      fontSize: 14,
+                      color: "#666666",
+                      fontWeight: 400,
+                      fontSize: 12,
+                      marginTop: "5px",
                     }}
                   >
                     Zona sul

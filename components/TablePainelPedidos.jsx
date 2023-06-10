@@ -201,7 +201,7 @@ export default function TablePainelPedidos(props) {
               <CustomTableCellBody align="center">NORTE</CustomTableCellBody>
               <CustomTableCellBody align="center">6</CustomTableCellBody>
               <CustomTableCellBody align="center">
-                <StatusPedido status={4}>CANCELADO</StatusPedido>
+                <StatusPedido status={5}>ABERTO</StatusPedido>
               </CustomTableCellBody>
               <CustomTableCellBody
                 align="center"

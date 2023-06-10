@@ -28,6 +28,11 @@ const TextStatusPedido = styled(Typography)((props) => ({
     color: "#e81f10",
     backgroundColor: "#ffbab5",
   }),
+
+  ...(props.status == 5 && {
+    color: "#45B802",
+    backgroundColor: "#c0fc9d",
+  }),
 }));
 
 const TextZonaEntregaPedido = styled(Typography)((props) => ({

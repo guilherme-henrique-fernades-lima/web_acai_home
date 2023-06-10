@@ -15,9 +15,16 @@ import IconButton from "@mui/material/IconButton";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
+import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-
 import FormGroup from "@mui/material/FormGroup";
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 //Ícones
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -41,10 +48,6 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { ThemeContext } from "@/context/ThemeContext";
 import { AuthContext } from "@/context/AuthContext";
 
-//Custom componentes
-import BodyText from "./BodyText";
-import TitleText from "./TitleText";
-
 export default function Layout(props) {
   const theme = useTheme();
 
@@ -53,10 +56,17 @@ export default function Layout(props) {
   const { changeThemePalette } = useContext(ThemeContext);
   const { logout } = useContext(AuthContext);
   const [open, setOpen] = useState(true);
-
+  const [activeOption, setActiveOption] = useState("home");
+  console.log("activeOption: ", activeOption);
   const [openRelatorios, setOpenRelatorios] = useState(false);
   const [openCadastros, setOpenCadastros] = useState(false);
   const [openPainel, setOpenPainel] = useState(false);
+
+  const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
+
+  const handleSairSistemaDialog = () => {
+    setOpenDialogSairSistema(!openDialogSairSistema);
+  };
 
   const handleOpenMenus = (state, setState) => {
     setState(!state);
@@ -242,117 +252,86 @@ export default function Layout(props) {
           }}
         >
           <Box sx={{ width: "100%" }}>
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="true"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+            <Tooltip title={open ? "" : "Home"} placement="right">
+              <CustomListItemButton
+                onClick={() => {
+                  handleOpenMenus(openPainel, setOpenPainel);
+                  setActiveOption("home");
                 }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "home" ? true : false}
+                open={open}
               >
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="true">Início</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <HomeIcon />
+                </ListItemIcon>
+                <Link href="/home">
+                  <ListItemText
+                    primary={
+                      <CustomTypography
+                        active={activeOption == "home" ? true : false}
+                      >
+                        Início
+                      </CustomTypography>
+                    }
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </Link>
+              </CustomListItemButton>
+            </Tooltip>
 
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+            <Tooltip title={open ? "" : "Cadastros"} placement="right">
+              <CustomListItemButton
+                onClick={() => {
+                  handleOpenMenus(openPainel, setOpenPainel);
+                  setActiveOption("cadastros");
                 }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "cadastros" ? true : false}
+                open={open}
               >
-                <GroupAddIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Cadastros</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <GroupAddIcon
+                    sx={{
+                      color: activeOption == "cadastros" ? true : false,
+                    }}
+                  />
+                </ListItemIcon>
 
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DvrIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
-
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DvrIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
+                <Link href="/cadastros/funcionario">
+                  <ListItemText
+                    primary={
+                      <CustomTypography
+                        active={activeOption == "cadastros" ? true : false}
+                      >
+                        Cadastros
+                      </CustomTypography>
+                    }
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </Link>
+              </CustomListItemButton>
+            </Tooltip>
 
             <Box
               sx={{
-                borderBottom: "1px solid #ECECEC",
+                //borderBottom: "1px solid #ECECEC",
                 ml: "30px",
                 mr: "30px",
                 display: open ? "" : "none",
@@ -360,114 +339,6 @@ export default function Layout(props) {
                 mb: 2,
               }}
             />
-
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DvrIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
-
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DvrIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
-
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DvrIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
-
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <DvrIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">Starred</CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
           </Box>
 
           <Box sx={{ width: "100%" }}>
@@ -482,63 +353,75 @@ export default function Layout(props) {
               }}
             />
 
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+            <Tooltip title={open ? "" : "Configurações"} placement="right">
+              <CustomListItemButton
+                onClick={() => {
+                  handleOpenMenus(openPainel, setOpenPainel);
+                  setActiveOption("configuracoes");
                 }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "configuracoes" ? true : false}
+                open={open}
               >
-                <SettingsIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false">
-                    Configurações
-                  </CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <SettingsIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={activeOption == "configuracoes" ? true : false}
+                    >
+                      Configurações
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </CustomListItemButton>
+            </Tooltip>
 
-            <CustomListItemButton
-              onClick={() => {
-                handleOpenMenus(openPainel, setOpenPainel);
-              }}
-              sx={{
-                justifyContent: open ? "initial" : "center",
-              }}
-              active="false"
-              open={open}
-            >
-              <ListItemIcon
+            <Tooltip title={open ? "" : "Sair"} placement="right">
+              <CustomListItemButton
+                // onClick={() => {
+                //   handleOpenMenus(openPainel, setOpenPainel);
+                // }}
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  justifyContent: open ? "initial" : "center",
                 }}
+                active={activeOption == "sair" ? true : false}
+                open={open}
+                onClick={handleSairSistemaDialog}
               >
-                <PowerSettingsNewIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  <CustomTypography active="false" onClick={logout}>
-                    Sair
-                  </CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <PowerSettingsNewIcon
+                    sx={{ fontSize: 22, color: "#B7B7B7" }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={activeOption == "cadastros" ? true : false}
+                    >
+                      Sair
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </CustomListItemButton>
+            </Tooltip>
           </Box>
         </List>
       </Drawer>
@@ -551,6 +434,36 @@ export default function Layout(props) {
         {/* <Container>{children}</Container> */}
         {children}
       </Box>
+
+      <Dialog
+        open={openDialogSairSistema}
+        onClose={handleSairSistemaDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Você deseja realmente sair do sistema?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="error" onClick={() => {}}>
+            NÃO
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={logout}
+            autoFocus
+          >
+            SIM
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
@@ -562,16 +475,15 @@ const CustomListItemButton = styled(ListItemButton)(
     borderRadius: "200px",
     marginLeft: open ? 30 : 10,
     marginRight: open ? 30 : 10,
-    backgroundColor: active == "true" ? "#f8e8ff" : "transparent",
+    backgroundColor: active ? "#f8e8ff" : "transparent",
     border: "none",
     marginTop: "5px",
     height: "38px",
     svg: {
       fontSize: 22,
-      color:
-        active == "true"
-          ? theme.palette.colors.brand
-          : theme.palette.colors.inactive_text,
+      color: active
+        ? theme.palette.colors.brand
+        : theme.palette.colors.inactive_text,
     },
 
     "&:hover": {
@@ -591,10 +503,9 @@ const CustomListItemButton = styled(ListItemButton)(
 const CustomTypography = styled(Typography)(({ theme, active }) => ({
   fontFamily: "Lato, sans-serif",
   fontWeight: 400,
-  color:
-    active == "true"
-      ? theme.palette.colors.brand
-      : theme.palette.colors.inactive_text,
+  color: active
+    ? theme.palette.colors.brand
+    : theme.palette.colors.inactive_text,
   fontSize: 14,
 }));
 
