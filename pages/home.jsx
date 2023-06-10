@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import useWebSocket from "@/hooks/useWebSocket";
 
 //Context
@@ -11,13 +11,14 @@ import { STATUS_PEDIDO, ZONA_ENTREGA } from "@/helpers/constants";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 
 //Icons
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-export default function index() {
+export default function Home() {
   const { user } = useContext(AuthContext);
 
   console.log("USER>>>>", user);
@@ -32,6 +33,7 @@ export default function index() {
 
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getPedidos = async () => {
@@ -46,9 +48,9 @@ export default function index() {
         const res = await req.json();
 
         console.log("RES>>>", res);
+        console.log(res);
 
         setPedidos(res.data);
-        setCards(res.status);
       }
     };
 
@@ -60,16 +62,6 @@ export default function index() {
       <GridPainelPedidos status={cards} />
 
       <Grid container spacing={1} sx={{ marginTop: 0, padding: "5px" }}>
-        {/* <Grid item xs={12}>
-          <Paper
-            sx={{
-              width: "100%",
-              height: 70,
-              boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-            }}
-            elevation={0}
-          ></Paper>
-        </Grid> */}
         <Grid item xs={9} sx={{ paddingRight: 1 }}>
           <Paper
             sx={{
@@ -84,36 +76,39 @@ export default function index() {
             }}
             elevation={0}
           >
-            <FilterListIcon sx={{ fontSize: 36 }} />
-
-            <Grid item xs={3}>
-              <TextField
-                id="sexo"
-                fullWidth
-                placeholder="Zona de entrega"
-                select
-                size="small"
-                // value={nome}
-                onChange={(e) => {
-                  // setNome(e.target.value);
-                }}
-                InputLabelProps={{ shrink: true }}
-                autoComplete="off"
-              >
-                {ZONA_ENTREGA.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
+            <FilterListIcon
+              sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
+            />
             <Grid container spacing={1}>
+              <Grid item xs={3}>
+                <TextField
+                  id="sexo"
+                  select
+                  fullWidth
+                  placeholder="Zona de entrega"
+                  label="Zona de entrega"
+                  size="small"
+                  // value={nome}
+                  onChange={(e) => {
+                    // setNome(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                >
+                  {ZONA_ENTREGA.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
               <Grid item xs={3}>
                 <TextField
                   id="sexo"
                   fullWidth
                   placeholder="Status do pedido"
+                  label="Status do pedido"
                   select
                   size="small"
                   // value={nome}
@@ -129,6 +124,12 @@ export default function index() {
                     </MenuItem>
                   ))}
                 </TextField>
+              </Grid>
+
+              <Grid item xs={3}>
+                <Button variant="contained" disableElevation>
+                  FILTRAR
+                </Button>
               </Grid>
             </Grid>
           </Paper>

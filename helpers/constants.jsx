@@ -50,3 +50,25 @@ export const STATUS_PEDIDO = [
     label: "CONCLUÍDO",
   },
 ];
+
+export const IS_ACTIVE = [
+  {
+    value: true,
+    label: "SIM",
+  },
+  {
+    value: false,
+    label: "NÃO",
+  },
+];
+
+export const FUNCOES = [
+  {
+    value: "entregador",
+    label: "ENTREGADOR",
+  },
+  {
+    value: "administrativo",
+    label: "ADMINISTRATIVO",
+  },
+];

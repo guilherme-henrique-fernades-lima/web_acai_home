@@ -43,6 +43,8 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 
 //Contexto
 import { ThemeContext } from "@/context/ThemeContext";
@@ -57,34 +59,14 @@ export default function Layout(props) {
   const { logout } = useContext(AuthContext);
   const [open, setOpen] = useState(true);
   const [activeOption, setActiveOption] = useState("home");
-  console.log("activeOption: ", activeOption);
-  const [openRelatorios, setOpenRelatorios] = useState(false);
-  const [openCadastros, setOpenCadastros] = useState(false);
-  const [openPainel, setOpenPainel] = useState(false);
-
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
 
   const handleSairSistemaDialog = () => {
     setOpenDialogSairSistema(!openDialogSairSistema);
   };
 
-  const handleOpenMenus = (state, setState) => {
-    setState(!state);
-    setOpen(true);
-  };
-
-  const handleCloseAllMenus = () => {
-    setOpenRelatorios(false);
-    setOpenCadastros(false);
-    setOpenPainel(false);
-  };
-
   const handleDrawerOpen = () => {
     setOpen(!open);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -137,10 +119,16 @@ export default function Layout(props) {
                 <MenuIcon sx={{ color: "#fff", fontSize: 28 }} />
               </IconButton>
             )}
-
-            <Typography variant="h6" noWrap component="div" sx={{ ml: 3 }}>
-              AÇAI HOME
-            </Typography>
+            <Link href="/home">
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ ml: 3, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+              >
+                AÇAI HOME
+              </Typography>
+            </Link>
           </Box>
 
           {/* <FormGroup>
@@ -252,10 +240,10 @@ export default function Layout(props) {
           }}
         >
           <Box sx={{ width: "100%" }}>
-            <Tooltip title={open ? "" : "Home"} placement="right">
+            <Link href="/home">
               <CustomListItemButton
                 onClick={() => {
-                  handleOpenMenus(openPainel, setOpenPainel);
+                  setOpen(true);
                   setActiveOption("home");
                 }}
                 sx={{
@@ -264,34 +252,34 @@ export default function Layout(props) {
                 active={activeOption == "home" ? true : false}
                 open={open}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <HomeIcon />
-                </ListItemIcon>
-                <Link href="/home">
-                  <ListItemText
-                    primary={
-                      <CustomTypography
-                        active={activeOption == "home" ? true : false}
-                      >
-                        Início
-                      </CustomTypography>
-                    }
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </Link>
+                <Tooltip title={open ? "" : "Home"} placement="right">
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <HomeIcon />
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={activeOption == "home" ? true : false}
+                    >
+                      Início
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
               </CustomListItemButton>
-            </Tooltip>
+            </Link>
 
-            <Tooltip title={open ? "" : "Cadastros"} placement="right">
+            <Link href="/cadastros/funcionario">
               <CustomListItemButton
                 onClick={() => {
-                  handleOpenMenus(openPainel, setOpenPainel);
+                  setOpen(true);
                   setActiveOption("cadastros");
                 }}
                 sx={{
@@ -300,34 +288,110 @@ export default function Layout(props) {
                 active={activeOption == "cadastros" ? true : false}
                 open={open}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <GroupAddIcon
+                <Tooltip title={open ? "" : "Cadastros"} placement="right">
+                  <ListItemIcon
                     sx={{
-                      color: activeOption == "cadastros" ? true : false,
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
                     }}
-                  />
-                </ListItemIcon>
-
-                <Link href="/cadastros/funcionario">
-                  <ListItemText
-                    primary={
-                      <CustomTypography
-                        active={activeOption == "cadastros" ? true : false}
-                      >
-                        Cadastros
-                      </CustomTypography>
-                    }
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </Link>
+                  >
+                    <GroupAddIcon
+                      sx={{
+                        color: activeOption == "cadastros" ? true : false,
+                      }}
+                    />
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={activeOption == "cadastros" ? true : false}
+                    >
+                      Cadastros
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
               </CustomListItemButton>
-            </Tooltip>
+            </Link>
+
+            <Link href="/relatorios/funcionario">
+              <CustomListItemButton
+                onClick={() => {
+                  setOpen(true);
+                  setActiveOption("relatorio_funcionarios");
+                }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "relatorio_funcionarios" ? true : false}
+                open={open}
+              >
+                <Tooltip
+                  title={open ? "" : "Relação de funcionários"}
+                  placement="right"
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ListAltIcon />
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={
+                        activeOption == "relatorio_funcionarios" ? true : false
+                      }
+                    >
+                      Funcionários
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </CustomListItemButton>
+            </Link>
+
+            <Link href="/cadastros/enviar-pedidos">
+              <CustomListItemButton
+                onClick={() => {
+                  setOpen(true);
+                  setActiveOption("enviar_pedidos");
+                }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "enviar_pedidos" ? true : false}
+                open={open}
+              >
+                <Tooltip title={open ? "" : "Enviar pedidos"} placement="right">
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <DeliveryDiningIcon />
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={activeOption == "enviar_pedidos" ? true : false}
+                    >
+                      Enviar pedidos
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </CustomListItemButton>
+            </Link>
 
             <Box
               sx={{
@@ -353,10 +417,10 @@ export default function Layout(props) {
               }}
             />
 
-            <Tooltip title={open ? "" : "Configurações"} placement="right">
+            <Link href="/configuracoes/usuario">
               <CustomListItemButton
                 onClick={() => {
-                  handleOpenMenus(openPainel, setOpenPainel);
+                  setOpen(true);
                   setActiveOption("configuracoes");
                 }}
                 sx={{
@@ -365,15 +429,17 @@ export default function Layout(props) {
                 active={activeOption == "configuracoes" ? true : false}
                 open={open}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <SettingsIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-                </ListItemIcon>
+                <Tooltip title={open ? "" : "Configurações"} placement="right">
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <SettingsIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
+                  </ListItemIcon>
+                </Tooltip>
                 <ListItemText
                   primary={
                     <CustomTypography
@@ -385,20 +451,17 @@ export default function Layout(props) {
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </CustomListItemButton>
-            </Tooltip>
+            </Link>
 
-            <Tooltip title={open ? "" : "Sair"} placement="right">
-              <CustomListItemButton
-                // onClick={() => {
-                //   handleOpenMenus(openPainel, setOpenPainel);
-                // }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "sair" ? true : false}
-                open={open}
-                onClick={handleSairSistemaDialog}
-              >
+            <CustomListItemButton
+              sx={{
+                justifyContent: open ? "initial" : "center",
+              }}
+              active={activeOption == "sair" ? true : false}
+              open={open}
+              onClick={handleSairSistemaDialog}
+            >
+              <Tooltip title={open ? "" : "Sair"} placement="right">
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
@@ -410,18 +473,18 @@ export default function Layout(props) {
                     sx={{ fontSize: 22, color: "#B7B7B7" }}
                   />
                 </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={activeOption == "cadastros" ? true : false}
-                    >
-                      Sair
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Tooltip>
+              </Tooltip>
+              <ListItemText
+                primary={
+                  <CustomTypography
+                    active={activeOption == "sair" ? true : false}
+                  >
+                    Sair
+                  </CustomTypography>
+                }
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </CustomListItemButton>
           </Box>
         </List>
       </Drawer>
@@ -444,14 +507,15 @@ export default function Layout(props) {
         <DialogTitle id="alert-dialog-title">
           Você deseja realmente sair do sistema?
         </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
+
         <DialogActions>
-          <Button variant="contained" color="error" onClick={() => {}}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleSairSistemaDialog}
+            disableElevation
+            fullWidth
+          >
             NÃO
           </Button>
           <Button
@@ -459,6 +523,8 @@ export default function Layout(props) {
             color="success"
             onClick={logout}
             autoFocus
+            disableElevation
+            fullWidth
           >
             SIM
           </Button>

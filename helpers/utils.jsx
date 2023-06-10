@@ -47,6 +47,26 @@ const TextZonaEntregaPedido = styled(Typography)((props) => ({
     color: "#0563CE",
     backgroundColor: "#E5EFFA",
   }),
+
+  ...(props.zona == "norte" && {
+    color: "#0563CE",
+    backgroundColor: "#E5EFFA",
+  }),
+
+  ...(props.zona == "norte" && {
+    color: "#0563CE",
+    backgroundColor: "#E5EFFA",
+  }),
+
+  ...(props.zona == "norte" && {
+    color: "#0563CE",
+    backgroundColor: "#E5EFFA",
+  }),
+
+  ...(props.zona == "norte" && {
+    color: "#0563CE",
+    backgroundColor: "#E5EFFA",
+  }),
 }));
 
 const TextStatusEntregador = styled(Typography)((props) => ({

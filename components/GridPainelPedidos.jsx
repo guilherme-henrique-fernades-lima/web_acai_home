@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 //Ícones
 import AccessAlarmIcon from "@mui/icons-material/AccessAlarm";
 import Typography from "@mui/material/Typography";
+import Skeleton from "@mui/material/Skeleton";
 
 import DoneIcon from "@mui/icons-material/Done";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -31,11 +32,233 @@ const CustomBox = styled(Paper)((props) => ({
 }));
 
 export default function GridPainelPedidos(props) {
-
   const { status } = props;
 
   return (
     <Grid container>
+      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+        <CustomBox elevation={0}>
+          <Stack
+            direction="row"
+            sx={{
+              wordBreak: "break-all",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{ marginRight: "10px" }}
+            />
+            <Box sx={{ displa: "flex", flexDirection: "column" }}>
+              <Skeleton variant="rounded" width={70} height={16} />
+              <Skeleton
+                variant="rounded"
+                width={70}
+                height={16}
+                sx={{ marginTop: 1 }}
+              />
+            </Box>
+          </Stack>
+
+          <Skeleton
+            variant="rounded"
+            width={20}
+            height={30}
+            sx={{ marginLeft: "20px" }}
+          />
+        </CustomBox>
+      </CustomGrid>
+
+      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+        <CustomBox elevation={0}>
+          <Stack
+            direction="row"
+            sx={{
+              wordBreak: "break-all",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{ marginRight: "10px" }}
+            />
+            <Box sx={{ displa: "flex", flexDirection: "column" }}>
+              <Skeleton variant="rounded" width={70} height={16} />
+              <Skeleton
+                variant="rounded"
+                width={70}
+                height={16}
+                sx={{ marginTop: 1 }}
+              />
+            </Box>
+          </Stack>
+
+          <Skeleton
+            variant="rounded"
+            width={20}
+            height={30}
+            sx={{ marginLeft: "20px" }}
+          />
+        </CustomBox>
+      </CustomGrid>
+
+      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+        <CustomBox elevation={0}>
+          <Stack
+            direction="row"
+            sx={{
+              wordBreak: "break-all",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{ marginRight: "10px" }}
+            />
+            <Box sx={{ displa: "flex", flexDirection: "column" }}>
+              <Skeleton variant="rounded" width={70} height={16} />
+              <Skeleton
+                variant="rounded"
+                width={70}
+                height={16}
+                sx={{ marginTop: 1 }}
+              />
+            </Box>
+          </Stack>
+
+          <Skeleton
+            variant="rounded"
+            width={20}
+            height={30}
+            sx={{ marginLeft: "20px" }}
+          />
+        </CustomBox>
+      </CustomGrid>
+
+      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+        <CustomBox elevation={0}>
+          <Stack
+            direction="row"
+            sx={{
+              wordBreak: "break-all",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{ marginRight: "10px" }}
+            />
+            <Box sx={{ displa: "flex", flexDirection: "column" }}>
+              <Skeleton variant="rounded" width={70} height={16} />
+              <Skeleton
+                variant="rounded"
+                width={70}
+                height={16}
+                sx={{ marginTop: 1 }}
+              />
+            </Box>
+          </Stack>
+
+          <Skeleton
+            variant="rounded"
+            width={20}
+            height={30}
+            sx={{ marginLeft: "20px" }}
+          />
+        </CustomBox>
+      </CustomGrid>
+
+      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+        <CustomBox elevation={0}>
+          <Stack
+            direction="row"
+            sx={{
+              wordBreak: "break-all",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{ marginRight: "10px" }}
+            />
+            <Box sx={{ displa: "flex", flexDirection: "column" }}>
+              <Skeleton variant="rounded" width={70} height={16} />
+              <Skeleton
+                variant="rounded"
+                width={70}
+                height={16}
+                sx={{ marginTop: 1 }}
+              />
+            </Box>
+          </Stack>
+
+          <Skeleton
+            variant="rounded"
+            width={20}
+            height={30}
+            sx={{ marginLeft: "20px" }}
+          />
+        </CustomBox>
+      </CustomGrid>
+
+      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+        <CustomBox elevation={0}>
+          <Stack
+            direction="row"
+            sx={{
+              wordBreak: "break-all",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{ marginRight: "10px" }}
+            />
+            <Box sx={{ displa: "flex", flexDirection: "column" }}>
+              <Skeleton variant="rounded" width={70} height={16} />
+              <Skeleton
+                variant="rounded"
+                width={70}
+                height={16}
+                sx={{ marginTop: 1 }}
+              />
+            </Box>
+          </Stack>
+
+          <Skeleton
+            variant="rounded"
+            width={20}
+            height={30}
+            sx={{ marginLeft: "20px" }}
+          />
+        </CustomBox>
+      </CustomGrid>
+      {/* FIM DO SKELETON */}
+
       <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
         <CustomBox elevation={0}>
           <Stack
@@ -102,7 +325,7 @@ export default function GridPainelPedidos(props) {
               color: "#FF8000",
             }}
           >
-             {status.EM_PRODUCAO ?? 0}
+            {status.EM_PRODUCAO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -137,7 +360,7 @@ export default function GridPainelPedidos(props) {
               color: "#076E29",
             }}
           >
-             {status.CONCLUIDO ?? 0}
+            {status.CONCLUIDO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -173,7 +396,7 @@ export default function GridPainelPedidos(props) {
               color: "#c51010",
             }}
           >
-             {status.CANCELADO ?? 0}
+            {status.CANCELADO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
