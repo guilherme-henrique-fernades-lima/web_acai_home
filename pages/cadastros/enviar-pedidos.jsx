@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 //Mui icons
 import Box from "@mui/material/Box";
@@ -9,6 +10,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -18,11 +20,22 @@ import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Divider from "@mui/material/Divider";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import SendIcon from "@mui/icons-material/Send";
 
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 
-import { StatusPedido, BadgeZonaEntrega } from "@/helpers/utils";
+import GridPainelPedidos from "@/components/GridPainelPedidos";
+
+import {
+  StatusPedido,
+  BadgeZonaEntrega,
+  RenderIconFormaPagamento,
+  RenderUser,
+} from "@/helpers/utils";
 
 const CustomTableCellHeader = styled(TableCell)((props) => ({
   fontSize: 12,
@@ -116,11 +129,29 @@ function RenderModoPagamento() {
 
 export default function EnviarPedidos() {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [openModalEnvio, setOpenModalEnvio] = useState(false);
+
+  const handleOpenCloseModalDetalhes = () => setOpen(!open);
+
+  const handleOpenCloseModalEnvio = () => setOpenModalEnvio(!openModalEnvio);
+
+  function enviarPedidosEntregador() {
+    toast.success("Pedido enviado com sucesso!");
+  }
 
   return (
-    <Container>
+    <>
+      <Toaster position="bottom-center" reverseOrder={true} />
+      <GridPainelPedidos />
+      <Button
+        variant="contained"
+        sx={{ mb: 1, mt: 1 }}
+        disableElevation
+        onClick={handleOpenCloseModalEnvio}
+        endIcon={<SendIcon />}
+      >
+        Enviar pedidos
+      </Button>
       <Paper
         elevation={0}
         sx={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
@@ -145,13 +176,14 @@ export default function EnviarPedidos() {
               }}
             >
               <TableRow sx={{ "& td": { border: 0 } }}>
-                <CustomTableCellHeader align="center">N°</CustomTableCellHeader>
-
                 <CustomTableCellHeader align="center">
-                  PRODUTO
+                  SELECIONAR
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  ML. DO AÇAI
+                  SEQ.
+                </CustomTableCellHeader>
+                <CustomTableCellHeader align="center">
+                  PRODUTO
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
                   N° PEDIDO
@@ -169,7 +201,7 @@ export default function EnviarPedidos() {
                   STATUS
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  DATA
+                  DATA/HORA
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
                   AÇÕES
@@ -182,7 +214,7 @@ export default function EnviarPedidos() {
                   transition: "all 0.3s ease",
                   height: 50,
                   border: "none",
-                  //"&:hover": { backgroundColor: "#f8e8ff" },
+                  "&:hover": { backgroundColor: "#f8e8ff" },
                   ".MuiTableCell-root": {
                     borderBottom: "none",
                   },
@@ -195,25 +227,44 @@ export default function EnviarPedidos() {
                     borderBottomLeftRadius: "30px",
                   }}
                 >
-                  1
+                  <Checkbox defaultChecked />
                 </TableCell>
+                <TableCell align="center">1</TableCell>
                 <CustomTableCellBody align="center">
                   Açai de maça com abacaxi
                 </CustomTableCellBody>
-                <CustomTableCellBody align="center">100ml</CustomTableCellBody>
                 <CustomTableCellBody align="center">
                   #PD0002
                 </CustomTableCellBody>
                 <CustomTableCellBody align="center">
                   R$ 25,36
                 </CustomTableCellBody>
-                <CustomTableCellBody align="center">CARTÃO</CustomTableCellBody>
-                <CustomTableCellBody align="center">NORTE</CustomTableCellBody>
+                <CustomTableCellBody align="center">
+                  <RenderIconFormaPagamento formaPagamento="PIX" />
+                </CustomTableCellBody>
+                <CustomTableCellBody align="center">
+                  <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
+                </CustomTableCellBody>
                 <CustomTableCellBody align="center">
                   <StatusPedido status={5}>ABERTO</StatusPedido>
                 </CustomTableCellBody>
                 <CustomTableCellBody align="center">
-                  25/01/2023
+                  <Stack direction="column">
+                    <Typography
+                      variant="span"
+                      component="span"
+                      sx={{ fontWeight: 700, fontSize: 12 }}
+                    >
+                      11/06/2023
+                    </Typography>
+                    <Typography
+                      variant="span"
+                      component="span"
+                      sx={{ fontWeight: 400, fontSize: 10 }}
+                    >
+                      10:48:23
+                    </Typography>
+                  </Stack>
                 </CustomTableCellBody>
                 <CustomTableCellBody
                   align="center"
@@ -226,12 +277,13 @@ export default function EnviarPedidos() {
                     sx={{
                       transition: "all 0.3s ease",
                       cursor: "pointer",
+                      border: "1px solid transparent",
                       "&:hover": {
                         color: "#B83E94",
-                        backgroundColor: "#f8e8ff",
+                        border: "1px solid #b83e94",
                       },
                     }}
-                    onClick={handleOpen}
+                    onClick={handleOpenCloseModalDetalhes}
                   >
                     <ArticleOutlinedIcon
                       sx={{
@@ -249,7 +301,7 @@ export default function EnviarPedidos() {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={open}
-          onClose={handleClose}
+          onClose={handleOpenCloseModalDetalhes}
           closeAfterTransition
           slots={{ backdrop: Backdrop }}
           slotProps={{
@@ -428,7 +480,113 @@ export default function EnviarPedidos() {
             </Box>
           </Fade>
         </Modal>
+
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={openModalEnvio}
+          onClose={handleOpenCloseModalEnvio}
+          closeAfterTransition
+          slots={{ backdrop: Backdrop }}
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={openModalEnvio}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                maxWidth: 400,
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                borderRadius: "8px",
+                padding: "20px 30px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                flexDirection: "column",
+                //minHeight: 400,
+              }}
+            >
+              <Typography
+                variant="h3"
+                component="h3"
+                sx={{ fontWeight: 900, fontSize: 16 }}
+              >
+                Confirmar envio de pedidos
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                  flexDirection: "column",
+                  width: "100%",
+                  //padding: 2,
+                  //border: "1px solid #ccc",
+                  mt: 1,
+                  borderRadius: "4px",
+                }}
+              >
+                <Stack
+                  direction="row"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    mt: 1,
+                    mb: 1,
+                  }}
+                >
+                  <Typography
+                    variant="h3"
+                    component="h3"
+                    sx={{ fontWeight: 700, fontSize: 14 }}
+                  >
+                    PD0001
+                  </Typography>
+                  <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
+                </Stack>
+              </Box>
+              <Divider sx={{ width: "100%", mt: 1, mb: 1 }} />
+
+              <RenderUser />
+
+              <Stack direction="row" sx={{ width: "100%", mt: 3 }}>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleOpenCloseModalEnvio}
+                  disableElevation
+                  fullWidth
+                >
+                  CANCELAR
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => {
+                    enviarPedidosEntregador();
+                    handleOpenCloseModalEnvio();
+                  }}
+                  autoFocus
+                  disableElevation
+                  fullWidth
+                  sx={{ ml: 1 }}
+                >
+                  CONFIRMAR
+                </Button>
+              </Stack>
+            </Box>
+          </Fade>
+        </Modal>
       </Paper>
-    </Container>
+    </>
   );
 }

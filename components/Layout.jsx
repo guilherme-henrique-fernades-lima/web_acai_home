@@ -46,6 +46,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import SendIcon from "@mui/icons-material/Send";
 
 //Contexto
 import { ThemeContext } from "@/context/ThemeContext";
@@ -412,7 +413,7 @@ export default function Layout(props) {
                       justifyContent: "center",
                     }}
                   >
-                    <DeliveryDiningIcon />
+                    <SendIcon />
                   </ListItemIcon>
                 </Tooltip>
                 <ListItemText
@@ -421,6 +422,47 @@ export default function Layout(props) {
                       active={activeOption == "enviar_pedidos" ? true : false}
                     >
                       Enviar pedidos
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </CustomListItemButton>
+            </Link>
+
+            <Link href="/relatorios/pedidos-em-transito">
+              <CustomListItemButton
+                onClick={() => {
+                  setOpen(true);
+                  setActiveOption("pedidos_em_transito");
+                }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "pedidos_em_transito" ? true : false}
+                open={open}
+              >
+                <Tooltip
+                  title={open ? "" : "Pedidos em trânsito"}
+                  placement="right"
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <DeliveryDiningIcon />
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={
+                        activeOption == "pedidos_em_transito" ? true : false
+                      }
+                    >
+                      Pedidos em trânsito
                     </CustomTypography>
                   }
                   sx={{ opacity: open ? 1 : 0 }}

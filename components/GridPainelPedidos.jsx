@@ -290,7 +290,7 @@ export default function GridPainelPedidos(props) {
               color: "#B83E94",
             }}
           >
-            {status.ABERTO ?? 0}
+            {status?.ABERTO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -325,7 +325,7 @@ export default function GridPainelPedidos(props) {
               color: "#FF8000",
             }}
           >
-            {status.EM_PRODUCAO ?? 0}
+            {status?.EM_PRODUCAO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -360,7 +360,7 @@ export default function GridPainelPedidos(props) {
               color: "#076E29",
             }}
           >
-            {status.CONCLUIDO ?? 0}
+            {status?.CONCLUIDO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -396,7 +396,7 @@ export default function GridPainelPedidos(props) {
               color: "#c51010",
             }}
           >
-            {status.CANCELADO ?? 0}
+            {status?.CANCELADO ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>
@@ -432,7 +432,7 @@ export default function GridPainelPedidos(props) {
               color: "#000000",
             }}
           >
-            {status.TOTAL ?? 0}
+            {status?.TOTAL ?? 0}
           </Typography>
         </CustomBox>
       </CustomGrid>

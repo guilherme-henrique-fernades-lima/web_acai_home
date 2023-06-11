@@ -16,11 +16,19 @@ import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
 
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import PixIcon from "@mui/icons-material/Pix";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 
-import { StatusPedido, BadgeZonaEntrega } from "@/helpers/utils";
+import {
+  StatusPedido,
+  BadgeZonaEntrega,
+  RenderIconFormaPagamento,
+} from "@/helpers/utils";
 
 const CustomTableCellHeader = styled(TableCell)((props) => ({
   fontSize: 12,
@@ -35,10 +43,6 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   fontFamily: "Lato, sans-serif",
   fontWeight: 400,
 }));
-
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import PixIcon from "@mui/icons-material/Pix";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 
 function RenderModoPagamento() {
   const [modoPagamento, setModoPagamento] = useState("");
@@ -140,13 +144,10 @@ export default function TablePainelPedidos(props) {
             }}
           >
             <TableRow sx={{ "& td": { border: 0 } }}>
-              <CustomTableCellHeader align="center">N°</CustomTableCellHeader>
+              <CustomTableCellHeader align="center">SEQ.</CustomTableCellHeader>
 
               <CustomTableCellHeader align="center">
                 PRODUTO
-              </CustomTableCellHeader>
-              <CustomTableCellHeader align="center">
-                ML. DO AÇAI
               </CustomTableCellHeader>
               <CustomTableCellHeader align="center">
                 N° PEDIDO
@@ -161,7 +162,9 @@ export default function TablePainelPedidos(props) {
               <CustomTableCellHeader align="center">
                 STATUS
               </CustomTableCellHeader>
-              <CustomTableCellHeader align="center">DATA</CustomTableCellHeader>
+              <CustomTableCellHeader align="center">
+                DATA/HORA
+              </CustomTableCellHeader>
               <CustomTableCellHeader align="center">
                 AÇÕES
               </CustomTableCellHeader>
@@ -178,7 +181,7 @@ export default function TablePainelPedidos(props) {
                 transition: "all 0.3s ease",
                 height: 50,
                 border: "none",
-                //"&:hover": { backgroundColor: "#f8e8ff" },
+                "&:hover": { backgroundColor: "#f8e8ff" },
                 ".MuiTableCell-root": {
                   borderBottom: "none",
                 },
@@ -196,16 +199,34 @@ export default function TablePainelPedidos(props) {
               <CustomTableCellBody align="center">
                 Açai de maça com abacaxi
               </CustomTableCellBody>
-              <CustomTableCellBody align="center">100ml</CustomTableCellBody>
               <CustomTableCellBody align="center">#PD0002</CustomTableCellBody>
               <CustomTableCellBody align="center">R$ 25,36</CustomTableCellBody>
-              <CustomTableCellBody align="center">CARTÃO</CustomTableCellBody>
-              <CustomTableCellBody align="center">NORTE</CustomTableCellBody>
+              <CustomTableCellBody align="center">
+                <RenderIconFormaPagamento formaPagamento="CREDITO" />
+              </CustomTableCellBody>
+              <CustomTableCellBody align="center">
+                <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
+              </CustomTableCellBody>
               <CustomTableCellBody align="center">
                 <StatusPedido status={5}>ABERTO</StatusPedido>
               </CustomTableCellBody>
               <CustomTableCellBody align="center">
-                25/01/2023
+                <Stack direction="column">
+                  <Typography
+                    variant="span"
+                    component="span"
+                    sx={{ fontWeight: 700, fontSize: 12 }}
+                  >
+                    11/06/2023
+                  </Typography>
+                  <Typography
+                    variant="span"
+                    component="span"
+                    sx={{ fontWeight: 400, fontSize: 10 }}
+                  >
+                    10:48:23
+                  </Typography>
+                </Stack>
               </CustomTableCellBody>
               <CustomTableCellBody
                 align="center"
@@ -218,7 +239,11 @@ export default function TablePainelPedidos(props) {
                   sx={{
                     transition: "all 0.3s ease",
                     cursor: "pointer",
-                    "&:hover": { color: "#B83E94", backgroundColor: "#f8e8ff" },
+                    border: "1px solid transparent",
+                    "&:hover": {
+                      color: "#B83E94",
+                      border: "1px solid #b83e94",
+                    },
                   }}
                   onClick={handleOpen}
                 >
