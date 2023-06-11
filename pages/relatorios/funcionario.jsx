@@ -19,5 +19,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 export default function RelacaoFuncionario() {
-  return <Container></Container>;
+  return (
+    <Container>
+      <h1>Relatório de funcionários.</h1>
+    </Container>
+  );
 }

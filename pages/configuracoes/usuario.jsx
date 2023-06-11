@@ -16,5 +16,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 
 export default function Usuario() {
-  return <Container></Container>;
+  return (
+    <Container>
+      <h1>Configurações de usuário.</h1>
+    </Container>
+  );
 }

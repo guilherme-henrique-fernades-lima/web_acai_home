@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Backdrop from "@mui/material/Backdrop";
 import Modal from "@mui/material/Modal";
@@ -40,7 +41,8 @@ import PixIcon from "@mui/icons-material/Pix";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 
 function RenderModoPagamento() {
-  const [] = useState();
+  const [modoPagamento, setModoPagamento] = useState("");
+
   return (
     <Box
       sx={{
@@ -199,9 +201,11 @@ export default function TablePainelPedidos(props) {
               <CustomTableCellBody align="center">R$ 25,36</CustomTableCellBody>
               <CustomTableCellBody align="center">CARTÃO</CustomTableCellBody>
               <CustomTableCellBody align="center">NORTE</CustomTableCellBody>
-              <CustomTableCellBody align="center">6</CustomTableCellBody>
               <CustomTableCellBody align="center">
                 <StatusPedido status={5}>ABERTO</StatusPedido>
+              </CustomTableCellBody>
+              <CustomTableCellBody align="center">
+                25/01/2023
               </CustomTableCellBody>
               <CustomTableCellBody
                 align="center"
@@ -250,7 +254,7 @@ export default function TablePainelPedidos(props) {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: 360,
+              width: 400,
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "8px",
@@ -390,10 +394,26 @@ export default function TablePainelPedidos(props) {
               }}
             >
               Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
+              industry. Lorem Ipsum has been the industry standard dummy text
               ever since the 1500s, when an unknown printer took a galley of
               type and scrambled it to make a type specimen book.
             </Typography>
+
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              disableElevation
+              sx={{
+                borderRadius: "38px",
+                height: "20",
+                fontSize: 12,
+                marginTop: 4,
+                marginBottom: 2,
+              }}
+            >
+              ENVIAR IMPRESSÃO
+            </Button>
           </Box>
         </Fade>
       </Modal>
