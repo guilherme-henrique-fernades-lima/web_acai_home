@@ -51,10 +51,11 @@ export default function Home() {
         console.log(res);
 
         setPedidos(res.data);
+        setCards(res.status);
       }
     };
 
-    user.token && getPedidos();
+    user?.token && getPedidos();
   }, [user]);
 
   return (
