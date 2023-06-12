@@ -54,33 +54,35 @@ import { AuthContext } from "@/context/AuthContext";
 
 function BrandImageAcai() {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "row",
-        ml: 3,
-        cursor: "pointer",
-        "&:hover": { opacity: 0.8 },
-      }}
-    >
-      <Image
-        src="/img/acai_login.svg"
-        alt="Imagem logo de uma fruta açai"
-        // layout="fill"
-        // objectFit="contain"
-        width="60"
-        height="60"
-      />
-      <Typography
-        variant="h4"
-        component="h4"
-        sx={{ ml: 1, fontSize: 22, fontWeight: 900 }}
+    <Link href="/home">
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "row",
+          ml: 3,
+          cursor: "pointer",
+          "&:hover": { opacity: 0.8 },
+        }}
       >
-        AÇAI HOME
-      </Typography>
-    </Box>
+        <Image
+          src="/img/acai_login.svg"
+          alt="Imagem logo de uma fruta açai"
+          // layout="fill"
+          // objectFit="contain"
+          width="60"
+          height="60"
+        />
+        <Typography
+          variant="h4"
+          component="h4"
+          sx={{ ml: 1, fontSize: 22, fontWeight: 900 }}
+        >
+          AÇAI HOME
+        </Typography>
+      </Box>
+    </Link>
   );
 }
 

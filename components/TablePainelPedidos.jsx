@@ -124,12 +124,13 @@ export default function TablePainelPedidos(props) {
 
   return (
     <>
-      <TableContainer>
+      <TableContainer sx={{ width: "100%" }}>
         <Table
           size="small"
           sx={{
             width: "100%",
             minWidth: 900,
+
             borderRadius: "8px",
             "& .tableCellClasses.root": {
               borderBottom: "none",
@@ -171,10 +172,10 @@ export default function TablePainelPedidos(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pedidos.map((item, index) => {
+            {/* {pedidos.map((item, index) => {
               console.log("ITEM>>>", item);
               return <></>;
-            })}
+            })} */}
 
             <TableRow
               sx={{

@@ -211,7 +211,6 @@ export default function CadastroFuncionario() {
         <Grid item xs={12}>
           <Button
             variant="contained"
-            size="small"
             endIcon={<SaveIcon />}
             disableElevation
             onClick={salvarFuncionario}
