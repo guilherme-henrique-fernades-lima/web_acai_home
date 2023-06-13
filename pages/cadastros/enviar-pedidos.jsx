@@ -24,6 +24,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import SendIcon from "@mui/icons-material/Send";
+import TextField from "@mui/material/TextField";
 
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
@@ -501,88 +502,97 @@ export default function EnviarPedidos() {
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
-                maxWidth: 400,
+                maxWidth: 450,
+                width: "100%",
                 bgcolor: "background.paper",
                 boxShadow: 24,
-                borderRadius: "8px",
-                padding: "20px 30px",
+                borderRadius: "2px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-start",
                 flexDirection: "column",
+                overflow: "hidden",
                 //minHeight: 400,
               }}
             >
-              <Typography
-                variant="h3"
-                component="h3"
-                sx={{ fontWeight: 900, fontSize: 16 }}
-              >
-                Confirmar envio de pedidos
-              </Typography>
               <Box
                 sx={{
                   display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "flex-start",
-                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
                   width: "100%",
-                  //padding: 2,
-                  //border: "1px solid #ccc",
-                  mt: 1,
-                  borderRadius: "4px",
+                  height: 60,
+                  backgroundColor: "#842E6B",
+                }}
+              ></Box>
+
+              <Stack
+                sx={{
+                  width: "100%",
+                  padding: "10px 20px",
+                  borderBottom: "1px solid #ccc",
                 }}
               >
-                <Stack
-                  direction="row"
+                <TextField
+                  id="procurar_entregador"
+                  fullWidth
+                  placeholder="Pesquisar entregador..."
+                  type="text"
+                  size="small"
+                  //value={email}
+                  // onChange={(e) => {
+                  //   setEmail(e.target.value);
+                  // }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                  //label="Nome do entregador"
+                />
+              </Stack>
+
+              <Typography
+                variant="h6"
+                component="h6"
+                sx={{
+                  color: "#842E6B",
+                  fontWeight: 700,
+                  fontSize: 16,
+                  textAlign: "left",
+                  width: "100%",
+                  marginLeft: "20px",
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                }}
+              >
+                Entregadores ativos
+              </Typography>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  width: "100%",
+                  height: 300,
+                  flexDirection: "column",
+                }}
+              >
+                <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
+                    justifyContent: "flex-start",
                     width: "100%",
-                    mt: 1,
-                    mb: 1,
+                    height: 70,
+                    flexDirection: "column",
+                    cursor: "pointer",
+                    borderBottom: "1px solid #ccc",
+                    borderTop: "1px solid #ccc",
+                    "&:hover": {
+                      backgroundColor: "#f8e8ff",
+                    },
                   }}
-                >
-                  <Typography
-                    variant="h3"
-                    component="h3"
-                    sx={{ fontWeight: 700, fontSize: 14 }}
-                  >
-                    PD0001
-                  </Typography>
-                  <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
-                </Stack>
+                ></Box>
               </Box>
-              <Divider sx={{ width: "100%", mt: 1, mb: 1 }} />
-
-              <RenderUser />
-
-              <Stack direction="row" sx={{ width: "100%", mt: 3 }}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={handleOpenCloseModalEnvio}
-                  disableElevation
-                  fullWidth
-                >
-                  CANCELAR
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={() => {
-                    enviarPedidosEntregador();
-                    handleOpenCloseModalEnvio();
-                  }}
-                  autoFocus
-                  disableElevation
-                  fullWidth
-                  sx={{ ml: 1 }}
-                >
-                  CONFIRMAR
-                </Button>
-              </Stack>
             </Box>
           </Fade>
         </Modal>
