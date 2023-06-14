@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Image from "next/image";
 
 //Mui icons
 import Box from "@mui/material/Box";
@@ -25,6 +26,13 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import SendIcon from "@mui/icons-material/Send";
 import TextField from "@mui/material/TextField";
+
+import Radio from "@mui/material/Radio";
+import InputAdornment from "@mui/material/InputAdornment";
+
+//Icons
+import CloseIcon from "@mui/icons-material/Close";
+import PersonIcon from "@mui/icons-material/Person";
 
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
@@ -55,6 +63,59 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PixIcon from "@mui/icons-material/Pix";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+
+function RenderUserRow() {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: "20px",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: "10px",
+          width: 50,
+          height: 50,
+          backgroundColor: "#ccc",
+          borderRadius: "50%",
+        }}
+      >
+        {/* <Image
+          src="https://public-ecommerce.s3.sa-east-1.amazonaws.com/geral/unknow_user.png"
+          height={50}
+          width={50}
+          className="roudedImage"
+        /> */}
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: "Lato, sans-serif",
+            fontWeight: 900,
+            color: "#2e2e2e",
+            fontSize: "14px",
+          }}
+        >
+          NOME
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
 
 function RenderModoPagamento() {
   const [modoPagamento, setModoPagamento] = useState("");
@@ -519,79 +580,382 @@ export default function EnviarPedidos() {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
+                  height: 100,
                   width: "100%",
-                  height: 60,
+                  borderBottom: "1px solid #ccc",
+                  padding: "10px 20px",
                   backgroundColor: "#842E6B",
                 }}
-              ></Box>
-
-              <Stack
-                sx={{
-                  width: "100%",
-                  padding: "10px 20px",
-                  borderBottom: "1px solid #ccc",
-                }}
               >
-                <TextField
-                  id="procurar_entregador"
-                  fullWidth
-                  placeholder="Pesquisar entregador..."
-                  type="text"
-                  size="small"
-                  //value={email}
-                  // onChange={(e) => {
-                  //   setEmail(e.target.value);
-                  // }}
-                  InputLabelProps={{ shrink: true }}
-                  autoComplete="off"
-                  //label="Nome do entregador"
-                />
-              </Stack>
+                <IconButton aria-label="enviar" size="large" color="error">
+                  <CloseIcon fontSize="inherit" sx={{ color: "#fff" }} />
+                </IconButton>
 
-              <Typography
-                variant="h6"
-                component="h6"
-                sx={{
-                  color: "#842E6B",
-                  fontWeight: 700,
-                  fontSize: 16,
-                  textAlign: "left",
-                  width: "100%",
-                  marginLeft: "20px",
-                  marginTop: "10px",
-                  marginBottom: "10px",
-                }}
-              >
-                Entregadores ativos
-              </Typography>
-
+                <Typography
+                  variant="h6"
+                  component="h6"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: 16,
+                    textAlign: "left",
+                    width: "100%",
+                    marginLeft: "20px",
+                    color: "#fff",
+                  }}
+                >
+                  ENVIAR PEDIDO PARA ENTREGADOR
+                </Typography>
+              </Box>
               <Box
                 sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
+                  overflowX: "hidden",
+                  overflowY: "scroll",
                   width: "100%",
-                  height: 300,
-                  flexDirection: "column",
+                  height: 400,
+                  ".firefoxScrollBar": {
+                    "scrollbar-width": "auto",
+                    "scrollbar-color": "#000 #5e5e5e",
+                  },
+                  "::-webkit-scrollbar": {
+                    width: "8px",
+                  },
+                  "::-webkit-scrollbar-track": {
+                    boxShadow: "nset 0 0 6px grey",
+                    //borderRadius: "5px",
+                    backgroundColor: "#ececec",
+                  },
+                  "::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#5e5e5e",
+                    //borderRadius: "8px",
+                    height: "2px",
+                  },
                 }}
               >
-                <Box
+                <Stack
                   sx={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "flex-start",
                     width: "100%",
                     height: 70,
-                    flexDirection: "column",
-                    cursor: "pointer",
-                    borderBottom: "1px solid #ccc",
-                    borderTop: "1px solid #ccc",
+                    flexDirection: "row",
                     "&:hover": {
-                      backgroundColor: "#f8e8ff",
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
                     },
                   }}
-                ></Box>
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    height: 70,
+                    flexDirection: "row",
+                    "&:hover": {
+                      backgroundColor: "#e6e6e6",
+                      cursor: "pointer",
+                    },
+                  }}
+                >
+                  <Radio
+                    checked={true}
+                    onChange={() => {}}
+                    value="a"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  <RenderUserRow />
+                </Stack>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  height: 70,
+                  width: "100%",
+                  borderTop: "1px solid #ccc",
+                  padding: "10px 20px",
+                  backgroundColor: "#842E6B",
+                }}
+              >
+                <Stack
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
+                  }}
+                >
+                  <PersonIcon sx={{ fontSize: 28, color: "#fff" }} />
+                  <Typography
+                    variant="h6"
+                    component="h6"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: 16,
+                      textAlign: "left",
+                      width: "100%",
+                      marginLeft: "10px",
+                      color: "#fff",
+                    }}
+                  >
+                    NOME
+                  </Typography>
+                </Stack>
+
+                <Button
+                  aria-label="enviar"
+                  variant="contained"
+                  disableElevation
+                  size="large"
+                  color="success"
+                  endIcon={<SendIcon fontSize="inherit" />}
+                >
+                  ENVIAR
+                </Button>
               </Box>
             </Box>
           </Fade>
