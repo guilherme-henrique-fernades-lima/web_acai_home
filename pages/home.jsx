@@ -62,11 +62,7 @@ export default function Home() {
     <>
       <GridPainelPedidos status={cards} />
 
-      <Grid
-        container
-        spacing={1}
-        sx={{ marginTop: 0, padding: "5px", backgroundColor: "blue" }}
-      >
+      <Grid container spacing={1} sx={{ marginTop: 0, padding: "5px" }}>
         <Grid
           item
           xs={12}
@@ -119,10 +115,10 @@ export default function Home() {
               <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
                 <TextField
                   id="status_pedido"
+                  select
                   fullWidth
                   placeholder="Status do pedido"
                   label="Status do pedido"
-                  select
                   size="small"
                   // value={nome}
                   onChange={(e) => {
@@ -152,7 +148,7 @@ export default function Home() {
               width: "100%",
               boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
               padding: "10px 20px",
-              overflow: "scroll",
+              // overflow: "scroll",
             }}
             elevation={0}
           >
@@ -163,18 +159,6 @@ export default function Home() {
         <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
           <TableEntregadoresStatus />
         </Grid>
-      </Grid>
-
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={9}
-          lg={9}
-          xl={9}
-          sx={{ border: "1px solid red", height: 300 }}
-        ></Grid>
       </Grid>
     </>
   );

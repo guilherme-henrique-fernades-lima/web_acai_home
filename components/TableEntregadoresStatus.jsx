@@ -62,7 +62,7 @@ function RenderUser() {
             fontSize: 14,
           }}
         >
-          NOME DO ENTREGADOR
+          NOME
         </Typography>
         <Typography
           variant="body1"

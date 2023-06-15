@@ -26,6 +26,10 @@ export const ZONA_ENTREGA = [
     value: "sudeste",
     label: "SUDESTE",
   },
+  {
+    value: "timon",
+    label: "TIMON (CIDADE)",
+  },
 ];
 
 export const STATUS_PEDIDO = [
@@ -34,19 +38,19 @@ export const STATUS_PEDIDO = [
     label: "ABERTO",
   },
   {
-    value: "f",
+    value: "2",
     label: "AGUARDANDO",
   },
   {
-    value: "f",
+    value: "3",
     label: "PENDENTE",
   },
   {
-    value: "f",
+    value: "4",
     label: "CANCELADO",
   },
   {
-    value: "f",
+    value: "5",
     label: "CONCLUÍDO",
   },
 ];
