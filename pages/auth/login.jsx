@@ -19,11 +19,11 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 export default function SingIn() {
   const { login, error } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
-  const [nr_matricula, setNrMatricula] = useState("");
+  const [cpf, setCpf] = useState("");
   const [password, setPassword] = useState("");
 
   const handleMatricula = (event) => {
-    setNrMatricula(event.target.value);
+    setCpf(event.target.value);
   };
 
   const handlePassword = (event) => {
@@ -31,7 +31,7 @@ export default function SingIn() {
   };
 
   const handleLogin = () => {
-    login(JSON.stringify({ nr_matricula: nr_matricula, password: password }));
+    login(JSON.stringify({ cpf: cpf, password: password }));
   };
 
   const handleShowPassword = () => {
@@ -86,7 +86,7 @@ export default function SingIn() {
           placeholder="Matrícula"
           type="text"
           size="small"
-          value={nr_matricula}
+          value={cpf}
           onChange={handleMatricula}
           error={Boolean(error)}
           InputLabelProps={{ shrink: true }}
