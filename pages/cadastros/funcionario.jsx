@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+
+//Third party libraries
 import toast, { Toaster } from "react-hot-toast";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,12 +16,16 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import MenuItem from "@mui/material/MenuItem";
 import Divider from "@mui/material/Divider";
+import InputAdornment from "@mui/material/InputAdornment";
 
+//Custom components
 import { FUNCOES, IS_ACTIVE, UF_ESTADO } from "@/helpers/constants";
 
 //Icons
 import SaveIcon from "@mui/icons-material/Save";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 //Schema validação
 import { funcionarioSchema } from "@/schemas/funcionario";
@@ -50,20 +56,27 @@ export default function CadastroFuncionario() {
   const [estado, setEstado] = useState("");
   const [observacaoEntregador, setObservacaoEntregador] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   async function salvarFuncionario() {
     const payload = getPayload();
     console.log(payload);
-    // const response = await fetch(`api/auth/register`, {
-    //   method: "POST",
-    //   body: JSON.stringify(payload),
-    // });
+    const response = await fetch(`/api/auth/register/`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+    });
 
-    // if (response.status == 200) {
-    toast.success("Funcionário cadastrado com sucesso!");
-    // } else {
-    //   toast.error("Erro ao cadastrar funcionário!");
-    // }
+    console.log(response);
+
+    if (response.status == 200) {
+      toast.success("Funcionário cadastrado com sucesso!");
+    } else {
+      toast.error("Erro ao cadastrar funcionário!");
+    }
   }
 
   async function editarDadosFuncionario() {
@@ -85,18 +98,20 @@ export default function CadastroFuncionario() {
 
   function getPayload() {
     const payload = {
-      username: userName,
-      cpf: cpf,
+      username: userName.toUpperCase(),
+      cpf: parseInt(cpf),
       funcao: funcao,
       is_active: active,
       cep: cep,
-      logradouro: logradouro,
+      logradouro: logradouro.toUpperCase(),
       numLogr: numLogr,
-      complemento: complemento,
-      bairro: bairro,
-      cidade: cidade,
-      estado: estado,
+      complLogr: complemento.toUpperCase(),
+      bairro: bairro.toUpperCase(),
+      cidade: cidade.toUpperCase(),
+      estado: estado.toUpperCase(),
       observacaoEntregador: observacaoEntregador,
+      avatar: null,
+      email: null,
     };
 
     return payload;
@@ -122,11 +137,19 @@ export default function CadastroFuncionario() {
           justifyContent: "flex-start",
         }}
       >
-        <GroupAddIcon sx={{ fontSize: 34, marginRight: "10px" }} />
+        <GroupAddIcon
+          sx={{
+            fontSize: { xs: 22, sm: 22, md: 28, lg: 30, xl: 30 },
+            marginRight: "10px",
+          }}
+        />
         <Typography
           component="h4"
           variant="h4"
-          sx={{ fontWeight: 700, fontSize: 26 }}
+          sx={{
+            fontWeight: 700,
+            fontSize: { xs: 14, sm: 16, md: 16, lg: 22, xl: 26 },
+          }}
         >
           Cadastrar funcionário
         </Typography>
@@ -162,6 +185,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
             <Typography sx={{ color: "#f00", fontSize: "12px" }}>
               {errors.username?.message}
@@ -198,6 +227,12 @@ export default function CadastroFuncionario() {
                   .replace(/(\..*?)\..*/g, "$1"))
               }
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
             <Typography sx={{ color: "#f00", fontSize: "12px" }}>
               {errors.cpf?.message}
@@ -224,6 +259,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
           </Grid>
 
@@ -247,6 +288,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
@@ -277,6 +324,12 @@ export default function CadastroFuncionario() {
                   .replace(/(\..*?)\..*/g, "$1"))
               }
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -290,7 +343,7 @@ export default function CadastroFuncionario() {
             <TextField
               id="complemento"
               fullWidth
-              //placeholder=""
+              placeholder="Digite a cidade"
               type="text"
               size="small"
               value={complemento}
@@ -299,6 +352,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
           </Grid>
 
@@ -313,7 +372,7 @@ export default function CadastroFuncionario() {
             <TextField
               id="bairro"
               fullWidth
-              //placeholder=""
+              placeholder="Digite o bairro"
               type="text"
               size="small"
               value={bairro}
@@ -322,6 +381,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
           </Grid>
 
@@ -336,7 +401,7 @@ export default function CadastroFuncionario() {
             <TextField
               id="cidade"
               fullWidth
-              // placeholder=""
+              placeholder="Digite a cidade"
               type="text"
               size="small"
               value={cidade}
@@ -345,6 +410,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             />
           </Grid>
 
@@ -369,6 +440,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             >
               {UF_ESTADO.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -400,6 +477,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             >
               {FUNCOES.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -434,6 +517,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
             >
               {IS_ACTIVE.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -443,6 +532,131 @@ export default function CadastroFuncionario() {
             </TextField>
             <Typography sx={{ color: "#f00", fontSize: "12px" }}>
               {errors.is_active?.message}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Typography
+              component="label"
+              htmlFor="password"
+              sx={{ fontSize: 14, fontWeight: 700 }}
+            >
+              Senha
+            </Typography>
+            <TextField
+              id="password"
+              {...register("password")}
+              error={Boolean(errors.password)}
+              fullWidth
+              type={showPassword ? "text" : "password"}
+              size="small"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
+              autoComplete="off"
+              inputProps={{
+                maxLength: 13,
+              }}
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ cursor: "pointer" }}
+                    onClick={handleShowPassword}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon
+                        sx={{
+                          color: "#3b3b3b",
+                          fontSize: 18,
+                          "&:hover": { color: "#7a7a7a" },
+                        }}
+                      />
+                    ) : (
+                      <VisibilityIcon
+                        sx={{
+                          color: "#3b3b3b",
+                          fontSize: 18,
+                          "&:hover": { color: "#7a7a7a" },
+                        }}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Typography sx={{ color: "#f00", fontSize: "12px" }}>
+              {errors.password?.message}
+            </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Typography
+              component="label"
+              htmlFor="repita_senha"
+              sx={{ fontSize: 14, fontWeight: 700 }}
+            >
+              Repita a senha
+            </Typography>
+            <TextField
+              id="repita_senha"
+              {...register("repeat_password")}
+              error={Boolean(errors.repeat_password)}
+              fullWidth
+              type={showPassword ? "text" : "password"}
+              size="small"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
+              autoComplete="off"
+              inputProps={{
+                maxLength: 13,
+              }}
+              InputProps={{
+                style: {
+                  borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ cursor: "pointer" }}
+                    onClick={handleShowPassword}
+                  >
+                    {showPassword ? (
+                      <VisibilityOffIcon
+                        sx={{
+                          color: "#3b3b3b",
+                          fontSize: 18,
+                          "&:hover": { color: "#7a7a7a" },
+                        }}
+                      />
+                    ) : (
+                      <VisibilityIcon
+                        sx={{
+                          color: "#3b3b3b",
+                          fontSize: 18,
+                          "&:hover": { color: "#7a7a7a" },
+                        }}
+                      />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+
+            <Typography sx={{ color: "#f00", fontSize: "12px" }}>
+              {errors.repeat_password?.message}
             </Typography>
           </Grid>
 
@@ -456,8 +670,10 @@ export default function CadastroFuncionario() {
             </Typography>
             <TextField
               id="observacao"
+              multiline
+              rows={4}
               fullWidth
-              // placeholder=""
+              placeholder="Aqui você pode inserir informações adicionais/histórico sobre o entregador."
               type="text"
               size="small"
               value={observacaoEntregador}
@@ -466,50 +682,12 @@ export default function CadastroFuncionario() {
               }}
               InputLabelProps={{ shrink: true }}
               autoComplete="off"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-            <Typography
-              component="label"
-              htmlFor="password"
-              sx={{ fontSize: 14, fontWeight: 700 }}
-            >
-              Senha
-            </Typography>
-            <TextField
-              id="password"
-              fullWidth
-              type="password"
-              size="small"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
+              InputProps={{
+                style: {
+                  borderRadius: "4px",
+                  color: "#3b3b3b",
+                },
               }}
-              InputLabelProps={{ shrink: true }}
-              autoComplete="off"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-            <Typography
-              component="label"
-              htmlFor="repita_senha"
-              sx={{ fontSize: 14, fontWeight: 700 }}
-            >
-              Repita a senha
-            </Typography>
-            <TextField
-              id="repita_senha"
-              fullWidth
-              type="password"
-              size="small"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              InputLabelProps={{ shrink: true }}
-              autoComplete="off"
             />
           </Grid>
 
@@ -520,7 +698,7 @@ export default function CadastroFuncionario() {
               endIcon={<SaveIcon />}
               disableElevation
             >
-              Salvar
+              CADASTRAR
             </Button>
           </Grid>
         </Grid>

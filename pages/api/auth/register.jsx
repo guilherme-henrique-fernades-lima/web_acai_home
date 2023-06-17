@@ -1,5 +1,7 @@
-async function signInRequest(req, res) {
+async function cadastrarNovoUsuario(req, res) {
   const payload = req.body;
+  console.log("ENTROU NA FUNCAO DE CADASTRAR NOVO FUNCIONARIO");
+  console.log("PAYLOAD: ", payload);
 
   const result = await fetch(`${process.env.NEXT_URL_BACKEND}/auth/register/`, {
     method: "POST",
@@ -17,7 +19,7 @@ async function signInRequest(req, res) {
 
 export default async function handler(req, res) {
   if (req.method == "POST") {
-    signInRequest(req, res);
+    cadastrarNovoUsuario(req, res);
   } else {
     res.status(405).send();
   }
