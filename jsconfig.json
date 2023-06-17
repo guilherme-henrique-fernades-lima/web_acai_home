@@ -6,6 +6,8 @@
         "@/context/*": ["context/*"],
         "@/helpers/*": ["helpers/*"],
         "@/components/*": ["components/*"],
+        "@/schemas/*": ["schemas/*"],
+        "@/styles/*": ["styles/*"],
       }
     }
   }
