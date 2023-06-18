@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 //Mui components
 import Container from "@mui/material/Container";
@@ -13,6 +13,9 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+
+//Context
+import { AuthContext } from "@/context/AuthContext";
 
 import { BadgeStatusEntregador } from "@/helpers/utils";
 
@@ -84,6 +87,27 @@ function RenderUser() {
 }
 
 export default function RelacaoFuncionario() {
+  const { user } = useContext(AuthContext);
+
+  const [dataSet, setDataset] = useState([]);
+  console.log(dataSet);
+  useEffect(() => {
+    user?.token && getUsersData();
+  }, []);
+
+  async function getUsersData() {
+    const response = await fetch(`/api/auth/users/`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
+
+    const res = await response.json();
+    console.log("RES", res);
+    setDataset(res.data);
+  }
+
   return (
     <Container>
       <Paper

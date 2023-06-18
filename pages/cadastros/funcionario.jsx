@@ -64,15 +64,13 @@ export default function CadastroFuncionario() {
 
   async function salvarFuncionario() {
     const payload = getPayload();
-    console.log(payload);
-    const response = await fetch(`/api/auth/register/`, {
+
+    const response = await fetch(`/api/auth/users/`, {
       method: "POST",
       body: JSON.stringify(payload),
     });
 
-    console.log(response);
-
-    if (response.status == 200) {
+    if (response.ok) {
       toast.success("Funcionário cadastrado com sucesso!");
     } else {
       toast.error("Erro ao cadastrar funcionário!");
@@ -99,19 +97,20 @@ export default function CadastroFuncionario() {
   function getPayload() {
     const payload = {
       username: userName.toUpperCase(),
+      email: null,
       cpf: cpf,
       funcao: funcao,
-      is_active: active,
+      is_active: false,
       cep: cep,
       logradouro: logradouro ? logradouro.toUpperCase() : null,
-      numLogr: numLogr,
+      numLogr: numLogr ? numLogr.toUpperCase() : null,
       complLogr: complemento ? complemento.toUpperCase() : null,
       bairro: bairro ? bairro.toUpperCase() : null,
       cidade: cidade ? cidade.toUpperCase() : null,
       estado: estado ? estado.toUpperCase() : null,
-      observacaoEntregador: observacaoEntregador,
+      observacao: observacaoEntregador ? observacaoEntregador : null,
+      password: password,
       avatar: null,
-      email: null,
     };
 
     return payload;
@@ -187,7 +186,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -229,7 +228,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -261,7 +260,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -290,7 +289,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -326,7 +325,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -354,7 +353,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -383,7 +382,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -412,7 +411,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -442,7 +441,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -479,7 +478,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -519,7 +518,7 @@ export default function CadastroFuncionario() {
               autoComplete="off"
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
               }}
@@ -561,7 +560,7 @@ export default function CadastroFuncionario() {
               }}
               InputProps={{
                 style: {
-                  borderRadius: "28px",
+                  // borderRadius: "28px",
                   color: "#3b3b3b",
                 },
 
@@ -594,69 +593,6 @@ export default function CadastroFuncionario() {
             />
             <Typography sx={{ color: "#f00", fontSize: "12px" }}>
               {errors.password?.message}
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-            <Typography
-              component="label"
-              htmlFor="repita_senha"
-              sx={{ fontSize: 14, fontWeight: 700 }}
-            >
-              Repita a senha
-            </Typography>
-            <TextField
-              id="repita_senha"
-              {...register("repeat_password")}
-              error={Boolean(errors.repeat_password)}
-              fullWidth
-              type={showPassword ? "text" : "password"}
-              size="small"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              InputLabelProps={{ shrink: true }}
-              autoComplete="off"
-              inputProps={{
-                maxLength: 13,
-              }}
-              InputProps={{
-                style: {
-                  borderRadius: "28px",
-                  color: "#3b3b3b",
-                },
-
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    sx={{ cursor: "pointer" }}
-                    onClick={handleShowPassword}
-                  >
-                    {showPassword ? (
-                      <VisibilityOffIcon
-                        sx={{
-                          color: "#3b3b3b",
-                          fontSize: 18,
-                          "&:hover": { color: "#7a7a7a" },
-                        }}
-                      />
-                    ) : (
-                      <VisibilityIcon
-                        sx={{
-                          color: "#3b3b3b",
-                          fontSize: 18,
-                          "&:hover": { color: "#7a7a7a" },
-                        }}
-                      />
-                    )}
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            <Typography sx={{ color: "#f00", fontSize: "12px" }}>
-              {errors.repeat_password?.message}
             </Typography>
           </Grid>
 

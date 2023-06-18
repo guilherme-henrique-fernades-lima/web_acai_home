@@ -94,7 +94,7 @@ export default function Layout(props) {
   const { changeThemePalette } = useContext(ThemeContext);
   const { logout } = useContext(AuthContext);
   const [open, setOpen] = useState(true);
-  const [activeOption, setActiveOption] = useState("home");
+  const [activeOption, setActiveOption] = useState("");
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
 
   const handleSairSistemaDialog = () => {
