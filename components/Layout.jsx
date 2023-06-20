@@ -47,6 +47,7 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SendIcon from "@mui/icons-material/Send";
+import MapIcon from "@mui/icons-material/Map";
 
 //Contexto
 import { ThemeContext } from "@/context/ThemeContext";
@@ -472,6 +473,45 @@ export default function Layout(props) {
               </CustomListItemButton>
             </Link>
 
+            <Link href="/entregadores/pedidos-em-rota">
+              <CustomListItemButton
+                onClick={() => {
+                  setOpen(true);
+                  setActiveOption("pedidos_em_rota");
+                }}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+                }}
+                active={activeOption == "pedidos_em_rota" ? true : false}
+                open={open}
+              >
+                <Tooltip
+                  title={open ? "" : "Pedidos em rota"}
+                  placement="right"
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <MapIcon />
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText
+                  primary={
+                    <CustomTypography
+                      active={activeOption == "pedidos_em_rota" ? true : false}
+                    >
+                      Pedidos em rota
+                    </CustomTypography>
+                  }
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </CustomListItemButton>
+            </Link>
+
             <Box
               sx={{
                 //borderBottom: "1px solid #ECECEC",
@@ -492,11 +532,11 @@ export default function Layout(props) {
                 mr: "30px",
                 display: open ? "" : "none",
                 mt: 2,
-                mb: 2,
+                mb: 0,
               }}
             />
 
-            <Link href="/configuracoes/usuario">
+            {/* <Link href="/configuracoes/usuario">
               <CustomListItemButton
                 onClick={() => {
                   setOpen(true);
@@ -530,7 +570,7 @@ export default function Layout(props) {
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </CustomListItemButton>
-            </Link>
+            </Link> */}
 
             <CustomListItemButton
               sx={{

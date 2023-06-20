@@ -4,6 +4,8 @@ import React, { useEffect, useState, useContext } from "react";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -18,6 +20,9 @@ import { styled } from "@mui/material/styles";
 import { AuthContext } from "@/context/AuthContext";
 
 import { BadgeStatusEntregador } from "@/helpers/utils";
+
+//Icons
+import EditIcon from "@mui/icons-material/Edit";
 
 const CustomTableCellHeader = styled(TableCell)((props) => ({
   fontSize: 12,
@@ -182,7 +187,15 @@ export default function RelacaoFuncionario() {
                 </CustomTableCellBody>
                 <CustomTableCellBody align="center">NOME</CustomTableCellBody>
                 <CustomTableCellBody align="center">NOME</CustomTableCellBody>
-                <CustomTableCellBody align="center">NOME</CustomTableCellBody>
+                <CustomTableCellBody align="center">
+                  <Tooltip title="Editar dados do funcionário" placement="top">
+                    <IconButton
+                      sx={{ "&:hover": { svg: { color: "#842E6B" } } }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                </CustomTableCellBody>
               </TableRow>
             </TableBody>
           </Table>

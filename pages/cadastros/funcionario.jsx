@@ -609,7 +609,7 @@ export default function CadastroFuncionario() {
               multiline
               rows={4}
               fullWidth
-              placeholder="Aqui você pode inserir informações adicionais/histórico sobre o entregador."
+              placeholder="Aqui você pode inserir informações adicionais/histórico sobre o funcionário."
               type="text"
               size="small"
               value={observacaoEntregador}
