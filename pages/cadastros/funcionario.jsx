@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 //Third party libraries
 import toast, { Toaster } from "react-hot-toast";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 //Mui components
 import Container from "@mui/material/Container";
@@ -30,7 +31,13 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 //Schema validação
 import { funcionarioSchema } from "@/schemas/funcionario";
 
+//Context
+import { AuthContext } from "@/context/AuthContext";
+
 export default function CadastroFuncionario() {
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -57,6 +64,40 @@ export default function CadastroFuncionario() {
   const [observacaoEntregador, setObservacaoEntregador] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (user?.token) {
+      getUserData();
+    }
+  }, []);
+
+  async function getUserData() {
+    setLoading(true);
+    const response = await fetch(
+      `/api/cadastros/funcionario/?id=${router.query?.id}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user?.token,
+        },
+      }
+    );
+
+    if (response.ok) {
+      const res = await response.json();
+
+      setUserName(res.username);
+      setCpf(res.cpf);
+      setFuncao(res.funcao);
+      setActive(res.is_active);
+      setShowPassword(res.password);
+      setObservacaoEntregador(res.observacao);
+
+      setLoading(false);
+    }
+  }
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);

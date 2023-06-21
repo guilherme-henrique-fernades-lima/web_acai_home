@@ -222,3 +222,16 @@ export function RenderUser() {
     </Box>
   );
 }
+
+export function formatCpf(cpf) {
+  cpf = cpf.replace(/\D/g, ""); // Remove caracteres não numéricos
+
+  // Anonimiza os dígitos intermediários do CPF com asteriscos
+  var cpfAnonimo = cpf.substring(0, 3) + "." + "xxx" + "." + "xxx";
+
+  // Mantém os últimos dois dígitos do CPF
+  cpfAnonimo += "-" + cpf.substring(9);
+
+  // Retorna o CPF anonimizado com a formatação
+  return cpfAnonimo;
+}

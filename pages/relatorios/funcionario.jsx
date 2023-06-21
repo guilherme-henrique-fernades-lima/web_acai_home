@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import Link from "next/link";
 
 //Mui components
 import Container from "@mui/material/Container";
@@ -15,11 +16,15 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
+import Chip from "@mui/material/Chip";
+import Skeleton from "@mui/material/Skeleton";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
 import { BadgeStatusEntregador } from "@/helpers/utils";
+
+import { formatCpf } from "@/helpers/utils";
 
 //Icons
 import EditIcon from "@mui/icons-material/Edit";
@@ -38,56 +43,33 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   fontWeight: 400,
 }));
 
-function RenderUser() {
+function SkeletonTable() {
   return (
-    <Box
+    <Paper
       sx={{
+        width: "100%",
+        padding: "20px",
+        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+        marginBottom: 1,
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start",
-        width: "100%",
+        justifyContent: "center",
+        flexDirection: "column",
       }}
+      elevation={0}
     >
-      <Box
-        sx={{
-          width: 45,
-          height: 45,
-          backgroundColor: "#ccc",
-          borderRadius: "50%",
-        }}
-      />
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          flexDirection: "column",
-          marginLeft: "10px",
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{
-            fontFamily: "Lato, sans-serif",
-            fontWeight: 900,
-            fontSize: 14,
-          }}
-        >
-          NOME
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            fontFamily: "Lato, sans-serif",
-            fontWeight: 400,
-            fontSize: 14,
-            marginTOp: "-15px",
-          }}
-        >
-          nome
-        </Typography>
-      </Box>
-    </Box>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
+        (item, index) => (
+          <Skeleton
+            key={index}
+            variant="rounded"
+            width={"100%"}
+            height={20}
+            sx={{ mt: 1, mb: 1 }}
+          />
+        )
+      )}
+    </Paper>
   );
 }
 
@@ -95,12 +77,15 @@ export default function RelacaoFuncionario() {
   const { user } = useContext(AuthContext);
 
   const [dataSet, setDataset] = useState([]);
-  console.log(dataSet);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     user?.token && getUsersData();
   }, []);
 
   async function getUsersData() {
+    setLoading(true);
+
     const response = await fetch(`/api/auth/users/`, {
       method: "GET",
       headers: {
@@ -109,98 +94,140 @@ export default function RelacaoFuncionario() {
     });
 
     const res = await response.json();
-    console.log("RES", res);
-    setDataset(res.data);
+
+    if (response.ok) {
+      setDataset(res);
+      setLoading(false);
+    }
   }
 
   return (
     <Container>
-      <Paper
-        sx={{
-          width: "100%",
-          padding: "20px",
-          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-          marginBottom: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-        }}
-        elevation={0}
-      >
-        <TableContainer>
-          <Table
-            size="small"
-            sx={{
-              width: "100%",
-              marginTop: "10px",
-            }}
-          >
-            <TableHead
+      {loading ? (
+        <SkeletonTable />
+      ) : (
+        <Paper
+          sx={{
+            width: "100%",
+            padding: "20px",
+            boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+            marginBottom: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+          elevation={0}
+        >
+          <TableContainer>
+            <Table
+              size="small"
               sx={{
-                height: 30,
-                borderBottom: "1px solid #ccc",
-                overflow: "hidden",
+                width: "100%",
+                marginTop: "10px",
               }}
             >
-              <TableRow sx={{ "& td": { border: 0 } }}>
-                <CustomTableCellHeader align="center">
-                  AVATAR
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  NOME
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  STATUS
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  CPF
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  FUNÇÃO
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  ATIVO
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  AÇÃO
-                </CustomTableCellHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow
+              <TableHead
                 sx={{
-                  transition: "all 0.3s ease",
-                  height: 50,
-                  border: "none",
-                  //"&:hover": { backgroundColor: "#f8e8ff" },
-                  ".MuiTableCell-root": {
-                    borderBottom: "none",
-                  },
+                  height: 30,
+                  borderBottom: "1px solid #ccc",
+                  overflow: "hidden",
                 }}
               >
-                <CustomTableCellBody align="center">IMAGEM</CustomTableCellBody>
-                <CustomTableCellBody align="center">NOME</CustomTableCellBody>
-                <CustomTableCellBody align="center">ATIVO</CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  123-***-***-11
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">NOME</CustomTableCellBody>
-                <CustomTableCellBody align="center">NOME</CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  <Tooltip title="Editar dados do funcionário" placement="top">
-                    <IconButton
-                      sx={{ "&:hover": { svg: { color: "#842E6B" } } }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                </CustomTableCellBody>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+                <TableRow sx={{ "& td": { border: 0 } }}>
+                  <CustomTableCellHeader align="center">
+                    AVATAR
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    NOME
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    CPF
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    FUNÇÃO
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    STATUS
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    AÇÃO
+                  </CustomTableCellHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {dataSet?.map((funcionario) => (
+                  <TableRow
+                    key={funcionario.id}
+                    sx={{
+                      transition: "all 0.3s ease",
+                      height: 50,
+                      border: "none",
+                      //"&:hover": { backgroundColor: "#f8e8ff" },
+                      ".MuiTableCell-root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <CustomTableCellBody align="center">
+                      IMAGEM
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {funcionario.username.toUpperCase()}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {formatCpf(funcionario.cpf)}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {funcionario.funcao.toUpperCase()}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {funcionario.is_active ? (
+                        <Chip
+                          label="ATIVO"
+                          size="small"
+                          color="success"
+                          variant="contained"
+                          sx={{ fontSize: 12 }}
+                        />
+                      ) : (
+                        <Chip
+                          label="INATIVO"
+                          size="small"
+                          color="error"
+                          variant="contained"
+                          sx={{ fontSize: 12 }}
+                        />
+                      )}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      <Tooltip
+                        title="Editar dados do funcionário"
+                        placement="top"
+                      >
+                        <Link
+                          href={{
+                            pathname: "/cadastros/funcionario",
+                            query: {
+                              id: funcionario.id,
+                            },
+                          }}
+                        >
+                          <IconButton
+                            sx={{ "&:hover": { svg: { color: "#842E6B" } } }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Link>
+                      </Tooltip>
+                    </CustomTableCellBody>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      )}
     </Container>
   );
 }

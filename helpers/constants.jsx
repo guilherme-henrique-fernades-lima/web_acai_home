@@ -30,6 +30,10 @@ export const ZONA_ENTREGA = [
     value: "timon",
     label: "TIMON (CIDADE)",
   },
+  {
+    value: "TODAS",
+    label: "TODAS",
+  },
 ];
 
 export const STATUS_PEDIDO = [
@@ -52,6 +56,10 @@ export const STATUS_PEDIDO = [
   {
     value: "5",
     label: "CONCLUÍDO",
+  },
+  {
+    value: "TODAS",
+    label: "TODAS",
   },
 ];
 

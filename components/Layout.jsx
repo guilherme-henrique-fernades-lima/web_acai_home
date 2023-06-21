@@ -94,7 +94,7 @@ export default function Layout(props) {
 
   const { changeThemePalette } = useContext(ThemeContext);
   const { logout } = useContext(AuthContext);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [activeOption, setActiveOption] = useState("");
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
 
@@ -610,11 +610,25 @@ export default function Layout(props) {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, backgroundColor: "#F8F8F8" }}
+        sx={{
+          backgroundColor: "#F8F8F8",
+          height: "100%",
+          width: "100%",
+        }}
       >
         <DrawerHeader />
-        {/* <Container>{children}</Container> */}
-        {children}
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            flexDirection: "column",
+            backgroundColor: "#F8F8F8",
+          }}
+        >
+          {children}
+        </Box>
       </Box>
 
       <Dialog

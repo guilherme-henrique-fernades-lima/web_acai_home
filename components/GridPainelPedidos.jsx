@@ -36,7 +36,7 @@ export default function GridPainelPedidos(props) {
 
   return (
     <Grid container>
-      <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+      {/* <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
         <CustomBox elevation={0}>
           <Stack
             direction="row"
@@ -219,7 +219,7 @@ export default function GridPainelPedidos(props) {
             sx={{ marginLeft: "20px" }}
           />
         </CustomBox>
-      </CustomGrid>
+      </CustomGrid> 
 
       <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
         <CustomBox elevation={0}>
@@ -257,6 +257,9 @@ export default function GridPainelPedidos(props) {
           />
         </CustomBox>
       </CustomGrid>
+
+      */}
+
       {/* FIM DO SKELETON */}
 
       <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>

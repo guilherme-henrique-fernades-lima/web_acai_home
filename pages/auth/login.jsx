@@ -83,7 +83,7 @@ export default function SingIn() {
         />
 
         <TextField
-          placeholder="Matrícula"
+          placeholder="CPF"
           type="text"
           size="small"
           value={cpf}
