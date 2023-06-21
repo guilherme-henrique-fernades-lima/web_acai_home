@@ -10,9 +10,12 @@ async function cadastrarNovoUsuario(req, res) {
     body: payload,
   });
 
-  const json = await result.json();
-
-  return res.status(result.status).json(json);
+  if (result.status == 201) {
+    const json = await result.json();
+    return res.status(result.status).json(json);
+  } else {
+    return res.status(result.status).json({ message: "CPF já existe" });
+  }
 }
 
 async function listarUsuarios(req, res) {

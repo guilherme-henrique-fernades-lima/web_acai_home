@@ -111,8 +111,10 @@ export default function CadastroFuncionario() {
       body: JSON.stringify(payload),
     });
 
-    if (response.ok) {
+    if (response.status == 201) {
       toast.success("Funcionário cadastrado com sucesso!");
+    } else if (response.status == 403) {
+      toast.error("Já existe um funcionário cadastrado com esse CPF");
     } else {
       toast.error("Erro ao cadastrar funcionário!");
     }
@@ -142,7 +144,7 @@ export default function CadastroFuncionario() {
       cpf: cpf,
       funcao: funcao,
       is_active: false,
-      cep: cep,
+      cep: cep ? cep : null,
       logradouro: logradouro ? logradouro.toUpperCase() : null,
       numLogr: numLogr ? numLogr.toUpperCase() : null,
       complLogr: complemento ? complemento.toUpperCase() : null,

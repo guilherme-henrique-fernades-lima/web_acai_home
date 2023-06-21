@@ -13,93 +13,45 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Skeleton from "@mui/material/Skeleton";
+import Typography from "@mui/material/Typography";
 
-//Context
-import { AuthContext } from "@/context/AuthContext";
+//Hooks
+import { useFetch } from "../../hooks/useFetch";
 
-import { BadgeStatusEntregador } from "@/helpers/utils";
-
+//Formatters
 import { formatCpf } from "@/helpers/utils";
 
 //Icons
 import EditIcon from "@mui/icons-material/Edit";
 
-const CustomTableCellHeader = styled(TableCell)((props) => ({
-  fontSize: 12,
-  color: props.theme.palette.colors.text_title,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 900,
-}));
-
-const CustomTableCellBody = styled(TableCell)((props) => ({
-  fontSize: 12,
-  color: props.theme.palette.colors.text_title,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 400,
-}));
-
-function SkeletonTable() {
-  return (
-    <Paper
-      sx={{
-        width: "100%",
-        padding: "20px",
-        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-        marginBottom: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-      elevation={0}
-    >
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
-        (item, index) => (
-          <Skeleton
-            key={index}
-            variant="rounded"
-            width={"100%"}
-            height={20}
-            sx={{ mt: 1, mb: 1 }}
-          />
-        )
-      )}
-    </Paper>
-  );
-}
-
 export default function RelacaoFuncionario() {
-  const { user } = useContext(AuthContext);
-
   const [dataSet, setDataset] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    user?.token && getUsersData();
-  }, []);
+  var { data, error, loading } = useFetch("/api/auth/users/");
 
-  async function getUsersData() {
-    setLoading(true);
+  //console.log("funcionarios: ", data);
 
-    const response = await fetch(`/api/auth/users/`, {
-      method: "GET",
-      headers: {
-        Authorization: user.token,
-      },
-    });
+  // async function getUsersData() {
+  //   setLoading(true);
 
-    const res = await response.json();
+  //   const response = await fetch(`/api/auth/users/`, {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: user.token,
+  //     },
+  //   });
 
-    if (response.ok) {
-      setDataset(res);
-      setLoading(false);
-    }
-  }
+  //   const res = await response.json();
+
+  //   if (response.ok) {
+  //     setDataset(res);
+  //     setLoading(false);
+  //   }
+  // }
 
   return (
     <Container>
@@ -156,7 +108,7 @@ export default function RelacaoFuncionario() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataSet?.map((funcionario) => (
+                {data?.map((funcionario) => (
                   <TableRow
                     key={funcionario.id}
                     sx={{
@@ -229,5 +181,49 @@ export default function RelacaoFuncionario() {
         </Paper>
       )}
     </Container>
+  );
+}
+
+const CustomTableCellHeader = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 900,
+}));
+
+const CustomTableCellBody = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 400,
+}));
+
+function SkeletonTable() {
+  return (
+    <Paper
+      sx={{
+        width: "100%",
+        padding: "20px",
+        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+        marginBottom: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+      elevation={0}
+    >
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
+        (item, index) => (
+          <Skeleton
+            key={index}
+            variant="rounded"
+            width={"100%"}
+            height={20}
+            sx={{ mt: 1, mb: 1 }}
+          />
+        )
+      )}
+    </Paper>
   );
 }
