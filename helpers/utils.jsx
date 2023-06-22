@@ -155,7 +155,14 @@ export function RenderIconFormaPagamento(props) {
   } else if (formaPagamento == "DINHEIRO_CARTAO") {
     return (
       <Tooltip title="Dinheiro e cartão" placement="top">
-        <Stack>
+        <Stack
+          direction="row"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <LocalAtmIcon />
           <CreditCardIcon sx={{ marginLeft: "5px" }} />
         </Stack>
@@ -234,4 +241,22 @@ export function formatCpf(cpf) {
 
   // Retorna o CPF anonimizado com a formatação
   return cpfAnonimo;
+}
+
+export function formatarData(data) {
+  const partes = data.split("-");
+  const ano = partes[0];
+  const mes = partes[1];
+  const dia = partes[2];
+  const dataFormatada = `${dia}/${mes}/${ano}`;
+  return dataFormatada;
+}
+
+export function formatarValorBRL(valor) {
+  const options = {
+    style: "currency",
+    currency: "BRL",
+  };
+  const valorFormatado = valor.toLocaleString("pt-BR", options);
+  return valorFormatado;
 }

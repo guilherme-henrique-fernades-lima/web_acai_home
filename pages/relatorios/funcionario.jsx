@@ -27,6 +27,7 @@ import { formatCpf } from "@/helpers/utils";
 
 //Icons
 import EditIcon from "@mui/icons-material/Edit";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function RelacaoFuncionario() {
   const [dataSet, setDataset] = useState([]);
@@ -122,7 +123,9 @@ export default function RelacaoFuncionario() {
                     }}
                   >
                     <CustomTableCellBody align="center">
-                      IMAGEM
+                      <AccountCircleIcon
+                        sx={{ fontSize: 40, color: "#616161" }}
+                      />
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
                       {funcionario.username.toUpperCase()}
