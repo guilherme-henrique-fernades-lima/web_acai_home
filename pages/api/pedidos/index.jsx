@@ -2,11 +2,12 @@ async function getPedidos(req, res) {
   const token = req.headers.authorization;
 
   var date = req.query.date ?? "";
-  var statusPedido = req.query.date ?? "";
-  var zonaEntrega = req.query.date ?? "";
+  var status = req.query.status ?? "";
+  var tp_pag = req.query.tp_pag ?? "";
+  var zona = req.query.zona ?? "";
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/?date=2023-06-21`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/?date=2023-06-21&status=${status}&tp_pag=${tp_pag}&zona=${zona}`,
     {
       method: "GET",
       headers: {

@@ -15,22 +15,6 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const CustomGrid = styled(Grid)((props) => ({
-  height: 64,
-  padding: "5px",
-}));
-
-const CustomBox = styled(Paper)((props) => ({
-  //border: "1px solid #ccc",
-  width: "100%",
-  height: "100%",
-  borderRadius: "8px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
-}));
-
 export default function GridPainelPedidos(props) {
   const { status } = props;
 
@@ -477,3 +461,19 @@ export default function GridPainelPedidos(props) {
     </Grid>
   );
 }
+
+const CustomGrid = styled(Grid)((props) => ({
+  height: 64,
+  padding: "5px",
+}));
+
+const CustomBox = styled(Paper)((props) => ({
+  //border: "1px solid #ccc",
+  width: "100%",
+  height: "100%",
+  borderRadius: "8px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+}));

@@ -5,7 +5,7 @@ export const OPTIONS_SEXO = [
   },
   {
     value: "f",
-    label: "FEMENINO",
+    label: "FEMININO",
   },
 ];
 
@@ -56,6 +56,33 @@ export const STATUS_PEDIDO = [
   {
     value: "5",
     label: "CONCLUÍDO",
+  },
+  {
+    value: "TODAS",
+    label: "TODAS",
+  },
+];
+
+export const FORMA_PAGAMENTO = [
+  {
+    value: "DINHEIRO",
+    label: "DINHEIRO",
+  },
+  {
+    value: "CREDITO",
+    label: "CRÉDITO",
+  },
+  {
+    value: "DEBITO",
+    label: "DÉBITO",
+  },
+  {
+    value: "PIX",
+    label: "PIX",
+  },
+  {
+    value: "DINHEIRO_CARTAO",
+    label: "CARTÃO E DINHEIRO",
   },
   {
     value: "TODAS",

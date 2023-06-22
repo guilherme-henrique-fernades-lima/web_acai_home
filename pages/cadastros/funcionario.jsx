@@ -53,6 +53,7 @@ export default function CadastroFuncionario() {
   const [userName, setUserName] = useState("");
   const [cpf, setCpf] = useState("");
   const [funcao, setFuncao] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [active, setActive] = useState(false);
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
@@ -154,6 +155,7 @@ export default function CadastroFuncionario() {
       observacao: observacaoEntregador ? observacaoEntregador : null,
       password: password,
       avatar: null,
+      telefone: telefone ? telefone : null,
     };
 
     return payload;
@@ -209,9 +211,13 @@ export default function CadastroFuncionario() {
             <Typography
               component="label"
               htmlFor="userName"
-              sx={{ fontSize: 14, fontWeight: 700 }}
+              sx={{
+                fontSize: 14,
+                fontWeight: 700,
+                span: { color: "red", marginLeft: "3px" },
+              }}
             >
-              Nome
+              Nome<span>*</span>
             </Typography>
             <TextField
               id="userName"
@@ -242,9 +248,13 @@ export default function CadastroFuncionario() {
             <Typography
               component="label"
               htmlFor="cpf"
-              sx={{ fontSize: 14, fontWeight: 700 }}
+              sx={{
+                fontSize: 14,
+                fontWeight: 700,
+                span: { color: "red", marginLeft: "3px" },
+              }}
             >
-              CPF
+              CPF<span>*</span>
             </Typography>
             <TextField
               {...register("cpf")}
@@ -279,6 +289,46 @@ export default function CadastroFuncionario() {
             <Typography sx={{ color: "#f00", fontSize: "12px" }}>
               {errors.cpf?.message}
             </Typography>
+          </Grid>
+
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Typography
+              component="label"
+              htmlFor="userName"
+              sx={{
+                fontSize: 14,
+                fontWeight: 700,
+              }}
+            >
+              Telefone
+            </Typography>
+            <TextField
+              id="telefone"
+              fullWidth
+              placeholder="Insira o telefone com DDD"
+              type="text"
+              size="small"
+              value={telefone || ""}
+              onChange={(e) => {
+                setTelefone(e.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
+              autoComplete="off"
+              InputProps={{
+                style: {
+                  // borderRadius: "28px",
+                  color: "#3b3b3b",
+                },
+              }}
+              inputProps={{
+                maxLength: 11,
+              }}
+              onInput={(e) =>
+                (e.target.value = e.target.value
+                  .replace(/[^0-9.]/g, "")
+                  .replace(/(\..*?)\..*/g, "$1"))
+              }
+            />
           </Grid>
 
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -501,9 +551,13 @@ export default function CadastroFuncionario() {
             <Typography
               component="label"
               htmlFor="funcao"
-              sx={{ fontSize: 14, fontWeight: 700 }}
+              sx={{
+                fontSize: 14,
+                fontWeight: 700,
+                span: { color: "red", marginLeft: "3px" },
+              }}
             >
-              Função
+              Função<span>*</span>
             </Typography>
             <TextField
               id="funcao"
@@ -541,9 +595,13 @@ export default function CadastroFuncionario() {
             <Typography
               component="label"
               htmlFor="is_active"
-              sx={{ fontSize: 14, fontWeight: 700 }}
+              sx={{
+                fontSize: 14,
+                fontWeight: 700,
+                span: { color: "red", marginLeft: "3px" },
+              }}
             >
-              Está ativo?
+              Está ativo?<span>*</span>
             </Typography>
             <TextField
               id="is_active"
@@ -581,9 +639,13 @@ export default function CadastroFuncionario() {
             <Typography
               component="label"
               htmlFor="password"
-              sx={{ fontSize: 14, fontWeight: 700 }}
+              sx={{
+                fontSize: 14,
+                fontWeight: 700,
+                span: { color: "red", marginLeft: "3px" },
+              }}
             >
-              Senha
+              Senha<span>*</span>
             </Typography>
             <TextField
               id="password"

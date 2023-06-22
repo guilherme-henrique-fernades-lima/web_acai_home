@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
-export function useFetch(url) {
+export function useFetchSWR(url) {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
 

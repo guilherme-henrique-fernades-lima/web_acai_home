@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
+
+//Mui components
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,74 +12,8 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 
+//Custom components
 import { BadgeStatusEntregador } from "@/helpers/utils";
-
-const CustomTableCellHeader = styled(TableCell)((props) => ({
-  fontSize: 12,
-  color: props.theme.palette.colors.text_title,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 900,
-}));
-
-const CustomTableCellBody = styled(TableCell)((props) => ({
-  fontSize: 12,
-  color: props.theme.palette.colors.text_title,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 400,
-}));
-
-function RenderUser() {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        width: "100%",
-      }}
-    >
-      <Box
-        sx={{
-          width: 45,
-          height: 45,
-          backgroundColor: "#ccc",
-          borderRadius: "50%",
-        }}
-      />
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          flexDirection: "column",
-          marginLeft: "10px",
-        }}
-      >
-        <Typography
-          variant="body1"
-          sx={{
-            fontFamily: "Lato, sans-serif",
-            fontWeight: 900,
-            fontSize: 14,
-          }}
-        >
-          NOME
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{
-            fontFamily: "Lato, sans-serif",
-            fontWeight: 400,
-            fontSize: 14,
-            marginTOp: "-15px",
-          }}
-        >
-          nome
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
 
 export default function TableEntregadoresStatus() {
   return (
@@ -115,7 +50,7 @@ export default function TableEntregadoresStatus() {
             fontSize: 14,
           }}
         >
-          ENTREGADORES ONLINE: <span>17</span>
+          ENTREGADORES DISPONÍVEIS: <span>17</span>
         </Typography>
       </Box>
 
@@ -170,18 +105,6 @@ export default function TableEntregadoresStatus() {
                   <BadgeStatusEntregador status="aguardando">
                     AGUARDANDO
                   </BadgeStatusEntregador>
-                  <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{
-                      color: "#666666",
-                      fontWeight: 400,
-                      fontSize: 12,
-                      marginTop: "5px",
-                    }}
-                  >
-                    Zona sul
-                  </Typography>
                 </Box>
               </CustomTableCellBody>
             </TableRow>
@@ -189,5 +112,61 @@ export default function TableEntregadoresStatus() {
         </Table>
       </TableContainer>
     </Paper>
+  );
+}
+
+const CustomTableCellHeader = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 900,
+}));
+
+const CustomTableCellBody = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 400,
+}));
+
+function RenderUser() {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          width: 45,
+          height: 45,
+          backgroundColor: "#ccc",
+          borderRadius: "50%",
+        }}
+      />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexDirection: "column",
+          marginLeft: "10px",
+        }}
+      >
+        <Typography
+          variant="body1"
+          sx={{
+            fontFamily: "Lato, sans-serif",
+            fontWeight: 900,
+            fontSize: 14,
+          }}
+        >
+          NOME
+        </Typography>
+      </Box>
+    </Box>
   );
 }

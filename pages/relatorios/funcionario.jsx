@@ -20,7 +20,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
 
 //Hooks
-import { useFetch } from "../../hooks/useFetch";
+import { useFetchSWR } from "../../hooks/useFetchSWR";
 
 //Formatters
 import { formatCpf } from "@/helpers/utils";
@@ -32,14 +32,14 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 export default function RelacaoFuncionario() {
   const [dataSet, setDataset] = useState([]);
 
-  var { data, error, loading } = useFetch("/api/auth/users/");
+  var { data, error, loading } = useFetchSWR("/api/relatorios/funcionario");
 
   //console.log("funcionarios: ", data);
 
   // async function getUsersData() {
   //   setLoading(true);
 
-  //   const response = await fetch(`/api/auth/users/`, {
+  //   const response = await fetch(`/api/relatorios/funcionarios/`, {
   //     method: "GET",
   //     headers: {
   //       Authorization: user.token,
@@ -104,6 +104,9 @@ export default function RelacaoFuncionario() {
                     STATUS
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
+                    TELEFONE
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
                     AÇÃO
                   </CustomTableCellHeader>
                 </TableRow>
@@ -154,6 +157,9 @@ export default function RelacaoFuncionario() {
                           sx={{ fontSize: 12 }}
                         />
                       )}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      TELEFONE
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
                       <Tooltip

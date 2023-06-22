@@ -37,6 +37,7 @@ import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 //Custom components
 import GridPainelPedidos from "components/GridPainelPedidos";
 import TableEntregadoresStatus from "components/TableEntregadoresStatus";
+import DatepickerField from "@/components/DatepickerField";
 import {
   StatusPedido,
   BadgeZonaEntrega,
@@ -45,21 +46,33 @@ import {
   formatarData,
   formatarValorBRL,
 } from "@/helpers/utils";
-import { STATUS_PEDIDO, ZONA_ENTREGA } from "@/helpers/constants";
+import {
+  FORMA_PAGAMENTO,
+  STATUS_PEDIDO,
+  ZONA_ENTREGA,
+} from "@/helpers/constants";
 
 export default function Home() {
   const { user } = useContext(AuthContext);
-  const [zonaEntrega, setZonaEntrega] = useState("TODAS");
-  const [statusPedido, setStatusPedido] = useState("TODAS");
+
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [pedidosModalData, setPedidosModalData] = useState({});
+  const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
 
-  console.log(pedidosModalData);
-  const [open, setOpen] = useState(false);
+  //States para Filtros
+  const [zonaEntrega, setZonaEntrega] = useState("TODAS");
+  const [statusPedido, setStatusPedido] = useState("TODAS");
+  const [formaPagamento, setFormaPagamento] = useState("TODAS");
+  const [dateFilter, setDateFilter] = useState(new Date());
+
+  console.log("dateFilter: ", dateFilter);
+
+  const [open, setOpen] = useState(false); //State para controle do modal
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // console.log(pedidosModalData);
 
   // const { evento } = useWebSocket();
 
@@ -72,12 +85,17 @@ export default function Home() {
 
   useEffect(() => {
     const getPedidos = async () => {
-      const req = await fetch(`/api/pedidos/?date=&tp_pag=&status=`, {
-        method: "GET",
-        headers: {
-          Authorization: user.token,
-        },
-      });
+      const req = await fetch(
+        `/api/pedidos/?date=&tp_pag=${
+          formaPagamento == "TODAS" ? "" : formaPagamento
+        }&status=${statusPedido == "TODAS" ? "" : statusPedido}&zona=`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: user.token,
+          },
+        }
+      );
 
       if (req.status == 200) {
         const res = await req.json();
@@ -120,7 +138,7 @@ export default function Home() {
               sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
             />
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
+              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 <TextField
                   id="zona_entrega"
                   select
@@ -143,7 +161,7 @@ export default function Home() {
                 </TextField>
               </Grid>
 
-              <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
+              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 <TextField
                   id="status_pedido"
                   select
@@ -166,8 +184,39 @@ export default function Home() {
                 </TextField>
               </Grid>
 
-              <Grid item xs={12} sm={4} md={3} lg={3} xl={3}>
-                <Button variant="contained" disableElevation>
+              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+                <TextField
+                  id="forma_pagamento"
+                  select
+                  fullWidth
+                  placeholder="Forma de pagamento"
+                  label="Forma de pagamento"
+                  size="small"
+                  value={formaPagamento}
+                  onChange={(e) => {
+                    setFormaPagamento(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                >
+                  {FORMA_PAGAMENTO.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+
+              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+                <DatepickerField
+                  value={dateFilter}
+                  textLabel="Data dos pedidos"
+                  onChange={setDateFilter}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+                <Button variant="contained" disableElevation fullWidth>
                   FILTRAR
                 </Button>
               </Grid>
@@ -264,7 +313,7 @@ export default function Home() {
                         {pedido.id}
                       </CustomTableCellBody>
                       <CustomTableCellBody align="center">
-                        {formatarValorBRL(pedido.valor)}
+                        {/* {formatarValorBRL(pedido.valor)} --- */}
                       </CustomTableCellBody>
                       <CustomTableCellBody align="center">
                         <RenderIconFormaPagamento
@@ -286,7 +335,7 @@ export default function Home() {
                             component="span"
                             sx={{ fontWeight: 700, fontSize: 12 }}
                           >
-                            {formatarData(pedido.data)}
+                            {/* {formatarData(pedido.data)} */} ---
                           </Typography>
                           <Typography
                             variant="span"
@@ -451,8 +500,9 @@ export default function Home() {
                   component="span"
                   sx={{ color: "#B7B7B7", fontWeight: 300, fontSize: 10 }}
                 >
-                  {formatarData(pedidosModalData?.data)}{" "}
-                  {pedidosModalData?.hora}
+                  {/* {formatarData(pedidosModalData?.data)}{" "}
+                  {pedidosModalData?.hora} */}
+                  ---
                 </Typography>
 
                 <Typography
@@ -472,7 +522,7 @@ export default function Home() {
               component="span"
               sx={{ color: "#000", fontWeight: 900, fontSize: 26 }}
             >
-              {formatarValorBRL(pedidosModalData?.valor)}
+              {/* {formatarValorBRL(pedidosModalData?.valor)} --- */}
             </Typography>
 
             <Box
