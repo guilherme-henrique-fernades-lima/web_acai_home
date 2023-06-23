@@ -3,8 +3,8 @@ import * as yup from "yup";
 export const funcionarioSchema = yup.object().shape({
   cpf: yup
     .string()
-    .required("* Informe a sigla da loja")
-    .min(11, "Insira um CPF válido"),
+    .required("Informe um CPF válido")
+    .min(11, "O CPF precisa ter pelo menos 11 digitos"),
   username: yup.string().required("Insira o nome"),
   password: yup
     .string()

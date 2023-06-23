@@ -1,22 +1,22 @@
-import { getCookiesServerSide } from '@/helpers/handleCookies';
+import { getCookiesServerSide } from "@/helpers/handleCookies";
 
 export default function Home() {
-  return <></>
+  return <></>;
 }
 
 export const getServerSideProps = ({ req, res }) => {
+  const token = getCookiesServerSide("@acai:user", { req, res });
 
-  const token = getCookiesServerSide('@acai:user', { req, res });
+  console.log("token: ", token);
 
   if (token) {
-
     return {
       redirect: {
         permanent: true,
         destination: "/home",
       },
     };
-  } 
+  }
 
   return {
     redirect: {
@@ -24,5 +24,4 @@ export const getServerSideProps = ({ req, res }) => {
       destination: "/auth/login",
     },
   };
-
-}
+};

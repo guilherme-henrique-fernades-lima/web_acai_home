@@ -712,13 +712,13 @@ export default function EnviarPedidos() {
                     }}
                   >
                     <>
-                      <PersonIcon sx={{ fontSize: 28, color: "#fff" }} />
+                      <PersonIcon sx={{ fontSize: 24, color: "#fff" }} />
                       <Typography
                         variant="h6"
                         component="h6"
                         sx={{
                           fontWeight: 700,
-                          fontSize: 16,
+                          fontSize: 12,
                           textAlign: "left",
                           width: "100%",
                           marginLeft: "10px",

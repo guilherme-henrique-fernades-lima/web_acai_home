@@ -169,7 +169,7 @@ export default function RelacaoFuncionario() {
                       )}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
-                      TELEFONE
+                      {funcionario?.celular}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
                       <Tooltip

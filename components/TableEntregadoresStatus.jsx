@@ -21,6 +21,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 export default function TableEntregadoresStatus(props) {
   const { entregadores } = props;
 
+  console.log(entregadores);
+
   return (
     <Paper
       sx={{

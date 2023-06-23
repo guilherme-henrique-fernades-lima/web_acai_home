@@ -107,6 +107,8 @@ export default function CadastroFuncionario() {
   async function salvarFuncionario() {
     const payload = getPayload();
 
+    console.log(payload);
+
     const response = await fetch(`/api/auth/users/`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -155,7 +157,7 @@ export default function CadastroFuncionario() {
       observacao: observacaoEntregador ? observacaoEntregador : null,
       password: password,
       avatar: null,
-      telefone: telefone ? telefone : null,
+      celular: telefone ? telefone : null,
     };
 
     return payload;
@@ -294,7 +296,7 @@ export default function CadastroFuncionario() {
           <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
             <Typography
               component="label"
-              htmlFor="userName"
+              htmlFor="celular"
               sx={{
                 fontSize: 14,
                 fontWeight: 700,
@@ -303,7 +305,7 @@ export default function CadastroFuncionario() {
               Telefone
             </Typography>
             <TextField
-              id="telefone"
+              id="celular"
               fullWidth
               placeholder="Insira o telefone com DDD"
               type="text"

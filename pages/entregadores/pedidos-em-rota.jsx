@@ -37,10 +37,10 @@ export default function PedidosEmRota(props) {
     <>
       <Box
         sx={{
-          width: 300,
-          height: 600,
+          width: "100%",
+          height: "100vh",
           border: "1px solid #ccc",
-          margin: 2,
+
           overflow: "hidden",
         }}
       >

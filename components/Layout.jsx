@@ -53,47 +53,13 @@ import MapIcon from "@mui/icons-material/Map";
 import { ThemeContext } from "@/context/ThemeContext";
 import { AuthContext } from "@/context/AuthContext";
 
-function BrandImageAcai() {
-  return (
-    <Link href="/home">
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexDirection: "row",
-          ml: 3,
-          cursor: "pointer",
-          "&:hover": { opacity: 0.8 },
-        }}
-      >
-        <Image
-          src="/img/acai_login.svg"
-          alt="Imagem logo de uma fruta açai"
-          // layout="fill"
-          // objectFit="contain"
-          width="60"
-          height="60"
-        />
-        <Typography
-          variant="h4"
-          component="h4"
-          sx={{ ml: 1, fontSize: 22, fontWeight: 900 }}
-        >
-          AÇAI HOME
-        </Typography>
-      </Box>
-    </Link>
-  );
-}
-
 export default function Layout(props) {
+  const { changeThemePalette } = useContext(ThemeContext);
   const theme = useTheme();
 
   const { children } = props;
 
-  const { changeThemePalette } = useContext(ThemeContext);
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [activeOption, setActiveOption] = useState("");
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
@@ -107,57 +73,63 @@ export default function Layout(props) {
   };
 
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open} elevation={0}>
-        <Toolbar
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            {open ? (
-              <IconButton
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                size="small"
+    <>
+      {user?.funcao == "entregador" ? (
+        <>{children}</>
+      ) : (
+        <Box sx={{ display: "flex", height: "100vh" }}>
+          <CssBaseline />
+          <AppBar position="fixed" open={open} elevation={0}>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box
                 sx={{
-                  backgroundColor: "#fff",
-                  boxShadow:
-                    "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
-                  marginLeft: open ? "-40px" : "-20px",
-                  "&:hover": {
-                    backgroundColor: theme.palette.colors.brand_hover,
-                  },
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                <ChevronLeftIcon sx={{ color: theme.palette.colors.brand }} />
-              </IconButton>
-            ) : (
-              <IconButton
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                size="small"
-                sx={{
-                  marginLeft: "-10px",
-                  "&:hover": {
-                    opacity: 0.7,
-                  },
-                }}
-              >
-                <MenuIcon sx={{ color: "#fff", fontSize: 28 }} />
-              </IconButton>
-            )}
-            <Link href="/home">
-              {/* <Typography
+                {open ? (
+                  <IconButton
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    size="small"
+                    sx={{
+                      backgroundColor: "#fff",
+                      boxShadow:
+                        "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+                      marginLeft: open ? "-40px" : "-20px",
+                      "&:hover": {
+                        backgroundColor: theme.palette.colors.brand_hover,
+                      },
+                    }}
+                  >
+                    <ChevronLeftIcon
+                      sx={{ color: theme.palette.colors.brand }}
+                    />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    size="small"
+                    sx={{
+                      marginLeft: "-10px",
+                      "&:hover": {
+                        opacity: 0.7,
+                      },
+                    }}
+                  >
+                    <MenuIcon sx={{ color: "#fff", fontSize: 28 }} />
+                  </IconButton>
+                )}
+                <Link href="/home">
+                  {/* <Typography
                 variant="h6"
                 noWrap
                 component="div"
@@ -166,365 +138,98 @@ export default function Layout(props) {
                 AÇAI HOME
               </Typography> */}
 
-              <BrandImageAcai />
-            </Link>
-          </Box>
+                  <BrandImageAcai />
+                </Link>
+              </Box>
 
-          {/* <FormGroup>
+              {/* <FormGroup>
             <MaterialUISwitch onChange={changeThemePalette} />
           </FormGroup> */}
-        </Toolbar>
-      </AppBar>
+            </Toolbar>
+          </AppBar>
 
-      <Drawer variant="permanent" open={open}>
-        <Box
-          sx={{
-            width: "100%",
-            padding: 5,
-            justifyContent: "center",
-            flexDirection: "column",
-            alignItems: "center",
-            display: open ? "flex" : "none",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "row",
-            }}
-          >
+          <Drawer variant="permanent" open={open}>
             <Box
               sx={{
-                width: "50px",
-                height: "50px",
-                borderRadius: "50%",
-                backgroundColor: theme.palette.colors.brand,
-                mr: 1,
-              }}
-            />
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "flex-start",
+                width: "100%",
+                padding: 5,
                 justifyContent: "center",
                 flexDirection: "column",
+                alignItems: "center",
+                display: open ? "flex" : "none",
               }}
             >
-              <Typography
+              <Box
                 sx={{
-                  fontFamily: "Lato, sans-serif",
-                  fontWeight: 900,
-                  color: theme.palette.colors.brand,
-                  fontSize: 14,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "row",
                 }}
               >
-                USUÁRIO
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "Lato, sans-serif",
-                  fontWeight: 400,
-                  color: theme.palette.colors.primary,
-                  fontSize: 12,
-                }}
-              >
-                MTF0001
-              </Typography>
+                <Box
+                  sx={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    backgroundColor: theme.palette.colors.brand,
+                    mr: 1,
+                  }}
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Lato, sans-serif",
+                      fontWeight: 900,
+                      color: theme.palette.colors.brand,
+                      fontSize: 14,
+                    }}
+                  >
+                    {user?.username.toUpperCase()}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: "Lato, sans-serif",
+                      fontWeight: 400,
+                      color: theme.palette.colors.primary,
+                      fontSize: 12,
+                    }}
+                  >
+                    {user?.cpf}
+                  </Typography>
+                </Box>
+              </Box>
             </Box>
-          </Box>
-        </Box>
 
-        {!open && <Toolbar />}
-
-        <Box
-          sx={{
-            display: open ? "none" : "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: 120,
-          }}
-        >
-          <Box
-            sx={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              backgroundColor: theme.palette.primary.main,
-            }}
-          />
-        </Box>
-
-        {!open && <Divider sx={{ margin: "0px 10px 20px 10px" }} />}
-
-        <Box
-          sx={{
-            borderBottom: "1px solid #ECECEC",
-            ml: "30px",
-            mr: "30px",
-            display: open ? "" : "none",
-            mt: 2,
-            mb: 2,
-          }}
-        />
-
-        <List
-          sx={{
-            height: "100%",
-            justifyContent: "space-between",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Box sx={{ width: "100%" }}>
-            <Link href="/home">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("home");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "home" ? true : false}
-                open={open}
-              >
-                <Tooltip title={open ? "" : "Home"} placement="right">
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <HomeIcon />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={activeOption == "home" ? true : false}
-                    >
-                      Início
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link>
-
-            <Link href="/cadastros/funcionario">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("cadastros");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "cadastros" ? true : false}
-                open={open}
-              >
-                <Tooltip title={open ? "" : "Cadastros"} placement="right">
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <GroupAddIcon
-                      sx={{
-                        color: activeOption == "cadastros" ? true : false,
-                      }}
-                    />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={activeOption == "cadastros" ? true : false}
-                    >
-                      Cadastros
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link>
-
-            <Link href="/relatorios/funcionario">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("relatorio_funcionarios");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "relatorio_funcionarios" ? true : false}
-                open={open}
-              >
-                <Tooltip
-                  title={open ? "" : "Relação de funcionários"}
-                  placement="right"
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <ListAltIcon />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={
-                        activeOption == "relatorio_funcionarios" ? true : false
-                      }
-                    >
-                      Funcionários
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link>
-
-            <Link href="/cadastros/enviar-pedidos">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("enviar_pedidos");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "enviar_pedidos" ? true : false}
-                open={open}
-              >
-                <Tooltip title={open ? "" : "Enviar pedidos"} placement="right">
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <SendIcon />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={activeOption == "enviar_pedidos" ? true : false}
-                    >
-                      Enviar pedidos
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link>
-
-            <Link href="/relatorios/pedidos-em-transito">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("pedidos_em_transito");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "pedidos_em_transito" ? true : false}
-                open={open}
-              >
-                <Tooltip
-                  title={open ? "" : "Pedidos em trânsito"}
-                  placement="right"
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <DeliveryDiningIcon />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={
-                        activeOption == "pedidos_em_transito" ? true : false
-                      }
-                    >
-                      Pedidos em trânsito
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link>
-
-            <Link href="/entregadores/pedidos-em-rota">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("pedidos_em_rota");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "pedidos_em_rota" ? true : false}
-                open={open}
-              >
-                <Tooltip
-                  title={open ? "" : "Pedidos em rota"}
-                  placement="right"
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <MapIcon />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={activeOption == "pedidos_em_rota" ? true : false}
-                    >
-                      Pedidos em rota
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link>
+            {!open && <Toolbar />}
 
             <Box
               sx={{
-                //borderBottom: "1px solid #ECECEC",
-                ml: "30px",
-                mr: "30px",
-                display: open ? "" : "none",
-                mt: 2,
-                mb: 2,
+                display: open ? "none" : "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 120,
               }}
-            />
-          </Box>
+            >
+              <Box
+                sx={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  backgroundColor: theme.palette.primary.main,
+                }}
+              />
+            </Box>
 
-          <Box sx={{ width: "100%" }}>
+            {!open && <Divider sx={{ margin: "0px 10px 20px 10px" }} />}
+
             <Box
               sx={{
                 borderBottom: "1px solid #ECECEC",
@@ -532,138 +237,384 @@ export default function Layout(props) {
                 mr: "30px",
                 display: open ? "" : "none",
                 mt: 2,
-                mb: 0,
+                mb: 2,
               }}
             />
 
-            {/* <Link href="/configuracoes/usuario">
-              <CustomListItemButton
-                onClick={() => {
-                  setOpen(true);
-                  setActiveOption("configuracoes");
-                }}
-                sx={{
-                  justifyContent: open ? "initial" : "center",
-                }}
-                active={activeOption == "configuracoes" ? true : false}
-                open={open}
-              >
-                <Tooltip title={open ? "" : "Configurações"} placement="right">
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <SettingsIcon sx={{ fontSize: 22, color: "#B7B7B7" }} />
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText
-                  primary={
-                    <CustomTypography
-                      active={activeOption == "configuracoes" ? true : false}
-                    >
-                      Configurações
-                    </CustomTypography>
-                  }
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </CustomListItemButton>
-            </Link> */}
-
-            <CustomListItemButton
+            <List
               sx={{
-                justifyContent: open ? "initial" : "center",
+                height: "100%",
+                justifyContent: "space-between",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
               }}
-              active={activeOption == "sair" ? true : false}
-              open={open}
-              onClick={handleSairSistemaDialog}
             >
-              <Tooltip title={open ? "" : "Sair"} placement="right">
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <PowerSettingsNewIcon
-                    sx={{ fontSize: 22, color: "#B7B7B7" }}
-                  />
-                </ListItemIcon>
-              </Tooltip>
-              <ListItemText
-                primary={
-                  <CustomTypography
-                    active={activeOption == "sair" ? true : false}
+              <Box sx={{ width: "100%" }}>
+                <Link href="/home">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("home");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={activeOption == "home" ? true : false}
+                    open={open}
                   >
-                    Sair
-                  </CustomTypography>
-                }
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </CustomListItemButton>
+                    <Tooltip title={open ? "" : "Home"} placement="right">
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <HomeIcon />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={activeOption == "home" ? true : false}
+                        >
+                          Início
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Link href="/cadastros/funcionario">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("cadastros");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={activeOption == "cadastros" ? true : false}
+                    open={open}
+                  >
+                    <Tooltip title={open ? "" : "Cadastros"} placement="right">
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <GroupAddIcon
+                          sx={{
+                            color: activeOption == "cadastros" ? true : false,
+                          }}
+                        />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={activeOption == "cadastros" ? true : false}
+                        >
+                          Cadastros
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Link href="/relatorios/funcionario">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("relatorio_funcionarios");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={
+                      activeOption == "relatorio_funcionarios" ? true : false
+                    }
+                    open={open}
+                  >
+                    <Tooltip
+                      title={open ? "" : "Relação de funcionários"}
+                      placement="right"
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <ListAltIcon />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={
+                            activeOption == "relatorio_funcionarios"
+                              ? true
+                              : false
+                          }
+                        >
+                          Funcionários
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Link href="/cadastros/enviar-pedidos">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("enviar_pedidos");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={activeOption == "enviar_pedidos" ? true : false}
+                    open={open}
+                  >
+                    <Tooltip
+                      title={open ? "" : "Enviar pedidos"}
+                      placement="right"
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <SendIcon />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={
+                            activeOption == "enviar_pedidos" ? true : false
+                          }
+                        >
+                          Enviar pedidos
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Link href="/relatorios/pedidos-em-transito">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("pedidos_em_transito");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={
+                      activeOption == "pedidos_em_transito" ? true : false
+                    }
+                    open={open}
+                  >
+                    <Tooltip
+                      title={open ? "" : "Pedidos em trânsito"}
+                      placement="right"
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <DeliveryDiningIcon />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={
+                            activeOption == "pedidos_em_transito" ? true : false
+                          }
+                        >
+                          Pedidos em trânsito
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Link href="/entregadores/pedidos-em-rota">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("pedidos_em_rota");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={activeOption == "pedidos_em_rota" ? true : false}
+                    open={open}
+                  >
+                    <Tooltip
+                      title={open ? "" : "Pedidos em rota"}
+                      placement="right"
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <MapIcon />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={
+                            activeOption == "pedidos_em_rota" ? true : false
+                          }
+                        >
+                          Pedidos em rota
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Box
+                  sx={{
+                    //borderBottom: "1px solid #ECECEC",
+                    ml: "30px",
+                    mr: "30px",
+                    display: open ? "" : "none",
+                    mt: 2,
+                    mb: 2,
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ width: "100%" }}>
+                <Box
+                  sx={{
+                    borderBottom: "1px solid #ECECEC",
+                    ml: "30px",
+                    mr: "30px",
+                    display: open ? "" : "none",
+                    mt: 2,
+                    mb: 0,
+                  }}
+                />
+
+                <CustomListItemButton
+                  sx={{
+                    justifyContent: open ? "initial" : "center",
+                  }}
+                  active={activeOption == "sair" ? true : false}
+                  open={open}
+                  onClick={handleSairSistemaDialog}
+                >
+                  <Tooltip title={open ? "" : "Sair"} placement="right">
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <PowerSettingsNewIcon
+                        sx={{ fontSize: 22, color: "#B7B7B7" }}
+                      />
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText
+                    primary={
+                      <CustomTypography
+                        active={activeOption == "sair" ? true : false}
+                      >
+                        Sair
+                      </CustomTypography>
+                    }
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </CustomListItemButton>
+              </Box>
+            </List>
+          </Drawer>
+
+          <Box
+            component="main"
+            sx={{
+              backgroundColor: "#F8F8F8",
+              height: "100%",
+              width: "100%",
+            }}
+          >
+            <DrawerHeader />
+            <Box
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+                flexDirection: "column",
+                backgroundColor: "#F8F8F8",
+              }}
+            >
+              {children}
+            </Box>
           </Box>
-        </List>
-      </Drawer>
 
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: "#F8F8F8",
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <DrawerHeader />
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "flex-start",
-            flexDirection: "column",
-            backgroundColor: "#F8F8F8",
-          }}
-        >
-          {children}
+          <Dialog
+            open={openDialogSairSistema}
+            onClose={handleSairSistemaDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              Você deseja realmente sair do sistema?
+            </DialogTitle>
+
+            <DialogActions>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleSairSistemaDialog}
+                disableElevation
+                fullWidth
+              >
+                NÃO
+              </Button>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={logout}
+                autoFocus
+                disableElevation
+                fullWidth
+              >
+                SIM
+              </Button>
+            </DialogActions>
+          </Dialog>
         </Box>
-      </Box>
-
-      <Dialog
-        open={openDialogSairSistema}
-        onClose={handleSairSistemaDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          Você deseja realmente sair do sistema?
-        </DialogTitle>
-
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleSairSistemaDialog}
-            disableElevation
-            fullWidth
-          >
-            NÃO
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={logout}
-            autoFocus
-            disableElevation
-            fullWidth
-          >
-            SIM
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+      )}
+    </>
   );
 }
 
@@ -820,3 +771,37 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     borderRadius: 20 / 2,
   },
 }));
+
+function BrandImageAcai() {
+  return (
+    <Link href="/home">
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "row",
+          ml: 3,
+          cursor: "pointer",
+          "&:hover": { opacity: 0.8 },
+        }}
+      >
+        <Image
+          src="/img/acai_login.svg"
+          alt="Imagem logo de uma fruta açai"
+          // layout="fill"
+          // objectFit="contain"
+          width="60"
+          height="60"
+        />
+        <Typography
+          variant="h4"
+          component="h4"
+          sx={{ ml: 1, fontSize: 22, fontWeight: 900 }}
+        >
+          AÇAI HOME
+        </Typography>
+      </Box>
+    </Link>
+  );
+}
