@@ -1,4 +1,6 @@
 import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+
 
 export default function SkeletonTable() {
   return (
