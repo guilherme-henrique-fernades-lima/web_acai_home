@@ -79,7 +79,7 @@ export default function PedidosEmRota(props) {
               }}
             >
               <Typography sx={{ fontWeight: 900, fontSize: 18, color: "#fff" }}>
-                {user?.username.toUpperCase()}
+                {user?.username?.toUpperCase()}
               </Typography>
               {/* <Typography sx={{ fontWeight: 400, fontSize: 14, color: "#fff" }}>
                 (86) 99999-9999
