@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
+
+//Context
+import { AuthContext } from "@/context/AuthContext";
 
 //Mui icons
 import Box from "@mui/material/Box";
@@ -23,7 +26,6 @@ import Divider from "@mui/material/Divider";
 import Checkbox from "@mui/material/Checkbox";
 import SendIcon from "@mui/icons-material/Send";
 import TextField from "@mui/material/TextField";
-
 import InputAdornment from "@mui/material/InputAdornment";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -31,215 +33,73 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 
 //Icons
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import PixIcon from "@mui/icons-material/Pix";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
 
-//Icons
-import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
-
 import GridPainelPedidos from "@/components/GridPainelPedidos";
-
 import {
   StatusPedido,
   BadgeZonaEntrega,
   RenderIconFormaPagamento,
 } from "@/helpers/utils";
 
-const CustomTableCellHeader = styled(TableCell)((props) => ({
-  fontSize: 12,
-  color: props.theme.palette.colors.text_title,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 900,
-}));
-
-const CustomTableCellBody = styled(TableCell)((props) => ({
-  fontSize: 12,
-  color: props.theme.palette.colors.text_title,
-  fontFamily: "Lato, sans-serif",
-  fontWeight: 400,
-}));
-
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import PixIcon from "@mui/icons-material/Pix";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
-
-const MOCK_DATA_ENTREGADORES = [
-  {
-    id: 1,
-    name: "JOÃO",
-  },
-  {
-    id: 2,
-    name: "PEDRO",
-  },
-  {
-    id: 3,
-    name: "ALBERTO",
-  },
-  {
-    id: 4,
-    name: "JORGE",
-  },
-  {
-    id: 6,
-    name: "SAMUEL",
-  },
-  {
-    id: 7,
-    name: "ROBERTO",
-  },
-  {
-    id: 8,
-    name: "ALAN",
-  },
-  {
-    id: 9,
-    name: "TIAGO",
-  },
-  {
-    id: 10,
-    name: "MÁRCIO",
-  },
-  {
-    id: 11,
-    name: "CLÁUDIO",
-  },
-  {
-    id: 12,
-    name: "MAURO",
-  },
-];
-
-function RenderUserRow(props) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        marginLeft: "20px",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginRight: "10px",
-          width: 50,
-          height: 50,
-          backgroundColor: "#ccc",
-          borderRadius: "50%",
-        }}
-      >
-        {/* <Image
-          src="https://public-ecommerce.s3.sa-east-1.amazonaws.com/geral/unknow_user.png"
-          height={50}
-          width={50}
-          className="roudedImage"
-        /> */}
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        <Typography
-          sx={{
-            fontFamily: "Lato, sans-serif",
-            fontWeight: 900,
-            color: "#2e2e2e",
-            fontSize: "14px",
-          }}
-        >
-          {props.name}
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
-
-function RenderModoPagamento() {
-  const [modoPagamento, setModoPagamento] = useState("");
-
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid red",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <PixIcon sx={{ color: "red" }} />
-      </Box>
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid #20202033",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <CreditCardIcon sx={{ color: "#20202033" }} />
-      </Box>
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid #20202033",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <CreditCardIcon sx={{ color: "#20202033" }} />
-      </Box>
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid #20202033",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <LocalAtmIcon sx={{ color: "#20202033" }} />
-      </Box>
-    </Box>
-  );
-}
-
 export default function EnviarPedidos() {
+  const { user } = useContext(AuthContext);
+
   const [open, setOpen] = useState(false);
+  const [entregadoresAtivos, setEntregadoresAtivos] = useState([]);
+  const [entregadoresAtivosFiltro, setEntregadoresAtivosFiltro] = useState([]);
+  console.log("ENTREGADORES ATIVOS: ", entregadoresAtivos);
   const [openModalEnvio, setOpenModalEnvio] = useState(false);
   const [nomeEntregadorSearch, setNomeEntregadorSearch] = useState("");
   const [entregadorEscolhido, setEntregadorEscolhido] = useState("");
+  const [radioSelected, setRadioSelected] = useState("");
+
+  const [filteredData, setFilteredData] = useState([]);
+  console.log("filteredData: ", filteredData);
+
+  useEffect(() => {
+    if (user?.token) {
+      getEntregadoresDisponiveis();
+    }
+  }, [user]);
+
+  // async function listarPedidosDisponiveis() {
+  //   //setLoading(true);
+
+  //   const response = await fetch(`/api/cadastros/enviar-pedidos/`, {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: user.token,
+  //     },
+  //   });
+
+  //   const res = await response.json();
+
+  //   if (response.ok) {
+  //     setDataset(res);
+  //     //setLoading(false);
+  //   }
+  // }
+
+  const getEntregadoresDisponiveis = async () => {
+    const response = await fetch(`/api/home/entregadores`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
+
+    if (response.status == 200) {
+      const res = await response.json();
+      setEntregadoresAtivos(res);
+      setEntregadoresAtivosFiltro(res);
+    }
+  };
 
   const handleOpenCloseModalDetalhes = () => setOpen(!open);
 
@@ -253,10 +113,21 @@ export default function EnviarPedidos() {
     setEntregadorEscolhido(event.target.value);
   };
 
-  function filtrarEntregador(array, name) {
-    const newArray = array.filter((item) => item.name == name);
+  let typingTimer;
+  const handleChangeInputDelaySearch = (string) => {
+    console.log("Entrou no filtro de entregador");
+    clearTimeout(typingTimer);
 
-    return newArray;
+    typingTimer = setTimeout(() => {
+      filtrarEntregador(string);
+    }, 500);
+  };
+
+  function filtrarEntregador(string) {
+    const entregadores = entregadoresAtivos.filter((obj) =>
+      obj.username.includes(string)
+    );
+    setEntregadoresAtivosFiltro(entregadores);
   }
 
   return (
@@ -688,10 +559,8 @@ export default function EnviarPedidos() {
                   placeholder="Procurar..."
                   type="text"
                   size="small"
-                  value={nomeEntregadorSearch}
-                  onChange={(e) => {
-                    setNomeEntregadorSearch(e.target.value);
-                  }}
+                  //value={nomeEntregadorSearch}
+                  onChange={(e) => handleChangeInputDelaySearch(e.target.value)}
                   InputLabelProps={{ shrink: true }}
                   autoComplete="off"
                   InputProps={{
@@ -748,47 +617,18 @@ export default function EnviarPedidos() {
                   },
                 }}
               >
-                <FormControl
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                    flexDirection: "column",
-                  }}
-                >
-                  <RadioGroup
-                    aria-labelledby="demo-controlled-radio-buttons-group"
-                    name="controlled-radio-buttons-group"
-                    value={entregadorEscolhido}
-                    onChange={handleSelecionarEntregador}
-                    sx={{
-                      width: "100%",
-                    }}
-                  >
-                    {MOCK_DATA_ENTREGADORES.map((entregador) => (
-                      <Box
+                <FormControl>
+                  <RadioGroup>
+                    {entregadoresAtivosFiltro?.map((entregador) => (
+                      <FormControlLabel
                         key={entregador.id}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "flex-start",
-                          width: "100%",
-                          height: 70,
-                          padding: "0 20px",
-                          "&:hover": {
-                            backgroundColor: "#f8e8ff",
-                            cursor: "pointer",
-                          },
+                        value={entregador.id}
+                        control={<Radio />}
+                        label=""
+                        onClick={(e) => {
+                          setRadioSelected(e.target.value);
                         }}
-                      >
-                        <FormControlLabel
-                          value={entregadorEscolhido}
-                          control={<Radio />}
-                          label={entregador.name}
-                        />
-                        {/* <RenderUserRow name={entregador.name} /> */}
-                      </Box>
+                      />
                     ))}
                   </RadioGroup>
                 </FormControl>
@@ -924,3 +764,189 @@ export default function EnviarPedidos() {
 //      </RadioGroup>
 //    </FormControl>
 //  </Box>;
+
+function RenderUserRow(props) {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: "20px",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: "10px",
+          width: 50,
+          height: 50,
+          backgroundColor: "#ccc",
+          borderRadius: "50%",
+        }}
+      >
+        {/* <Image
+          src="https://public-ecommerce.s3.sa-east-1.amazonaws.com/geral/unknow_user.png"
+          height={50}
+          width={50}
+          className="roudedImage"
+        /> */}
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: "Lato, sans-serif",
+            fontWeight: 900,
+            color: "#2e2e2e",
+            fontSize: "14px",
+          }}
+        >
+          {props.name}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+const CustomTableCellHeader = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 900,
+}));
+
+const CustomTableCellBody = styled(TableCell)((props) => ({
+  fontSize: 12,
+  color: props.theme.palette.colors.text_title,
+  fontFamily: "Lato, sans-serif",
+  fontWeight: 400,
+}));
+
+const MOCK_DATA_ENTREGADORES = [
+  {
+    id: 1,
+    name: "JOÃO",
+  },
+  {
+    id: 2,
+    name: "PEDRO",
+  },
+  {
+    id: 3,
+    name: "ALBERTO",
+  },
+  {
+    id: 4,
+    name: "JORGE",
+  },
+  {
+    id: 6,
+    name: "SAMUEL",
+  },
+  {
+    id: 7,
+    name: "ROBERTO",
+  },
+  {
+    id: 8,
+    name: "ALAN",
+  },
+  {
+    id: 9,
+    name: "TIAGO",
+  },
+  {
+    id: 10,
+    name: "MÁRCIO",
+  },
+  {
+    id: 11,
+    name: "CLÁUDIO",
+  },
+  {
+    id: 12,
+    name: "MAURO",
+  },
+];
+
+function RenderModoPagamento() {
+  const [modoPagamento, setModoPagamento] = useState("");
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid red",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <PixIcon sx={{ color: "red" }} />
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #20202033",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <CreditCardIcon sx={{ color: "#20202033" }} />
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #20202033",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <CreditCardIcon sx={{ color: "#20202033" }} />
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: "1px solid #20202033",
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <LocalAtmIcon sx={{ color: "#20202033" }} />
+      </Box>
+    </Box>
+  );
+}

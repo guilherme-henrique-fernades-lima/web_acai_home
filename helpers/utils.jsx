@@ -86,6 +86,10 @@ const TextStatusEntregador = styled(Typography)((props) => ({
   borderRadius: "30px",
   textAlign: "center",
 
+  ...(props.status == "ativo" && {
+    color: "#45B802",
+    backgroundColor: "#c0fc9d",
+  }),
   ...(props.status == "aguardando" && {
     color: "#FF8000",
     backgroundColor: "#ffdebd",

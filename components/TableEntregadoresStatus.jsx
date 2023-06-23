@@ -15,7 +15,12 @@ import { styled } from "@mui/material/styles";
 //Custom components
 import { BadgeStatusEntregador } from "@/helpers/utils";
 
-export default function TableEntregadoresStatus() {
+//Icons
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
+export default function TableEntregadoresStatus(props) {
+  const { entregadores } = props;
+
   return (
     <Paper
       sx={{
@@ -47,10 +52,16 @@ export default function TableEntregadoresStatus() {
           sx={{
             color: "#000000",
             fontWeight: 700,
-            fontSize: 14,
+            fontSize: {
+              xs: 14,
+              sm: 14,
+              md: 14,
+              lg: 12,
+              xl: 16,
+            },
           }}
         >
-          ENTREGADORES DISPONÍVEIS: <span>17</span>
+          ENTREGADORES DISPONÍVEIS: <span>{entregadores?.length}</span>
         </Typography>
       </Box>
 
@@ -79,35 +90,38 @@ export default function TableEntregadoresStatus() {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow
-              sx={{
-                transition: "all 0.3s ease",
-                height: 50,
-                border: "none",
-                //"&:hover": { backgroundColor: "#f8e8ff" },
-                ".MuiTableCell-root": {
-                  borderBottom: "none",
-                },
-              }}
-            >
-              <CustomTableCellBody align="left">
-                <RenderUser />
-              </CustomTableCellBody>
-              <CustomTableCellBody align="center">
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <BadgeStatusEntregador status="aguardando">
-                    AGUARDANDO
-                  </BadgeStatusEntregador>
-                </Box>
-              </CustomTableCellBody>
-            </TableRow>
+            {entregadores?.map((entregador) => (
+              <TableRow
+                key={entregador.id}
+                sx={{
+                  transition: "all 0.3s ease",
+                  height: 50,
+                  border: "none",
+                  //"&:hover": { backgroundColor: "#f8e8ff" },
+                  ".MuiTableCell-root": {
+                    borderBottom: "none",
+                  },
+                }}
+              >
+                <CustomTableCellBody align="left">
+                  <RenderUser entregador={entregador} />
+                </CustomTableCellBody>
+                <CustomTableCellBody align="center">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <BadgeStatusEntregador status="ativo">
+                      ATIVO
+                    </BadgeStatusEntregador>
+                  </Box>
+                </CustomTableCellBody>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -129,7 +143,8 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   fontWeight: 400,
 }));
 
-function RenderUser() {
+function RenderUser(props) {
+  const { entregador } = props;
   return (
     <Box
       sx={{
@@ -139,14 +154,7 @@ function RenderUser() {
         width: "100%",
       }}
     >
-      <Box
-        sx={{
-          width: 45,
-          height: 45,
-          backgroundColor: "#ccc",
-          borderRadius: "50%",
-        }}
-      />
+      <AccountCircleIcon sx={{ fontSize: 40, color: "#616161" }} />
       <Box
         sx={{
           display: "flex",
@@ -164,7 +172,7 @@ function RenderUser() {
             fontSize: 14,
           }}
         >
-          NOME
+          {entregador.username}
         </Typography>
       </Box>
     </Box>

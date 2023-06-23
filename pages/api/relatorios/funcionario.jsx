@@ -16,7 +16,7 @@ async function listarUsuarios(req, res) {
 }
 
 export default async function handler(req, res) {
-  if (req.method == "POST") {
+  if (req.method == "GET") {
     listarUsuarios(req, res);
   } else {
     res.status(405).send();

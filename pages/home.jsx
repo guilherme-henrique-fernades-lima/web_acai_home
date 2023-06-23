@@ -57,6 +57,7 @@ export default function Home() {
 
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
+  const [entregadores, setEntregadores] = useState([]);
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
 
   //States para Filtros
@@ -65,47 +66,51 @@ export default function Home() {
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [dateFilter, setDateFilter] = useState(new Date());
 
-  console.log("dateFilter: ", dateFilter);
-
   const [open, setOpen] = useState(false); //State para controle do modal
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // console.log(pedidosModalData);
-
-  // const { evento } = useWebSocket();
-
-  // useEffect(() => {
-  //   if (evento.NOVO_PEDIDO) {
-  //     //Logica de negocio
-  //     console.log("EVENTO>>>", evento);
-  //   }
-  // }, [evento]);
-
   useEffect(() => {
-    const getPedidos = async () => {
-      const req = await fetch(
-        `/api/pedidos/?date=&tp_pag=${
-          formaPagamento == "TODAS" ? "" : formaPagamento
-        }&status=${statusPedido == "TODAS" ? "" : statusPedido}&zona=`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: user.token,
-          },
-        }
-      );
-
-      if (req.status == 200) {
-        const res = await req.json();
-        setPedidos(res.data);
-        setCards(res.status);
-      }
-    };
-
-    user?.token && getPedidos();
+    if (user?.token) {
+      getPedidos();
+      getEntregadoresDisponiveis();
+    }
   }, [user]);
+
+  const getPedidos = async () => {
+    const response = await fetch(
+      `/api/home/?date=&tp_pag=${
+        formaPagamento == "TODAS" ? "" : formaPagamento
+      }&status=${statusPedido == "TODAS" ? "" : statusPedido}&zona=`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user.token,
+        },
+      }
+    );
+
+    if (response.status == 200) {
+      const res = await response.json();
+      setPedidos(res.data);
+      setCards(res.status);
+    }
+  };
+
+  const getEntregadoresDisponiveis = async () => {
+    const response = await fetch(`/api/home/entregadores`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
+
+    if (response.status == 200) {
+      const res = await response.json();
+      setEntregadores(res);
+    }
+  };
 
   return (
     <>
@@ -116,7 +121,7 @@ export default function Home() {
           item
           xs={12}
           sm={12}
-          md={9}
+          md={12}
           lg={9}
           xl={9}
           sx={{ paddingRight: 1 }}
@@ -138,7 +143,7 @@ export default function Home() {
               sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
             />
             <Grid container spacing={1}>
-              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+              {/* <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 <TextField
                   id="zona_entrega"
                   select
@@ -159,9 +164,9 @@ export default function Home() {
                     </MenuItem>
                   ))}
                 </TextField>
-              </Grid>
+              </Grid> */}
 
-              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+              {/* <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 <TextField
                   id="status_pedido"
                   select
@@ -182,7 +187,7 @@ export default function Home() {
                     </MenuItem>
                   ))}
                 </TextField>
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 <TextField
@@ -216,7 +221,12 @@ export default function Home() {
               </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                <Button variant="contained" disableElevation fullWidth>
+                <Button
+                  variant="contained"
+                  disableElevation
+                  fullWidth
+                  onClick={getPedidos}
+                >
                   FILTRAR
                 </Button>
               </Grid>
@@ -257,9 +267,6 @@ export default function Home() {
                       SEQ.
                     </CustomTableCellHeader>
 
-                    <CustomTableCellHeader align="center">
-                      PRODUTO
-                    </CustomTableCellHeader>
                     <CustomTableCellHeader align="center">
                       N° PEDIDO
                     </CustomTableCellHeader>
@@ -306,14 +313,11 @@ export default function Home() {
                       >
                         {index + 1}
                       </TableCell>
-                      <CustomTableCellBody align="left">
-                        {pedido.descricao}
-                      </CustomTableCellBody>
                       <CustomTableCellBody align="center">
                         {pedido.id}
                       </CustomTableCellBody>
                       <CustomTableCellBody align="center">
-                        {/* {formatarValorBRL(pedido.valor)} --- */}
+                        {formatarValorBRL(pedido.valor)}
                       </CustomTableCellBody>
                       <CustomTableCellBody align="center">
                         <RenderIconFormaPagamento
@@ -335,7 +339,7 @@ export default function Home() {
                             component="span"
                             sx={{ fontWeight: 700, fontSize: 12 }}
                           >
-                            {/* {formatarData(pedido.data)} */} ---
+                            {formatarData(pedido.data)}
                           </Typography>
                           <Typography
                             variant="span"
@@ -383,8 +387,16 @@ export default function Home() {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
-          <TableEntregadoresStatus />
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={3}
+          xl={3}
+          sx={{ height: "auto" }}
+        >
+          <TableEntregadoresStatus entregadores={entregadores} />
         </Grid>
       </Grid>
 

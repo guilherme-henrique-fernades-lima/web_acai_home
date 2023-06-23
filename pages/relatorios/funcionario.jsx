@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 
+//Context
+import { AuthContext } from "@/context/AuthContext";
+
 //Mui components
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
@@ -30,29 +33,36 @@ import EditIcon from "@mui/icons-material/Edit";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function RelacaoFuncionario() {
+  const { user } = useContext(AuthContext);
+
   const [dataSet, setDataset] = useState([]);
+  const [loading, setLoading] = useState([]);
 
-  var { data, error, loading } = useFetchSWR("/api/relatorios/funcionario");
+  //var { data, error, loading } = useFetchSWR("/api/auth/users/");
 
-  //console.log("funcionarios: ", data);
+  useEffect(() => {
+    if (user?.token) {
+      getUsersData();
+    }
+  }, [user]);
 
-  // async function getUsersData() {
-  //   setLoading(true);
+  async function getUsersData() {
+    setLoading(true);
 
-  //   const response = await fetch(`/api/relatorios/funcionarios/`, {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: user.token,
-  //     },
-  //   });
+    const response = await fetch(`/api/relatorios/funcionario/`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
 
-  //   const res = await response.json();
+    const res = await response.json();
 
-  //   if (response.ok) {
-  //     setDataset(res);
-  //     setLoading(false);
-  //   }
-  // }
+    if (response.ok) {
+      setDataset(res);
+      setLoading(false);
+    }
+  }
 
   return (
     <Container>
@@ -112,7 +122,7 @@ export default function RelacaoFuncionario() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.map((funcionario) => (
+                {dataSet?.map((funcionario) => (
                   <TableRow
                     key={funcionario.id}
                     sx={{
