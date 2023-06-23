@@ -31,6 +31,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import Grow from "@mui/material/Grow";
 
 //Icons
 import CreditCardIcon from "@mui/icons-material/CreditCard";
@@ -39,13 +40,12 @@ import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
+//Custon components
 import GridPainelPedidos from "@/components/GridPainelPedidos";
-import {
-  StatusPedido,
-  BadgeZonaEntrega,
-  RenderIconFormaPagamento,
-} from "@/helpers/utils";
+import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
+import { StatusPedido, BadgeZonaEntrega } from "@/helpers/utils";
 
 export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
@@ -53,14 +53,14 @@ export default function EnviarPedidos() {
   const [open, setOpen] = useState(false);
   const [entregadoresAtivos, setEntregadoresAtivos] = useState([]);
   const [entregadoresAtivosFiltro, setEntregadoresAtivosFiltro] = useState([]);
-  console.log("ENTREGADORES ATIVOS: ", entregadoresAtivos);
   const [openModalEnvio, setOpenModalEnvio] = useState(false);
-  const [nomeEntregadorSearch, setNomeEntregadorSearch] = useState("");
-  const [entregadorEscolhido, setEntregadorEscolhido] = useState("");
-  const [radioSelected, setRadioSelected] = useState("");
+  const [radioSelected, setRadioSelected] = useState(null);
 
-  const [filteredData, setFilteredData] = useState([]);
-  console.log("filteredData: ", filteredData);
+  const [nomeEntregadorSearch, setNomeEntregadorSearch] = useState("");
+  const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
+
+  // console.log("ENTREGADOR SELECIONADO: ", entregadorSelecionado);
+  // console.log("ID: ", radioSelected);
 
   useEffect(() => {
     if (user?.token) {
@@ -113,9 +113,19 @@ export default function EnviarPedidos() {
     setEntregadorEscolhido(event.target.value);
   };
 
+  const handleSelectEntregador = (entregadorId, entregadorUserName) => {
+    console.log("entregadorId: ", entregadorId);
+    if (radioSelected === entregadorId) {
+      setEntregadorSelecionado(null);
+      setRadioSelected(null);
+    } else {
+      setRadioSelected(entregadorId);
+      setEntregadorSelecionado(entregadorUserName);
+    }
+  };
+
   let typingTimer;
   const handleChangeInputDelaySearch = (string) => {
-    console.log("Entrou no filtro de entregador");
     clearTimeout(typingTimer);
 
     typingTimer = setTimeout(() => {
@@ -432,7 +442,7 @@ export default function EnviarPedidos() {
               </Box>
 
               <Box>
-                <RenderModoPagamento />
+                <RenderIconFormaPagamento />
               </Box>
 
               <Divider sx={{ width: "100%", marginTop: 2, marginBottom: 2 }} />
@@ -503,6 +513,11 @@ export default function EnviarPedidos() {
                 //overflow: "hidden",
                 maxHeight: 700,
                 height: "100%",
+
+                ["@media (max-width:600px)"]: {
+                  // maxHeight: "100%",
+                  // height: "100%",
+                },
               }}
             >
               <Box
@@ -521,7 +536,11 @@ export default function EnviarPedidos() {
                   aria-label="enviar"
                   size="large"
                   color="error"
-                  onClick={handleOpenCloseModalEnvio}
+                  onClick={() => {
+                    handleOpenCloseModalEnvio();
+                    setEntregadorSelecionado(null);
+                    setRadioSelected(null);
+                  }}
                 >
                   <CloseIcon fontSize="inherit" sx={{ color: "#fff" }} />
                 </IconButton>
@@ -560,7 +579,9 @@ export default function EnviarPedidos() {
                   type="text"
                   size="small"
                   //value={nomeEntregadorSearch}
-                  onChange={(e) => handleChangeInputDelaySearch(e.target.value)}
+                  onChange={(e) =>
+                    handleChangeInputDelaySearch(e.target.value.toUpperCase())
+                  }
                   InputLabelProps={{ shrink: true }}
                   autoComplete="off"
                   InputProps={{
@@ -617,18 +638,50 @@ export default function EnviarPedidos() {
                   },
                 }}
               >
-                <FormControl>
+                <FormControl
+                  sx={{
+                    width: "100%",
+                  }}
+                >
                   <RadioGroup>
                     {entregadoresAtivosFiltro?.map((entregador) => (
-                      <FormControlLabel
-                        key={entregador.id}
-                        value={entregador.id}
-                        control={<Radio />}
-                        label=""
-                        onClick={(e) => {
-                          setRadioSelected(e.target.value);
+                      <Box
+                        key={entregador?.id}
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                          width: "100%",
+                          cursor: "pointer",
+                          padding: "10px 20px",
+                          height: 60,
+
+                          "&:hover": { backgroundColor: "#f8e8ff" },
                         }}
-                      />
+                        onClick={() => {
+                          handleSelectEntregador(
+                            entregador?.id,
+                            entregador?.username
+                          );
+                        }}
+                      >
+                        <FormControlLabel
+                          value={entregador.id}
+                          control={<Radio />}
+                          // onClick={(e) => {
+                          //   setRadioSelected(e.target.value);
+                          // }}
+                          checked={radioSelected === entregador.id}
+                          onClick={() =>
+                            handleSelectEntregador(
+                              entregador?.id,
+                              entregador?.username
+                            )
+                          }
+                          sx={{ marginRight: 0 }}
+                        />
+                        <RenderUserRow username={entregador?.username} />
+                      </Box>
                     ))}
                   </RadioGroup>
                 </FormControl>
@@ -646,32 +699,42 @@ export default function EnviarPedidos() {
                   backgroundColor: "#842E6B",
                 }}
               >
-                <Stack
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "row",
-                  }}
-                >
-                  <PersonIcon sx={{ fontSize: 28, color: "#fff" }} />
-                  <Typography
-                    variant="h6"
-                    component="h6"
+                {entregadorSelecionado ? (
+                  <Stack
                     sx={{
-                      fontWeight: 700,
-                      fontSize: 16,
-                      textAlign: "left",
-                      width: "100%",
-                      marginLeft: "10px",
-                      color: "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "row",
+                      border: "2px solid #fff",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
                     }}
                   >
-                    NOME
-                  </Typography>
-                </Stack>
+                    <>
+                      <PersonIcon sx={{ fontSize: 28, color: "#fff" }} />
+                      <Typography
+                        variant="h6"
+                        component="h6"
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: 16,
+                          textAlign: "left",
+                          width: "100%",
+                          marginLeft: "10px",
+                          color: "#fff",
+                        }}
+                      >
+                        {entregadorSelecionado}
+                      </Typography>
+                    </>
+                  </Stack>
+                ) : (
+                  <div />
+                )}
 
                 <Button
+                  disabled={entregadorSelecionado ? false : true}
                   aria-label="enviar"
                   variant="contained"
                   disableElevation
@@ -690,110 +753,22 @@ export default function EnviarPedidos() {
   );
 }
 
-//  <Box
-//    sx={{
-//      display: "flex",
-//      alignItems: "center",
-//      justifyContent: "flex-start",
-//      overflowX: "hidden",
-//      overflowY: "scroll",
-//      width: "100%",
-//      height: 500,
-//      ".firefoxScrollBar": {
-//        "scrollbar-width": "auto",
-//        "scrollbar-color": "#842E6B #f8e8ff",
-//      },
-//      "::-webkit-scrollbar": {
-//        width: "8px",
-//      },
-//      "::-webkit-scrollbar-track": {
-//        boxShadow: "nset 0 0 6px grey",
-//        //borderRadius: "5px",
-//        backgroundColor: "#f8e8ff",
-//      },
-//      "::-webkit-scrollbar-thumb": {
-//        backgroundColor: "#842E6B",
-//        //borderRadius: "8px",
-//        height: "2px",
-//      },
-//    }}
-//  >
-//    <FormControl
-//      sx={{
-//        display: "flex",
-//        alignItems: "center",
-//        justifyContent: "center",
-//        width: "100%",
-//        height: 70,
-//        flexDirection: "column",
-//      }}
-//    >
-//      <RadioGroup
-//        aria-labelledby="demo-controlled-radio-buttons-group"
-//        name="controlled-radio-buttons-group"
-//        value={entregadorEscolhido}
-//        onChange={handleSelecionarEntregador}
-//        sx={{
-//          width: "100%",
-//        }}
-//      >
-//        {MOCK_DATA_ENTREGADORES.map((entregador) => (
-//          <Box
-//            key={entregador.id}
-//            sx={{
-//              display: "flex",
-//              alignItems: "center",
-//              justifyContent: "flex-start",
-//              width: "100%",
-//              height: 70,
-//              padding: "0 20px",
-//              "&:hover": {
-//                backgroundColor: "#e6e6e6",
-//                cursor: "pointer",
-//              },
-//            }}
-//          >
-//            <FormControlLabel
-//              value={entregadorEscolhido}
-//              control={<Radio />}
-//              label={entregador.name}
-//            />
-//            {/* <RenderUserRow name={entregador.name} /> */}
-//          </Box>
-//        ))}
-//      </RadioGroup>
-//    </FormControl>
-//  </Box>;
+function SkeletonSelectEntregador() {
+  return <></>;
+}
 
 function RenderUserRow(props) {
+  const { username } = props;
+
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        marginLeft: "20px",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          marginRight: "10px",
-          width: 50,
-          height: 50,
-          backgroundColor: "#ccc",
-          borderRadius: "50%",
-        }}
-      >
-        {/* <Image
-          src="https://public-ecommerce.s3.sa-east-1.amazonaws.com/geral/unknow_user.png"
-          height={50}
-          width={50}
-          className="roudedImage"
-        /> */}
-      </Box>
+      <AccountCircleIcon sx={{ fontSize: 40, color: "#616161" }} />
 
       <Box
         sx={{
@@ -809,9 +784,10 @@ function RenderUserRow(props) {
             fontWeight: 900,
             color: "#2e2e2e",
             fontSize: "14px",
+            marginLeft: "10px",
           }}
         >
-          {props.name}
+          {username}
         </Typography>
       </Box>
     </Box>
@@ -831,122 +807,3 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   fontFamily: "Lato, sans-serif",
   fontWeight: 400,
 }));
-
-const MOCK_DATA_ENTREGADORES = [
-  {
-    id: 1,
-    name: "JOÃO",
-  },
-  {
-    id: 2,
-    name: "PEDRO",
-  },
-  {
-    id: 3,
-    name: "ALBERTO",
-  },
-  {
-    id: 4,
-    name: "JORGE",
-  },
-  {
-    id: 6,
-    name: "SAMUEL",
-  },
-  {
-    id: 7,
-    name: "ROBERTO",
-  },
-  {
-    id: 8,
-    name: "ALAN",
-  },
-  {
-    id: 9,
-    name: "TIAGO",
-  },
-  {
-    id: 10,
-    name: "MÁRCIO",
-  },
-  {
-    id: 11,
-    name: "CLÁUDIO",
-  },
-  {
-    id: 12,
-    name: "MAURO",
-  },
-];
-
-function RenderModoPagamento() {
-  const [modoPagamento, setModoPagamento] = useState("");
-
-  return (
-    <Box
-      sx={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid red",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <PixIcon sx={{ color: "red" }} />
-      </Box>
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid #20202033",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <CreditCardIcon sx={{ color: "#20202033" }} />
-      </Box>
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid #20202033",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <CreditCardIcon sx={{ color: "#20202033" }} />
-      </Box>
-      <Box
-        sx={{
-          padding: "10px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          border: "1px solid #20202033",
-          borderRadius: "8px",
-          width: "60px",
-          margin: "3px",
-        }}
-      >
-        <LocalAtmIcon sx={{ color: "#20202033" }} />
-      </Box>
-    </Box>
-  );
-}

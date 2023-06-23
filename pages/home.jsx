@@ -38,10 +38,10 @@ import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import GridPainelPedidos from "components/GridPainelPedidos";
 import TableEntregadoresStatus from "components/TableEntregadoresStatus";
 import DatepickerField from "@/components/DatepickerField";
+import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
 import {
   StatusPedido,
   BadgeZonaEntrega,
-  RenderIconFormaPagamento,
   BadgeStatusEntregador,
   formatarData,
   formatarValorBRL,

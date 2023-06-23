@@ -220,32 +220,11 @@ export default function SingIn() {
         onClose={handleDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        sx={{ margin: "10px" }}
       >
         <DialogTitle id="alert-dialog-title">
           Para alteração de senha, contate a administração.
         </DialogTitle>
-
-        {/* <DialogActions>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleSairSistemaDialog}
-            disableElevation
-            fullWidth
-          >
-            NÃO
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={logout}
-            autoFocus
-            disableElevation
-            fullWidth
-          >
-            SIM
-          </Button>
-        </DialogActions> */}
       </Dialog>
     </>
   );
