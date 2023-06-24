@@ -1,6 +1,10 @@
 async function signInRequest(req, res) {
 
+    console.log("SSR>>>>LOGIN")
+
     const payload = req.body
+
+    console.log("URL>>>", `${process.env.NEXT_URL_BACKEND}/auth/login/`)
 
     const result = await fetch(`${process.env.NEXT_URL_BACKEND}/auth/login/`, {
         method: 'POST',
@@ -10,6 +14,8 @@ async function signInRequest(req, res) {
         },
         body: payload
     });
+
+    console.log("RESULT>>>", result)
 
     const user = await result.json();
 

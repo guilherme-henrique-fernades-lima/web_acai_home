@@ -42,6 +42,7 @@ export default function SingIn() {
   };
 
   const handleLogin = () => {
+    console.log("LOGIN>>> START")
     login(JSON.stringify({ cpf: cpf, password: password }));
   };
 
