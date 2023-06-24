@@ -2,6 +2,8 @@ async function signInRequest(req, res) {
 
     const payload = req.body
 
+    console.log("SSR>>>", payload)
+
     const result = await fetch(`${process.env.NEXT_URL_BACKEND}/auth/login/`, {
         method: 'POST',
         headers: {
