@@ -10,7 +10,7 @@ async function signInRequest(req, res) {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json;charset=UTF-8"
         },
-        body: payload
+        body: JSON.stringify(payload)
     });
 
     console.log("RESULT>>>", result)
