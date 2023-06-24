@@ -18,9 +18,15 @@ async function getEntregadoresDisponiveis(req, res) {
   return res.status(result.status).json(data);
 }
 
+async function enviarPedidosEntregador() {
+  console.log("ENTROU NA FUNCAO DE ENVIAR PEDIDO");
+}
+
 export default async function handler(req, res) {
   if (req.method == "GET") {
     getEntregadoresDisponiveis(req, res);
+  } else if (req.method == "POST") {
+    enviarPedidosEntregador(req, res);
   } else {
     res.status(405).send();
   }

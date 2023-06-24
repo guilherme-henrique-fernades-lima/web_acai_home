@@ -55,6 +55,9 @@ export default function EnviarPedidos() {
   const [entregadoresAtivosFiltro, setEntregadoresAtivosFiltro] = useState([]);
   const [openModalEnvio, setOpenModalEnvio] = useState(false);
   const [radioSelected, setRadioSelected] = useState(null);
+  const [pedidosParaEntrega, setPedidosParaEntrega] = useState([]);
+  console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
+  const [pedidos, setPedidos] = useState([]);
 
   const [nomeEntregadorSearch, setNomeEntregadorSearch] = useState("");
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
@@ -65,6 +68,7 @@ export default function EnviarPedidos() {
   useEffect(() => {
     if (user?.token) {
       getEntregadoresDisponiveis();
+      getPedidos();
     }
   }, [user]);
 
@@ -86,6 +90,23 @@ export default function EnviarPedidos() {
   //   }
   // }
 
+  const getPedidos = async () => {
+    const response = await fetch(
+      `/api/home/?date=&tp_pag=DINHEIRO_CARTAO&status=&zona=`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user.token,
+        },
+      }
+    );
+
+    if (response.status == 200) {
+      const res = await response.json();
+      setPedidos(res.data);
+    }
+  };
+
   const getEntregadoresDisponiveis = async () => {
     const response = await fetch(`/api/home/entregadores`, {
       method: "GET",
@@ -106,15 +127,38 @@ export default function EnviarPedidos() {
   const handleOpenCloseModalEnvio = () => setOpenModalEnvio(!openModalEnvio);
 
   function enviarPedidosEntregador() {
-    toast.success("Pedido enviado com sucesso!");
+    if (pedidosParaEntrega.length > 1) {
+      toast.success("Pedidos enviados com sucesso!");
+    } else {
+      toast.success("Pedido enviado com sucesso!");
+    }
   }
 
-  const handleSelecionarEntregador = (event) => {
-    setEntregadorEscolhido(event.target.value);
-  };
+  function getPayloadPedidosEnvio() {
+    const data = {
+      cpf_motorista: entregadorSelecionado ? entregadorSelecionado?.cpf : null,
+      motorista: entregadorSelecionado ? entregadorSelecionado?.username : null,
+      cpf_user: user?.cpf,
+      usuario: user?.username,
+      pedidos: pedidosParaEntrega,
+    };
+
+    return data;
+  }
+
+  function addPedidoCarrinho(idPedido) {
+    if (pedidosParaEntrega.includes(idPedido)) {
+      // Se o ID já estiver selecionado, remova-o do array
+      setPedidosParaEntrega(
+        pedidosParaEntrega.filter((selectedId) => selectedId !== idPedido)
+      );
+    } else {
+      // Caso contrário, adicione o ID ao array
+      setPedidosParaEntrega([...pedidosParaEntrega, idPedido]);
+    }
+  }
 
   const handleSelectEntregador = (entregadorId, entregadorUserName) => {
-    console.log("entregadorId: ", entregadorId);
     if (radioSelected === entregadorId) {
       setEntregadorSelecionado(null);
       setRadioSelected(null);
@@ -150,19 +194,23 @@ export default function EnviarPedidos() {
         disableElevation
         onClick={handleOpenCloseModalEnvio}
         endIcon={<SendIcon />}
+        disabled={pedidosParaEntrega.length > 0 ? false : true}
       >
         Enviar pedidos
       </Button>
       <Paper
         elevation={0}
-        sx={{ boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" }}
+        sx={{
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          width: "100%",
+        }}
       >
         <TableContainer>
           <Table
             size="small"
             sx={{
               width: "100%",
-              minWidth: 900,
+
               borderRadius: "8px",
               "& .tableCellClasses.root": {
                 borderBottom: "none",
@@ -210,90 +258,96 @@ export default function EnviarPedidos() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow
-                sx={{
-                  transition: "all 0.3s ease",
-                  height: 50,
-                  border: "none",
-                  "&:hover": { backgroundColor: "#f8e8ff" },
-                  ".MuiTableCell-root": {
-                    borderBottom: "none",
-                  },
-                }}
-              >
-                <TableCell
-                  align="center"
+              {pedidos?.map((pedido, index) => (
+                <TableRow
+                  key={index}
                   sx={{
-                    borderTopLeftRadius: "30px",
-                    borderBottomLeftRadius: "30px",
+                    transition: "all 0.3s ease",
+                    height: 50,
+                    border: "none",
+                    "&:hover": { backgroundColor: "#f8e8ff" },
+                    ".MuiTableCell-root": {
+                      borderBottom: "none",
+                    },
                   }}
                 >
-                  <Checkbox defaultChecked />
-                </TableCell>
-                <TableCell align="center">1</TableCell>
-                <CustomTableCellBody align="center">
-                  Açai de maça com abacaxi
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  #PD0002
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  R$ 25,36
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  <RenderIconFormaPagamento formaPagamento="PIX" />
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  <StatusPedido status={5}>ABERTO</StatusPedido>
-                </CustomTableCellBody>
-                <CustomTableCellBody align="center">
-                  <Stack direction="column">
-                    <Typography
-                      variant="span"
-                      component="span"
-                      sx={{ fontWeight: 700, fontSize: 12 }}
-                    >
-                      11/06/2023
-                    </Typography>
-                    <Typography
-                      variant="span"
-                      component="span"
-                      sx={{ fontWeight: 400, fontSize: 10 }}
-                    >
-                      10:48:23
-                    </Typography>
-                  </Stack>
-                </CustomTableCellBody>
-                <CustomTableCellBody
-                  align="center"
-                  sx={{
-                    borderTopRightRadius: "30px",
-                    borderBottomRightRadius: "30px",
-                  }}
-                >
-                  <IconButton
+                  <TableCell
+                    align="center"
                     sx={{
-                      transition: "all 0.3s ease",
-                      cursor: "pointer",
-                      border: "1px solid transparent",
-                      "&:hover": {
-                        color: "#B83E94",
-                        border: "1px solid #b83e94",
-                      },
+                      borderTopLeftRadius: "30px",
+                      borderBottomLeftRadius: "30px",
                     }}
-                    onClick={handleOpenCloseModalDetalhes}
                   >
-                    <ArticleOutlinedIcon
-                      sx={{
-                        fontSize: 24,
-                      }}
+                    <Checkbox
+                      onChange={() => addPedidoCarrinho(pedido.id)} // Passa o ID do pedido aqui
+                      checked={pedidosParaEntrega.includes(pedido.id)} // Verifica se o pedido está selecionado
                     />
-                  </IconButton>
-                </CustomTableCellBody>
-              </TableRow>
+                  </TableCell>
+                  <TableCell align="center">1</TableCell>
+                  <CustomTableCellBody align="center">
+                    Açai de maça com abacaxi
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    #PD0002
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    R$ 25,36
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    <RenderIconFormaPagamento formaPagamento="PIX" />
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    <StatusPedido status={5}>ABERTO</StatusPedido>
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    <Stack direction="column">
+                      <Typography
+                        variant="span"
+                        component="span"
+                        sx={{ fontWeight: 700, fontSize: 12 }}
+                      >
+                        11/06/2023
+                      </Typography>
+                      <Typography
+                        variant="span"
+                        component="span"
+                        sx={{ fontWeight: 400, fontSize: 10 }}
+                      >
+                        10:48:23
+                      </Typography>
+                    </Stack>
+                  </CustomTableCellBody>
+                  <CustomTableCellBody
+                    align="center"
+                    sx={{
+                      borderTopRightRadius: "30px",
+                      borderBottomRightRadius: "30px",
+                    }}
+                  >
+                    <IconButton
+                      sx={{
+                        transition: "all 0.3s ease",
+                        cursor: "pointer",
+                        border: "1px solid transparent",
+                        "&:hover": {
+                          color: "#B83E94",
+                          border: "1px solid #b83e94",
+                        },
+                      }}
+                      onClick={handleOpenCloseModalDetalhes}
+                    >
+                      <ArticleOutlinedIcon
+                        sx={{
+                          fontSize: 24,
+                        }}
+                      />
+                    </IconButton>
+                  </CustomTableCellBody>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -661,7 +715,8 @@ export default function EnviarPedidos() {
                         onClick={() => {
                           handleSelectEntregador(
                             entregador?.id,
-                            entregador?.username
+                            entregador?.username,
+                            entregador?.cpf
                           );
                         }}
                       >
@@ -741,6 +796,7 @@ export default function EnviarPedidos() {
                   size="large"
                   color="success"
                   endIcon={<SendIcon fontSize="inherit" />}
+                  onClick={enviarPedidosEntregador}
                 >
                   ENVIAR
                 </Button>
