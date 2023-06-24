@@ -2,18 +2,14 @@ async function signInRequest(req, res) {
 
     const payload = req.body
 
-    console.log("SSR>>>", payload)
-
     const result = await fetch(`${process.env.NEXT_URL_BACKEND}/auth/login/`, {
         method: 'POST',
         headers: {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json;charset=UTF-8"
         },
-        body: JSON.stringify(payload)
+        body: payload
     });
-
-    console.log("RESULT>>>", result)
 
     const user = await result.json();
 

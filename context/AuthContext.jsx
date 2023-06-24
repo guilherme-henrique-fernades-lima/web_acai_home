@@ -16,7 +16,6 @@ export default function AuthProvider({ children }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("INICIA CONTEXT>>>>")
     //Rotina para checar autenticação
     if (hasCookie("@acai:user")) {
       userRecover();
