@@ -79,7 +79,7 @@ export default function DataTable(props) {
               },
             }}
           >
-            <Restricted to={props.perm}>
+            {/* <Restricted to={props.perm}> */}
               <GridToolbarExport
                 csvOptions={{
                   allColumns: true,
@@ -102,8 +102,8 @@ export default function DataTable(props) {
                 printOptions={{ disableToolbarButton: true }}
               />
 
-              <ExportExcel />
-            </Restricted>
+              {/* <ExportExcel /> */}
+            {/* </Restricted> */}
 
             <GridToolbarColumnsButton
               startIcon={
