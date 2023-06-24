@@ -16,6 +16,7 @@ export default function AuthProvider({ children }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log("INICIA CONTEXT>>>>")
     //Rotina para checar autenticação
     if (hasCookie("@acai:user")) {
       userRecover();
@@ -25,10 +26,13 @@ export default function AuthProvider({ children }) {
   }, []);
 
   const login = async (credenciais) => {
+    console.log("ENTRA NO BLOCO DE LOGIN>>>")
     const result = await fetch("/api/auth/sign-in", {
       method: "POST",
       body: credenciais,
     });
+
+    console.log("RESULTADO DO REQUEST PARA API SSR", result)
 
     if (result.status == 200) {
       const data = await result.json();
