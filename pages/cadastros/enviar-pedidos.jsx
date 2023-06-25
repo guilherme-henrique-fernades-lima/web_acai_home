@@ -31,7 +31,7 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import Grow from "@mui/material/Grow";
+import Skeleton from "@mui/material/Skeleton";
 
 //Icons
 import CreditCardIcon from "@mui/icons-material/CreditCard";
@@ -56,6 +56,7 @@ export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
 
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [entregadoresAtivos, setEntregadoresAtivos] = useState([]);
   const [entregadoresAtivosFiltro, setEntregadoresAtivosFiltro] = useState([]);
   const [openModalEnvio, setOpenModalEnvio] = useState(false);
@@ -65,8 +66,8 @@ export default function EnviarPedidos() {
   const [cards, setCards] = useState([]);
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
 
-  console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
-  console.log("ENTREGADOR SELECIONADO: ", entregadorSelecionado);
+  //console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
+  //console.log("ENTREGADOR SELECIONADO: ", entregadorSelecionado);
 
   useEffect(() => {
     if (user?.token) {
@@ -76,6 +77,7 @@ export default function EnviarPedidos() {
   }, [user]);
 
   const getPedidos = async () => {
+    setLoading(true);
     const response = await fetch(`/api/cadastros/enviar-pedidos`, {
       method: "GET",
       headers: {
@@ -86,9 +88,10 @@ export default function EnviarPedidos() {
     if (response.status == 200) {
       const res = await response.json();
 
-      console.log(res);
       setPedidos(res.data);
       setCards(res.status);
+
+      setLoading(false);
     }
   };
 
@@ -110,7 +113,7 @@ export default function EnviarPedidos() {
   async function enviarPedidosEntregador() {
     const payload = getPayloadPedidosEnvio();
 
-    console.log("payload: ", payload);
+    //console.log("payload: ", payload);
 
     const response = await fetch(`/api/cadastros/enviar-pedidos`, {
       method: "POST",
@@ -120,16 +123,18 @@ export default function EnviarPedidos() {
       body: JSON.stringify(payload),
     });
 
-    console.log(response);
-
     if (response.ok) {
-    }
+      if (pedidosParaEntrega.length > 1) {
+        toast.success("Pedidos enviados com sucesso!");
+      } else {
+        toast.success("Pedido enviado com sucesso!");
+      }
 
-    // if (pedidosParaEntrega.length > 1) {
-    //   toast.success("Pedidos enviados com sucesso!");
-    // } else {
-    //   toast.success("Pedido enviado com sucesso!");
-    // }
+      getPedidos();
+      handleOpenCloseModalEnvio();
+      setRadioSelected();
+      setEntregadorSelecionado();
+    }
   }
 
   const handleOpenCloseModalDetalhes = () => setOpen(!open);
@@ -247,7 +252,7 @@ export default function EnviarPedidos() {
                 },
               }}
             >
-              Total de pedidos: {cards?.TOTAL}
+              Total de pedidos: {cards?.TOTAL || "--"}
             </Typography>
           </Stack>
 
@@ -256,160 +261,164 @@ export default function EnviarPedidos() {
           </Box>
         </Stack>
 
-        <TableContainer>
-          <Table
-            size="small"
-            sx={{
-              width: "100%",
-
-              borderRadius: "8px",
-              "& .tableCellClasses.root": {
-                borderBottom: "none",
-              },
-            }}
-          >
-            <TableHead
+        {loading ? (
+          <SkeletonTable />
+        ) : (
+          <TableContainer>
+            <Table
+              size="small"
               sx={{
-                height: 50,
-                borderBottom: "1px solid #ccc",
-                overflow: "hidden",
+                width: "100%",
+
+                borderRadius: "8px",
+                "& .tableCellClasses.root": {
+                  borderBottom: "none",
+                },
               }}
             >
-              <TableRow sx={{ "& td": { border: 0 } }}>
-                <CustomTableCellHeader align="center">
-                  SELECIONAR
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  SEQ.
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  N° PEDIDO
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  CLIENTE
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  VALOR
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  FORM. PAGAMENTO
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  ZONA
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  STATUS
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  DATA/HORA
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
-                  AÇÕES
-                </CustomTableCellHeader>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {pedidos?.map((pedido, index) => (
-                <TableRow
-                  key={index}
-                  sx={{
-                    transition: "all 0.3s ease",
-                    height: 50,
-                    border: "none",
-                    backgroundColor: pedidosParaEntrega.includes(pedido.id)
-                      ? "#f8e8ff"
-                      : "transparent",
-                    "&:hover": { backgroundColor: "#f8e8ff" },
-                    ".MuiTableCell-root": {
-                      borderBottom: "none",
-                    },
-                  }}
-                >
-                  <TableCell
-                    align="center"
-                    sx={{
-                      borderTopLeftRadius: "4px",
-                      borderBottomLeftRadius: "4px",
-                    }}
-                  >
-                    <Checkbox
-                      onChange={() => addPedidoCarrinho(pedido.id)} // Passa o ID do pedido aqui
-                      checked={pedidosParaEntrega.includes(pedido.id)} // Verifica se o pedido está selecionado
-                    />
-                  </TableCell>
-                  <TableCell align="center">{index + 1}</TableCell>
-
-                  <CustomTableCellBody align="center">
-                    {pedido.id}
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="left">
-                    {pedido?.nome.toUpperCase()}
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="center">
-                    {formatarValorBRL(pedido.valor)}
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="center">
-                    <RenderIconFormaPagamento
-                      formaPagamento={pedido.formaPagamento}
-                    />
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="center">
-                    {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
-                    ---
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="center">
-                    {/* <StatusPedido status={5}>ABERTO</StatusPedido> */}
-                    ---
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="center">
-                    <Stack direction="column">
-                      <Typography
-                        variant="span"
-                        component="span"
-                        sx={{ fontWeight: 700, fontSize: 12 }}
-                      >
-                        {formatarData(pedido.data)}
-                      </Typography>
-                      <Typography
-                        variant="span"
-                        component="span"
-                        sx={{ fontWeight: 400, fontSize: 10 }}
-                      >
-                        {pedido.hora}
-                      </Typography>
-                    </Stack>
-                  </CustomTableCellBody>
-                  <CustomTableCellBody
-                    align="center"
-                    sx={{
-                      borderTopRightRadius: "4px",
-                      borderBottomRightRadius: "4px",
-                    }}
-                  >
-                    <IconButton
-                      sx={{
-                        transition: "all 0.3s ease",
-                        cursor: "pointer",
-                        border: "1px solid transparent",
-                        "&:hover": {
-                          color: "#B83E94",
-                          border: "1px solid #b83e94",
-                        },
-                      }}
-                      onClick={handleOpenCloseModalDetalhes}
-                    >
-                      <ArticleOutlinedIcon
-                        sx={{
-                          fontSize: 24,
-                        }}
-                      />
-                    </IconButton>
-                  </CustomTableCellBody>
+              <TableHead
+                sx={{
+                  height: 50,
+                  borderBottom: "1px solid #ccc",
+                  overflow: "hidden",
+                }}
+              >
+                <TableRow sx={{ "& td": { border: 0 } }}>
+                  <CustomTableCellHeader align="center">
+                    SELECIONAR
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    SEQ.
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    N° PEDIDO
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    CLIENTE
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    VALOR
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    FORM. PAGAMENTO
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    ZONA
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    STATUS
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    DATA/HORA
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
+                    AÇÕES
+                  </CustomTableCellHeader>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {pedidos?.map((pedido, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      transition: "all 0.3s ease",
+                      height: 50,
+                      border: "none",
+                      backgroundColor: pedidosParaEntrega.includes(pedido.id)
+                        ? "#f8e8ff"
+                        : "transparent",
+                      "&:hover": { backgroundColor: "#f8e8ff" },
+                      ".MuiTableCell-root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <TableCell
+                      align="center"
+                      sx={{
+                        borderTopLeftRadius: "4px",
+                        borderBottomLeftRadius: "4px",
+                      }}
+                    >
+                      <Checkbox
+                        onChange={() => addPedidoCarrinho(pedido.id)} // Passa o ID do pedido aqui
+                        checked={pedidosParaEntrega.includes(pedido.id)} // Verifica se o pedido está selecionado
+                      />
+                    </TableCell>
+                    <TableCell align="center">{index + 1}</TableCell>
+
+                    <CustomTableCellBody align="center">
+                      {pedido.id}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="left">
+                      {pedido?.nome.toUpperCase()}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {formatarValorBRL(pedido.valor)}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      <RenderIconFormaPagamento
+                        formaPagamento={pedido.formaPagamento}
+                      />
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
+                      ---
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {/* <StatusPedido status={5}>ABERTO</StatusPedido> */}
+                      ---
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      <Stack direction="column">
+                        <Typography
+                          variant="span"
+                          component="span"
+                          sx={{ fontWeight: 700, fontSize: 12 }}
+                        >
+                          {formatarData(pedido.data)}
+                        </Typography>
+                        <Typography
+                          variant="span"
+                          component="span"
+                          sx={{ fontWeight: 400, fontSize: 10 }}
+                        >
+                          {pedido.hora}
+                        </Typography>
+                      </Stack>
+                    </CustomTableCellBody>
+                    <CustomTableCellBody
+                      align="center"
+                      sx={{
+                        borderTopRightRadius: "4px",
+                        borderBottomRightRadius: "4px",
+                      }}
+                    >
+                      <IconButton
+                        sx={{
+                          transition: "all 0.3s ease",
+                          cursor: "pointer",
+                          border: "1px solid transparent",
+                          "&:hover": {
+                            color: "#B83E94",
+                            border: "1px solid #b83e94",
+                          },
+                        }}
+                        onClick={handleOpenCloseModalDetalhes}
+                      >
+                        <ArticleOutlinedIcon
+                          sx={{
+                            fontSize: 24,
+                          }}
+                        />
+                      </IconButton>
+                    </CustomTableCellBody>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
 
         <Modal
           aria-labelledby="transition-modal-title"
@@ -837,10 +846,6 @@ export default function EnviarPedidos() {
   );
 }
 
-function SkeletonSelectEntregador() {
-  return <></>;
-}
-
 function RenderUserRow(props) {
   const { username } = props;
 
@@ -891,3 +896,33 @@ const CustomTableCellBody = styled(TableCell)((props) => ({
   fontFamily: "Lato, sans-serif",
   fontWeight: 400,
 }));
+
+function SkeletonTable() {
+  return (
+    <Paper
+      sx={{
+        width: "100%",
+        padding: "20px",
+        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+        marginBottom: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+      elevation={0}
+    >
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
+        (item, index) => (
+          <Skeleton
+            key={index}
+            variant="rounded"
+            width={"100%"}
+            height={20}
+            sx={{ mt: 1, mb: 1 }}
+          />
+        )
+      )}
+    </Paper>
+  );
+}
