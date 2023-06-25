@@ -43,7 +43,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 //Custon components
-import GridPainelPedidos from "@/components/GridPainelPedidos";
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
 import {
   StatusPedido,
@@ -63,6 +62,7 @@ export default function EnviarPedidos() {
   const [radioSelected, setRadioSelected] = useState(null);
   const [pedidosParaEntrega, setPedidosParaEntrega] = useState([]);
   const [pedidos, setPedidos] = useState([]);
+  const [cards, setCards] = useState([]);
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
 
   console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
@@ -85,7 +85,10 @@ export default function EnviarPedidos() {
 
     if (response.status == 200) {
       const res = await response.json();
-      setPedidos(res);
+
+      console.log(res);
+      setPedidos(res.data);
+      setCards(res.status);
     }
   };
 
@@ -186,7 +189,6 @@ export default function EnviarPedidos() {
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={true} />
-      <GridPainelPedidos />
 
       <Paper
         elevation={0}
@@ -199,29 +201,61 @@ export default function EnviarPedidos() {
         <Stack
           sx={{
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexDirection: "row",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            flexDirection: "column",
             width: "100%",
             mb: 1,
             mt: 1,
             p: 1,
           }}
         >
-          <Button
-            variant="contained"
-            sx={{ mr: 1 }}
-            disableElevation
-            onClick={handleOpenCloseModalEnvio}
-            endIcon={<SendIcon />}
-            disabled={pedidosParaEntrega.length > 0 ? false : true}
+          <Stack
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexDirection: "row",
+              width: "100%",
+
+              ["@media (max-width:599px)"]: {
+                flexDirection: "column",
+                alignItems: "flex-start",
+              },
+            }}
           >
-            Enviar pedidos
-          </Button>
-          <Box>
+            <Button
+              variant="contained"
+              sx={{ mr: 1 }}
+              disableElevation
+              onClick={handleOpenCloseModalEnvio}
+              endIcon={<SendIcon />}
+              disabled={pedidosParaEntrega.length > 0 ? false : true}
+            >
+              Enviar pedidos
+            </Button>
+
+            <Typography
+              sx={{
+                border: "2px solid #2f910c",
+                padding: "5px 10px",
+                color: "#2f910c",
+                borderRadius: "8px",
+                fontWeight: 900,
+                ["@media (max-width:599px)"]: {
+                  display: "none",
+                },
+              }}
+            >
+              Total de pedidos: {cards?.TOTAL}
+            </Typography>
+          </Stack>
+
+          <Box sx={{ mt: 1 }}>
             <DatepickerField />
           </Box>
         </Stack>
+
         <TableContainer>
           <Table
             size="small"
