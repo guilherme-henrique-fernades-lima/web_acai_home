@@ -33,6 +33,8 @@ export default function PedidosEmRota(props) {
     }
   };
 
+  function getPedidosParaEntrega() {}
+
   return (
     <>
       <Box

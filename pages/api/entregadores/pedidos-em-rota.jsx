@@ -1,13 +1,8 @@
-async function getPedidos(req, res) {
+async function pedidos(req, res) {
   const token = req.headers.authorization;
 
-  var date = req.query.date ?? "";
-  var status = req.query.status ?? "";
-  var tp_pag = req.query.tp_pag ?? "";
-  var zona = req.query.zona ?? "";
-
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/?date=2023-06-21&status=${status}&tp_pag=${tp_pag}&zona=${zona}`,
+    `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/?date=&motorista=`,
     {
       method: "GET",
       headers: {
@@ -18,14 +13,14 @@ async function getPedidos(req, res) {
     }
   );
 
-  const data = await result.json();
+  const json = await result.json();
 
-  return res.status(result.status).json(data);
+  return res.status(result.status).json(json);
 }
 
 export default async function handler(req, res) {
   if (req.method == "GET") {
-    getPedidos(req, res);
+    listarUsuarios(req, res);
   } else {
     res.status(405).send();
   }

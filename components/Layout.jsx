@@ -413,18 +413,16 @@ export default function Layout(props) {
                   </CustomListItemButton>
                 </Link>
 
-                <Link href="/relatorios/pedidos-em-transito">
+                <Link href="/relatorios/pedidos-em-rota">
                   <CustomListItemButton
                     onClick={() => {
                       setOpen(true);
-                      setActiveOption("pedidos_em_transito");
+                      setActiveOption("pedidos_em_rota");
                     }}
                     sx={{
                       justifyContent: open ? "initial" : "center",
                     }}
-                    active={
-                      activeOption == "pedidos_em_transito" ? true : false
-                    }
+                    active={activeOption == "pedidos_em_rota" ? true : false}
                     open={open}
                   >
                     <Tooltip
@@ -445,51 +443,10 @@ export default function Layout(props) {
                       primary={
                         <CustomTypography
                           active={
-                            activeOption == "pedidos_em_transito" ? true : false
-                          }
-                        >
-                          Pedidos em trânsito
-                        </CustomTypography>
-                      }
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </CustomListItemButton>
-                </Link>
-
-                <Link href="/entregadores/pedidos-em-rota">
-                  <CustomListItemButton
-                    onClick={() => {
-                      setOpen(true);
-                      setActiveOption("pedidos_em_rota");
-                    }}
-                    sx={{
-                      justifyContent: open ? "initial" : "center",
-                    }}
-                    active={activeOption == "pedidos_em_rota" ? true : false}
-                    open={open}
-                  >
-                    <Tooltip
-                      title={open ? "" : "Pedidos em rota"}
-                      placement="right"
-                    >
-                      <ListItemIcon
-                        sx={{
-                          minWidth: 0,
-                          mr: open ? 3 : "auto",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <MapIcon />
-                      </ListItemIcon>
-                    </Tooltip>
-                    <ListItemText
-                      primary={
-                        <CustomTypography
-                          active={
                             activeOption == "pedidos_em_rota" ? true : false
                           }
                         >
-                          Pedidos em rota
+                          Pedidos em trânsito
                         </CustomTypography>
                       }
                       sx={{ opacity: open ? 1 : 0 }}

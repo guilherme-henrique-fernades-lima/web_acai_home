@@ -26,7 +26,6 @@ import Divider from "@mui/material/Divider";
 import Checkbox from "@mui/material/Checkbox";
 import SendIcon from "@mui/icons-material/Send";
 import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -34,9 +33,6 @@ import FormControl from "@mui/material/FormControl";
 import Skeleton from "@mui/material/Skeleton";
 
 //Icons
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import PixIcon from "@mui/icons-material/Pix";
-import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
@@ -65,9 +61,7 @@ export default function EnviarPedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
-
-  //console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
-  //console.log("ENTREGADOR SELECIONADO: ", entregadorSelecionado);
+  const [dateFilter, setDateFilter] = useState(new Date());
 
   useEffect(() => {
     if (user?.token) {
@@ -96,7 +90,7 @@ export default function EnviarPedidos() {
   };
 
   const getEntregadoresDisponiveis = async () => {
-    const response = await fetch(`/api/home/entregadores`, {
+    const response = await fetch(`/api/home/entregadores/?date=${dateFilter}`, {
       method: "GET",
       headers: {
         Authorization: user.token,
@@ -112,8 +106,6 @@ export default function EnviarPedidos() {
 
   async function enviarPedidosEntregador() {
     const payload = getPayloadPedidosEnvio();
-
-    //console.log("payload: ", payload);
 
     const response = await fetch(`/api/cadastros/enviar-pedidos`, {
       method: "POST",
@@ -242,9 +234,9 @@ export default function EnviarPedidos() {
 
             <Typography
               sx={{
-                border: "2px solid #2f910c",
+                border: "2px solid #842E6B",
                 padding: "5px 10px",
-                color: "#2f910c",
+                color: "#842E6B",
                 borderRadius: "8px",
                 fontWeight: 900,
                 ["@media (max-width:599px)"]: {
@@ -257,7 +249,11 @@ export default function EnviarPedidos() {
           </Stack>
 
           <Box sx={{ mt: 1 }}>
-            <DatepickerField />
+            <DatepickerField
+              value={dateFilter}
+              textLabel="Data dos pedidos"
+              onChange={setDateFilter}
+            />
           </Box>
         </Stack>
 
@@ -903,7 +899,6 @@ function SkeletonTable() {
       sx={{
         width: "100%",
         padding: "20px",
-        boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
         marginBottom: 1,
         display: "flex",
         alignItems: "center",
