@@ -45,7 +45,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 //Custon components
 import GridPainelPedidos from "@/components/GridPainelPedidos";
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
-import { StatusPedido, BadgeZonaEntrega } from "@/helpers/utils";
+import {
+  StatusPedido,
+  BadgeZonaEntrega,
+  formatarData,
+  formatarValorBRL,
+} from "@/helpers/utils";
+import DatepickerField from "@/components/DatepickerField";
 
 export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
@@ -56,14 +62,11 @@ export default function EnviarPedidos() {
   const [openModalEnvio, setOpenModalEnvio] = useState(false);
   const [radioSelected, setRadioSelected] = useState(null);
   const [pedidosParaEntrega, setPedidosParaEntrega] = useState([]);
-  console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
   const [pedidos, setPedidos] = useState([]);
-
-  const [nomeEntregadorSearch, setNomeEntregadorSearch] = useState("");
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
 
-  // console.log("ENTREGADOR SELECIONADO: ", entregadorSelecionado);
-  // console.log("ID: ", radioSelected);
+  console.log("PEDIDOS PARA ENVIAR AO ENTREGADOR: ", pedidosParaEntrega);
+  console.log("ENTREGADOR SELECIONADO: ", entregadorSelecionado);
 
   useEffect(() => {
     if (user?.token) {
@@ -72,38 +75,17 @@ export default function EnviarPedidos() {
     }
   }, [user]);
 
-  // async function listarPedidosDisponiveis() {
-  //   //setLoading(true);
-
-  //   const response = await fetch(`/api/cadastros/enviar-pedidos/`, {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: user.token,
-  //     },
-  //   });
-
-  //   const res = await response.json();
-
-  //   if (response.ok) {
-  //     setDataset(res);
-  //     //setLoading(false);
-  //   }
-  // }
-
   const getPedidos = async () => {
-    const response = await fetch(
-      `/api/home/?date=&tp_pag=DINHEIRO_CARTAO&status=&zona=`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: user.token,
-        },
-      }
-    );
+    const response = await fetch(`/api/cadastros/enviar-pedidos`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
 
     if (response.status == 200) {
       const res = await response.json();
-      setPedidos(res.data);
+      setPedidos(res);
     }
   };
 
@@ -122,17 +104,34 @@ export default function EnviarPedidos() {
     }
   };
 
+  async function enviarPedidosEntregador() {
+    const payload = getPayloadPedidosEnvio();
+
+    console.log("payload: ", payload);
+
+    const response = await fetch(`/api/cadastros/enviar-pedidos`, {
+      method: "POST",
+      headers: {
+        Authorization: user.token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    console.log(response);
+
+    if (response.ok) {
+    }
+
+    // if (pedidosParaEntrega.length > 1) {
+    //   toast.success("Pedidos enviados com sucesso!");
+    // } else {
+    //   toast.success("Pedido enviado com sucesso!");
+    // }
+  }
+
   const handleOpenCloseModalDetalhes = () => setOpen(!open);
 
   const handleOpenCloseModalEnvio = () => setOpenModalEnvio(!openModalEnvio);
-
-  function enviarPedidosEntregador() {
-    if (pedidosParaEntrega.length > 1) {
-      toast.success("Pedidos enviados com sucesso!");
-    } else {
-      toast.success("Pedido enviado com sucesso!");
-    }
-  }
 
   function getPayloadPedidosEnvio() {
     const data = {
@@ -158,13 +157,13 @@ export default function EnviarPedidos() {
     }
   }
 
-  const handleSelectEntregador = (entregadorId, entregadorUserName) => {
-    if (radioSelected === entregadorId) {
+  const handleSelectEntregador = (entregador) => {
+    if (radioSelected === entregador.id) {
       setEntregadorSelecionado(null);
       setRadioSelected(null);
     } else {
-      setRadioSelected(entregadorId);
-      setEntregadorSelecionado(entregadorUserName);
+      setRadioSelected(entregador.id);
+      setEntregadorSelecionado(entregador);
     }
   };
 
@@ -188,23 +187,41 @@ export default function EnviarPedidos() {
     <>
       <Toaster position="bottom-center" reverseOrder={true} />
       <GridPainelPedidos />
-      <Button
-        variant="contained"
-        sx={{ mb: 1, mt: 1 }}
-        disableElevation
-        onClick={handleOpenCloseModalEnvio}
-        endIcon={<SendIcon />}
-        disabled={pedidosParaEntrega.length > 0 ? false : true}
-      >
-        Enviar pedidos
-      </Button>
+
       <Paper
         elevation={0}
         sx={{
           boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
           width: "100%",
+          p: 1,
         }}
       >
+        <Stack
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            width: "100%",
+            mb: 1,
+            mt: 1,
+            p: 1,
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{ mr: 1 }}
+            disableElevation
+            onClick={handleOpenCloseModalEnvio}
+            endIcon={<SendIcon />}
+            disabled={pedidosParaEntrega.length > 0 ? false : true}
+          >
+            Enviar pedidos
+          </Button>
+          <Box>
+            <DatepickerField />
+          </Box>
+        </Stack>
         <TableContainer>
           <Table
             size="small"
@@ -232,10 +249,10 @@ export default function EnviarPedidos() {
                   SEQ.
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  PRODUTO
+                  N° PEDIDO
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  N° PEDIDO
+                  CLIENTE
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
                   VALOR
@@ -265,6 +282,9 @@ export default function EnviarPedidos() {
                     transition: "all 0.3s ease",
                     height: 50,
                     border: "none",
+                    backgroundColor: pedidosParaEntrega.includes(pedido.id)
+                      ? "#f8e8ff"
+                      : "transparent",
                     "&:hover": { backgroundColor: "#f8e8ff" },
                     ".MuiTableCell-root": {
                       borderBottom: "none",
@@ -274,8 +294,8 @@ export default function EnviarPedidos() {
                   <TableCell
                     align="center"
                     sx={{
-                      borderTopLeftRadius: "30px",
-                      borderBottomLeftRadius: "30px",
+                      borderTopLeftRadius: "4px",
+                      borderBottomLeftRadius: "4px",
                     }}
                   >
                     <Checkbox
@@ -283,24 +303,29 @@ export default function EnviarPedidos() {
                       checked={pedidosParaEntrega.includes(pedido.id)} // Verifica se o pedido está selecionado
                     />
                   </TableCell>
-                  <TableCell align="center">1</TableCell>
+                  <TableCell align="center">{index + 1}</TableCell>
+
                   <CustomTableCellBody align="center">
-                    Açai de maça com abacaxi
+                    {pedido.id}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="left">
+                    {pedido?.nome.toUpperCase()}
                   </CustomTableCellBody>
                   <CustomTableCellBody align="center">
-                    #PD0002
+                    {formatarValorBRL(pedido.valor)}
                   </CustomTableCellBody>
                   <CustomTableCellBody align="center">
-                    R$ 25,36
+                    <RenderIconFormaPagamento
+                      formaPagamento={pedido.formaPagamento}
+                    />
                   </CustomTableCellBody>
                   <CustomTableCellBody align="center">
-                    <RenderIconFormaPagamento formaPagamento="PIX" />
+                    {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
+                    ---
                   </CustomTableCellBody>
                   <CustomTableCellBody align="center">
-                    <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega>
-                  </CustomTableCellBody>
-                  <CustomTableCellBody align="center">
-                    <StatusPedido status={5}>ABERTO</StatusPedido>
+                    {/* <StatusPedido status={5}>ABERTO</StatusPedido> */}
+                    ---
                   </CustomTableCellBody>
                   <CustomTableCellBody align="center">
                     <Stack direction="column">
@@ -309,22 +334,22 @@ export default function EnviarPedidos() {
                         component="span"
                         sx={{ fontWeight: 700, fontSize: 12 }}
                       >
-                        11/06/2023
+                        {formatarData(pedido.data)}
                       </Typography>
                       <Typography
                         variant="span"
                         component="span"
                         sx={{ fontWeight: 400, fontSize: 10 }}
                       >
-                        10:48:23
+                        {pedido.hora}
                       </Typography>
                     </Stack>
                   </CustomTableCellBody>
                   <CustomTableCellBody
                     align="center"
                     sx={{
-                      borderTopRightRadius: "30px",
-                      borderBottomRightRadius: "30px",
+                      borderTopRightRadius: "4px",
+                      borderBottomRightRadius: "4px",
                     }}
                   >
                     <IconButton
@@ -638,28 +663,6 @@ export default function EnviarPedidos() {
                   }
                   InputLabelProps={{ shrink: true }}
                   autoComplete="off"
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment
-                        position="end"
-                        sx={{
-                          cursor: "pointer",
-                          height: "100%",
-                          borderRadius: "4px",
-                          "&:active": {
-                            svg: {
-                              opacity: 0.8,
-                            },
-                          },
-                        }}
-                        onClick={() => {
-                          setNomeEntregadorSearch("");
-                        }}
-                      >
-                        <CloseIcon />
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </Box>
 
@@ -713,11 +716,7 @@ export default function EnviarPedidos() {
                           "&:hover": { backgroundColor: "#f8e8ff" },
                         }}
                         onClick={() => {
-                          handleSelectEntregador(
-                            entregador?.id,
-                            entregador?.username,
-                            entregador?.cpf
-                          );
+                          handleSelectEntregador(entregador);
                         }}
                       >
                         <FormControlLabel
@@ -727,12 +726,7 @@ export default function EnviarPedidos() {
                           //   setRadioSelected(e.target.value);
                           // }}
                           checked={radioSelected === entregador.id}
-                          onClick={() =>
-                            handleSelectEntregador(
-                              entregador?.id,
-                              entregador?.username
-                            )
-                          }
+                          onClick={() => handleSelectEntregador(entregador)}
                           sx={{ marginRight: 0 }}
                         />
                         <RenderUserRow username={entregador?.username} />
@@ -780,7 +774,7 @@ export default function EnviarPedidos() {
                           color: "#fff",
                         }}
                       >
-                        {entregadorSelecionado}
+                        {entregadorSelecionado?.username}
                       </Typography>
                     </>
                   </Stack>
