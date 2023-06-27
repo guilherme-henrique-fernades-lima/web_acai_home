@@ -5,6 +5,9 @@ import Image from "next/image";
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
+//Hooks
+import { useFetchSWR } from "../hooks/useFetchSWR";
+
 //Mui components
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -72,6 +75,8 @@ export default function Home() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  //var { data, error, loading } = useFetchSWR("/api/auth/users/");
+
   useEffect(() => {
     if (user?.token) {
       getPedidos();
@@ -114,7 +119,7 @@ export default function Home() {
   };
 
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pedidos.length) : 0;
@@ -249,7 +254,6 @@ export default function Home() {
               width: "100%",
               boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
               padding: "10px 20px",
-              // overflow: "scroll",
             }}
             elevation={0}
           >
@@ -259,7 +263,6 @@ export default function Home() {
                 sx={{
                   width: "100%",
                   minWidth: 900,
-
                   borderRadius: "8px",
                   "& .tableCellClasses.root": {
                     borderBottom: "none",

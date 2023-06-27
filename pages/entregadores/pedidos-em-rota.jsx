@@ -255,7 +255,6 @@ export default function PedidosEmRota(props) {
                 >
                   <IconButton
                     size="small"
-                    disableElevation
                     variant="contained"
                     sx={{
                       marginRight: "5px",
@@ -265,12 +264,7 @@ export default function PedidosEmRota(props) {
                     <WhatsAppIcon sx={{ color: "#25d366" }} />
                   </IconButton>
 
-                  <IconButton
-                    size="small"
-                    disableElevation
-                    variant="contained"
-                    color="primary"
-                  >
+                  <IconButton size="small" variant="contained" color="primary">
                     <CallIcon sx={{ color: "#221446" }} />
                   </IconButton>
                 </Box>
@@ -594,7 +588,6 @@ export default function PedidosEmRota(props) {
                   >
                     <IconButton
                       size="small"
-                      disableElevation
                       variant="contained"
                       sx={{
                         marginRight: "5px",
@@ -606,7 +599,6 @@ export default function PedidosEmRota(props) {
 
                     <IconButton
                       size="small"
-                      disableElevation
                       variant="contained"
                       color="primary"
                     >

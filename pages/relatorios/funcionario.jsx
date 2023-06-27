@@ -20,10 +20,6 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Skeleton from "@mui/material/Skeleton";
-import Typography from "@mui/material/Typography";
-
-//Hooks
-import { useFetchSWR } from "../../hooks/useFetchSWR";
 
 //Formatters
 import { formatCpf } from "@/helpers/utils";
@@ -37,8 +33,6 @@ export default function RelacaoFuncionario() {
 
   const [dataSet, setDataset] = useState([]);
   const [loading, setLoading] = useState([]);
-
-  //var { data, error, loading } = useFetchSWR("/api/auth/users/");
 
   useEffect(() => {
     if (user?.token) {

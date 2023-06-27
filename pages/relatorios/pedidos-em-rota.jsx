@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import Image from "next/image";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
 //Mui icons
-import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,44 +17,26 @@ import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
-import Backdrop from "@mui/material/Backdrop";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
-import Divider from "@mui/material/Divider";
-import Checkbox from "@mui/material/Checkbox";
-import SendIcon from "@mui/icons-material/Send";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import Skeleton from "@mui/material/Skeleton";
 import Tooltip from "@mui/material/Tooltip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 //Icons
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
-//Custon components
-import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
+//Custom components
 import { formatarData, formatCpf } from "@/helpers/utils";
 import DatepickerField from "@/components/DatepickerField";
 
 export default function PedidosEmRota() {
   const { user } = useContext(AuthContext);
 
-  const [open, setOpen] = useState(false);
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
-
-  console.log(pedidoParaDeletar);
 
   const handleDialog = () => {
     setOpenDialogRetirarPedido(!openDialogRetirarPedido);
@@ -97,7 +77,6 @@ export default function PedidosEmRota() {
   }
 
   async function retirarPedidosEntregador() {
-    console.log("Entrou no retirar pedidos");
     const payload = getPayloadPedidosEnvio();
 
     const response = await fetch(`/api/relatorios/pedidos-em-rota/`, {
@@ -153,7 +132,6 @@ export default function PedidosEmRota() {
               justifyContent: "space-between",
               flexDirection: "row",
               width: "100%",
-
               ["@media (max-width:599px)"]: {
                 flexDirection: "column",
                 alignItems: "flex-start",
@@ -358,7 +336,6 @@ function SkeletonTable() {
       sx={{
         width: "100%",
         padding: "20px",
-
         marginBottom: 1,
         display: "flex",
         alignItems: "center",

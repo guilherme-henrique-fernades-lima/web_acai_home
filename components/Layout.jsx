@@ -743,18 +743,39 @@ function BrandImageAcai() {
           "&:hover": { opacity: 0.8 },
         }}
       >
-        <Image
-          src="/img/acai_login.svg"
-          alt="Imagem logo de uma fruta açai"
-          // layout="fill"
-          // objectFit="contain"
-          width="60"
-          height="60"
-        />
+        <Box
+          sx={{
+            width: 60,
+            height: 60,
+            transition: "all 0.3s ease",
+            ["@media (max-width:900px)"]: {
+              width: 50,
+              height: 50,
+            },
+
+            ["@media (max-width:600px)"]: {
+              width: 45,
+              height: 45,
+            },
+          }}
+        >
+          <Image
+            src="/img/acai_login.svg"
+            alt="Imagem logo de uma fruta açai"
+            // layout="fill"
+            // objectFit="contain"
+            width="100%"
+            height="100%"
+          />
+        </Box>
         <Typography
           variant="h4"
           component="h4"
-          sx={{ ml: 1, fontSize: 22, fontWeight: 900 }}
+          sx={{
+            ml: 1,
+            fontSize: { xs: 14, sm: 16, md: 18, lg: 22, xl: 22 },
+            fontWeight: 900,
+          }}
         >
           AÇAI HOME
         </Typography>
