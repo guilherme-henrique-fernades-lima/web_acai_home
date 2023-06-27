@@ -60,7 +60,6 @@ export default function PedidosEmRota() {
 
   const handleDialog = () => {
     setOpenDialogRetirarPedido(!openDialogRetirarPedido);
-    setPedidoParaDeletar(null);
   };
 
   useEffect(() => {
@@ -87,21 +86,22 @@ export default function PedidosEmRota() {
 
   function getPayloadPedidosEnvio() {
     const data = {
-      // cpf_motorista: entregadorSelecionado ? entregadorSelecionado?.cpf : null,
-      // motorista: entregadorSelecionado ? entregadorSelecionado?.username : null,
-      // cpf_user: user?.cpf,
-      // usuario: user?.username,
-      // pedidos: pedidosParaEntrega,
+      cpf_motorista: pedidoParaDeletar?.cpf_motorista,
+      motorista: pedidoParaDeletar?.motorista,
+      cpf_user: pedidoParaDeletar?.cpf_user,
+      usuario: pedidoParaDeletar?.usuario,
+      pedidos: [pedidoParaDeletar?.idPedido],
     };
 
     return data;
   }
 
   async function retirarPedidosEntregador() {
+    console.log("Entrou no retirar pedidos");
     const payload = getPayloadPedidosEnvio();
 
     const response = await fetch(`/api/relatorios/pedidos-em-rota/`, {
-      method: "DELETE",
+      method: "POST",
       headers: {
         Authorization: user.token,
       },
@@ -109,14 +109,16 @@ export default function PedidosEmRota() {
     });
 
     if (response.ok) {
-      // if (pedidosParaEntrega.length > 1) {
-      //   toast.success("Pedidos enviados com sucesso!");
-      // } else {
-      //   toast.success("Pedido enviado com sucesso!");
-      // }
-
+      toast.success(`Pedido ${payload.pedidos[0]} removido com sucesso!`);
       getPedidos();
-      setPedidoParaDeletar("");
+      handleDialog();
+      setTimeout(() => {
+        setPedidoParaDeletar(null);
+      }, 500);
+    } else {
+      toast.error(
+        `Erro ao remover pedido, tente novamente ou recarregue a página.`
+      );
     }
   }
 
@@ -323,7 +325,7 @@ export default function PedidosEmRota() {
           <Button
             variant="contained"
             color="success"
-            onClick={() => {}}
+            onClick={retirarPedidosEntregador}
             autoFocus
             disableElevation
             fullWidth

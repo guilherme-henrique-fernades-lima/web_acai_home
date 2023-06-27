@@ -31,12 +31,18 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Skeleton from "@mui/material/Skeleton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 //Custon components
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
@@ -62,6 +68,11 @@ export default function EnviarPedidos() {
   const [cards, setCards] = useState([]);
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
   const [dateFilter, setDateFilter] = useState(new Date());
+
+  const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
+  const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
+
+  console.log(pedidoParaDeletar);
 
   useEffect(() => {
     if (user?.token) {
@@ -182,6 +193,10 @@ export default function EnviarPedidos() {
     );
     setEntregadoresAtivosFiltro(entregadores);
   }
+
+  const handleDialog = () => {
+    setOpenDialogRetirarPedido(!openDialogRetirarPedido);
+  };
 
   return (
     <>
@@ -403,6 +418,20 @@ export default function EnviarPedidos() {
                         onClick={handleOpenCloseModalDetalhes}
                       >
                         <ArticleOutlinedIcon
+                          sx={{
+                            fontSize: 24,
+                          }}
+                        />
+                      </IconButton>
+
+                      <IconButton
+                        color="error"
+                        onClick={() => {
+                          handleDialog();
+                          setPedidoParaDeletar(pedido);
+                        }}
+                      >
+                        <DeleteForeverIcon
                           sx={{
                             fontSize: 24,
                           }}
@@ -838,6 +867,45 @@ export default function EnviarPedidos() {
           </Fade>
         </Modal>
       </Paper>
+
+      <Dialog
+        open={openDialogRetirarPedido}
+        onClose={handleDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ margin: "10px" }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          Deletar pedido {pedidoParaDeletar?.id}?
+        </DialogTitle>
+
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleDialog();
+              setTimeout(() => {
+                setPedidoParaDeletar(null);
+              }, 500);
+            }}
+            disableElevation
+            fullWidth
+          >
+            NÃO
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {}}
+            autoFocus
+            disableElevation
+            fullWidth
+          >
+            SIM
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

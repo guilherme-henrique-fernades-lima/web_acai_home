@@ -9,23 +9,45 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
+import TextField from "@mui/material/TextField";
+import Modal from "@mui/material/Modal";
+
+import PropTypes from "prop-types";
+
 //Icons
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import CallIcon from "@mui/icons-material/Call";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 export default function PedidosEmRota(props) {
-  const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
-
   const { user } = useContext(AuthContext);
+
+  const [open, setOpen] = useState(false);
+  const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
+  const handleOpenAndCloseModal = () => setOpen(!open);
+
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  function concluirEntrega() {}
 
   const handlePedidosExibidos = (event, newAlignment) => {
     if (newAlignment !== null) {
@@ -39,11 +61,14 @@ export default function PedidosEmRota(props) {
     <>
       <Box
         sx={{
-          width: "100%",
-          height: "100vh",
+          m: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          flexDirection: "column",
+          width: 325,
+          height: 600,
           border: "1px solid #ccc",
-
-          overflow: "hidden",
         }}
       >
         <Box
@@ -124,12 +149,13 @@ export default function PedidosEmRota(props) {
         {pedidosExibidos == "pendentes" ? (
           <Box
             sx={{
+              p: 1,
               width: "100%",
-              height: "100%",
+              height: 450,
+              borderBottom: "1px solid #ccc",
+              overflowY: "auto",
+              overflowX: "hidden",
               backgroundColor: "#F8F8F8",
-              overflow: "scroll",
-              padding: "10px",
-
               ".firefoxScrollBar": {
                 "scrollbar-width": "auto",
                 "scrollbar-color": "#842E6B #f8e8ff",
@@ -149,7 +175,7 @@ export default function PedidosEmRota(props) {
               },
             }}
           >
-            {[1, 2, 3, 4, 8, 9, 10].map((item, index) => (
+            {[1, 2, 2, 2, 2].map((item, index) => (
               <Box
                 key={index}
                 sx={{
@@ -162,63 +188,295 @@ export default function PedidosEmRota(props) {
                   backgroundColor: "#fff",
                   borderRadius: "4px",
                   marginBottom: "10px",
-                  border: "1px solid #ccc",
+                  border: "1px solid #f5f5f5",
                   padding: "10px",
                   position: "relative",
+                  boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                  border: "1px solid #ccc",
                 }}
               >
-                <IconButton
-                  size="small"
+                <Box
                   sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "row",
                     position: "absolute",
                     top: 10,
                     right: 10,
                   }}
                 >
-                  <LocalPhoneIcon />
-                </IconButton>
+                  <IconButton
+                    size="small"
+                    disableElevation
+                    variant="contained"
+                    sx={{
+                      marginRight: "5px",
+                    }}
+                    color="primary"
+                  >
+                    <WhatsAppIcon sx={{ color: "#25d366" }} />
+                  </IconButton>
 
-                <Box sx={{ width: "100%" }}>
+                  <IconButton
+                    size="small"
+                    disableElevation
+                    variant="contained"
+                    color="primary"
+                  >
+                    <CallIcon sx={{ color: "#221446" }} />
+                  </IconButton>
+                </Box>
+
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    flexDirection: "row",
+                    marginBottom: "10px",
+                    marginTop: 2,
+                  }}
+                >
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "flex-start",
-                      flexDirection: "row",
-                      marginBottom: "10px",
+                      alignItems: "flex-start",
+                      justifyContent: "center",
+                      flexDirection: "column",
                     }}
                   >
-                    <Box
-                      sx={{ width: 50, height: 50, border: "1px solid #ccc" }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        marginLeft: "10px",
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: 900, fontSize: 12 }}>
-                        CLIENTE
-                      </Typography>
-                      <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
-                        CLIENTE
-                      </Typography>
-                      <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
-                        CLIENTE
-                      </Typography>
-                    </Box>
+                    <Typography sx={{ fontWeight: 900, fontSize: 12 }}>
+                      CLIENTE
+                    </Typography>
+                    <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                      Forma de pagamento: DÉBITO
+                    </Typography>
+                    <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                      Endereço:
+                    </Typography>
+                    <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                      Complemento:
+                    </Typography>
+                    <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                      Bairro:
+                    </Typography>
                   </Box>
                 </Box>
+
+                <TableContainer
+                  sx={{
+                    mt: 1,
+                    mb: 1,
+                    border: "1px solid #ebebeb",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Table
+                    size="small"
+                    sx={{
+                      width: "100%",
+                      borderRadius: "8px",
+                      "& .tableCellClasses.root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <TableHead
+                      sx={{
+                        height: 20,
+                        borderBottom: "1px solid #ccc",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <TableRow sx={{ "& td": { border: 0 } }}>
+                        <TableCell
+                          align="left"
+                          sx={{ fontSize: 10, fontWeight: 900 }}
+                        >
+                          PRODUTO(S)
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: 10, fontWeight: 900 }}
+                        >
+                          N° PEDIDO
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow
+                        sx={{
+                          height: 20,
+                          border: "none",
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopLeftRadius: "2px",
+                            borderBottomLeftRadius: "2px",
+                          }}
+                        >
+                          Nome
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopRightRadius: "2px",
+                            borderBottomRightRadius: "2px",
+                          }}
+                        >
+                          Qtd
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow
+                        sx={{
+                          height: 20,
+                          border: "none",
+                          backgroundColor: "#f5f5f5",
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopLeftRadius: "2px",
+                            borderBottomLeftRadius: "2px",
+                          }}
+                        >
+                          Nome
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopRightRadius: "2px",
+                            borderBottomRightRadius: "2px",
+                          }}
+                        >
+                          Qtd
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow
+                        sx={{
+                          height: 14,
+                          border: "none",
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopLeftRadius: "2px",
+                            borderBottomLeftRadius: "2px",
+                          }}
+                        >
+                          Nome
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopRightRadius: "2px",
+                            borderBottomRightRadius: "2px",
+                          }}
+                        >
+                          Qtd
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow
+                        sx={{
+                          height: 20,
+                          border: "none",
+                          backgroundColor: "#f5f5f5",
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopLeftRadius: "2px",
+                            borderBottomLeftRadius: "2px",
+                          }}
+                        >
+                          Nome
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopRightRadius: "2px",
+                            borderBottomRightRadius: "2px",
+                          }}
+                        >
+                          Qtd
+                        </TableCell>
+                      </TableRow>
+
+                      <TableRow
+                        sx={{
+                          height: 20,
+                          border: "none",
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopLeftRadius: "2px",
+                            borderBottomLeftRadius: "2px",
+                          }}
+                        ></TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ fontSize: 10, fontWeight: 900 }}
+                        >
+                          Valor total: R$ 25,00
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+
                 <Button
                   variant="contained"
                   color="success"
-                  size="small"
+                  size="medium"
                   disableElevation
                   fullWidth
-                  sx={{ fontWeight: 400, fontSize: 12 }}
+                  sx={{ fontWeight: 400, fontSize: 12, mt: 2 }}
+                  onClick={handleOpenAndCloseModal}
                 >
                   CONCLUIR ENTREGA
                 </Button>
@@ -226,52 +484,400 @@ export default function PedidosEmRota(props) {
             ))}
           </Box>
         ) : (
-          <Box
-            sx={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "#F8F8F8",
-              overflow: "scroll",
-              padding: "10px",
+          <>
+            {" "}
+            <Box
+              sx={{
+                p: 1,
+                width: "100%",
+                height: 450,
+                borderBottom: "1px solid #ccc",
+                overflowY: "auto",
+                overflowX: "hidden",
+                backgroundColor: "#F8F8F8",
+                ".firefoxScrollBar": {
+                  "scrollbar-width": "auto",
+                  "scrollbar-color": "#842E6B #f8e8ff",
+                },
+                "::-webkit-scrollbar": {
+                  width: "8px",
+                },
+                "::-webkit-scrollbar-track": {
+                  boxShadow: "nset 0 0 6px grey",
+                  //borderRadius: "5px",
+                  backgroundColor: "#f8e8ff",
+                },
+                "::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#842E6B",
+                  //borderRadius: "8px",
+                  height: "2px",
+                },
+              }}
+            >
+              {[1, 2, 2, 2, 2].map((item, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    width: "100%",
+                    //height: 120,
+                    backgroundColor: "#fff",
+                    borderRadius: "4px",
+                    marginBottom: "10px",
+                    border: "1px solid #f5f5f5",
+                    padding: "10px",
+                    position: "relative",
+                    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                    border: "1px solid #ccc",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "row",
+                      position: "absolute",
+                      top: 10,
+                      right: 10,
+                    }}
+                  >
+                    <IconButton
+                      size="small"
+                      disableElevation
+                      variant="contained"
+                      sx={{
+                        marginRight: "5px",
+                      }}
+                      color="primary"
+                    >
+                      <WhatsAppIcon sx={{ color: "#25d366" }} />
+                    </IconButton>
 
-              ".firefoxScrollBar": {
-                "scrollbar-width": "auto",
-                "scrollbar-color": "#842E6B #f8e8ff",
-              },
-              "::-webkit-scrollbar": {
-                width: "8px",
-              },
-              "::-webkit-scrollbar-track": {
-                boxShadow: "nset 0 0 6px grey",
-                //borderRadius: "5px",
-                backgroundColor: "#f8e8ff",
-              },
-              "::-webkit-scrollbar-thumb": {
-                backgroundColor: "#842E6B",
-                //borderRadius: "8px",
-                height: "2px",
-              },
-            }}
-          >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "100%",
-                  height: 120,
-                  backgroundColor: "#fff",
-                  borderRadius: "8px",
-                  marginBottom: "10px",
-                  border: "1px solid #ccc",
-                }}
-              />
-            ))}
-          </Box>
+                    <IconButton
+                      size="small"
+                      disableElevation
+                      variant="contained"
+                      color="primary"
+                    >
+                      <CallIcon sx={{ color: "#221446" }} />
+                    </IconButton>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      flexDirection: "row",
+                      marginBottom: "10px",
+                      marginTop: 2,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: 900, fontSize: 12 }}>
+                        CLIENTE
+                      </Typography>
+                      <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                        Forma de pagamento: DÉBITO
+                      </Typography>
+                      <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                        Endereço:
+                      </Typography>
+                      <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                        Complemento:
+                      </Typography>
+                      <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                        Bairro:
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <TableContainer
+                    sx={{
+                      mt: 1,
+                      mb: 1,
+                      border: "1px solid #ebebeb",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    <Table
+                      size="small"
+                      sx={{
+                        width: "100%",
+                        borderRadius: "8px",
+                        "& .tableCellClasses.root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableHead
+                        sx={{
+                          height: 20,
+                          borderBottom: "1px solid #ccc",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <TableRow sx={{ "& td": { border: 0 } }}>
+                          <TableCell
+                            align="left"
+                            sx={{ fontSize: 10, fontWeight: 900 }}
+                          >
+                            PRODUTO(S)
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: 10, fontWeight: 900 }}
+                          >
+                            N° PEDIDO
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow
+                          sx={{
+                            height: 20,
+                            border: "none",
+                            ".MuiTableCell-root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableCell
+                            align="left"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopLeftRadius: "2px",
+                              borderBottomLeftRadius: "2px",
+                            }}
+                          >
+                            Nome
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopRightRadius: "2px",
+                              borderBottomRightRadius: "2px",
+                            }}
+                          >
+                            Qtd
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow
+                          sx={{
+                            height: 20,
+                            border: "none",
+                            backgroundColor: "#f5f5f5",
+                            ".MuiTableCell-root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableCell
+                            align="left"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopLeftRadius: "2px",
+                              borderBottomLeftRadius: "2px",
+                            }}
+                          >
+                            Nome
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopRightRadius: "2px",
+                              borderBottomRightRadius: "2px",
+                            }}
+                          >
+                            Qtd
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow
+                          sx={{
+                            height: 14,
+                            border: "none",
+                            ".MuiTableCell-root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableCell
+                            align="left"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopLeftRadius: "2px",
+                              borderBottomLeftRadius: "2px",
+                            }}
+                          >
+                            Nome
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopRightRadius: "2px",
+                              borderBottomRightRadius: "2px",
+                            }}
+                          >
+                            Qtd
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow
+                          sx={{
+                            height: 20,
+                            border: "none",
+                            backgroundColor: "#f5f5f5",
+                            ".MuiTableCell-root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableCell
+                            align="left"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopLeftRadius: "2px",
+                              borderBottomLeftRadius: "2px",
+                            }}
+                          >
+                            Nome
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopRightRadius: "2px",
+                              borderBottomRightRadius: "2px",
+                            }}
+                          >
+                            Qtd
+                          </TableCell>
+                        </TableRow>
+
+                        <TableRow
+                          sx={{
+                            height: 20,
+                            border: "none",
+                            ".MuiTableCell-root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableCell
+                            align="left"
+                            sx={{
+                              fontSize: 10,
+                              fontWeight: 400,
+                              borderTopLeftRadius: "2px",
+                              borderBottomLeftRadius: "2px",
+                            }}
+                          ></TableCell>
+                          <TableCell
+                            align="right"
+                            sx={{ fontSize: 10, fontWeight: 900 }}
+                          >
+                            Valor total: R$ 25,00
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              ))}
+            </Box>
+          </>
         )}
       </Box>
+
+      <Modal open={open} onClose={handleOpenAndCloseModal}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 2,
+            borderRadius: "8px",
+          }}
+        >
+          <Typography
+            variant="h6"
+            component="h2"
+            sx={{ mb: 2, fontSize: 16, fontWeight: 900 }}
+          >
+            Concluir entrega?
+          </Typography>
+          <TextField
+            label="Observações"
+            multiline
+            rows={4}
+            placeholder="Aqui você pode incluir observações relevantes sobre a entrega"
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "row",
+              marginTop: "20px",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              disableElevation
+              fullWidth
+              sx={{ fontWeight: 400, fontSize: 12, mr: 1 }}
+              onClick={handleOpenAndCloseModal}
+            >
+              CANCELAR
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              disableElevation
+              fullWidth
+              sx={{ fontWeight: 400, fontSize: 12 }}
+              onClick={() => {}}
+            >
+              CONFIRMAR
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 }
