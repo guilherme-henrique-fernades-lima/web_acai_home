@@ -10,6 +10,15 @@ export const getServerSideProps = ({ req, res }) => {
   console.log("token: ", token);
 
   if (token) {
+    if (token?.funcao) {
+      return {
+        redirect: {
+          permanent: true,
+          destination: "/entregadores/pedidos-em-rota",
+        },
+      };
+    }
+
     return {
       redirect: {
         permanent: true,

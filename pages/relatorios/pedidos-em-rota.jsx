@@ -163,7 +163,7 @@ export default function PedidosEmRota() {
             {loading ? (
               <Skeleton
                 variant="rounded"
-                width={280}
+                width={240}
                 height={38}
                 sx={{ borderRadius: "8px" }}
               />

@@ -18,6 +18,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TablePagination from "@mui/material/TablePagination";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
@@ -112,9 +113,19 @@ export default function Home() {
     }
   };
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pedidos.length) : 0;
+  const displayedData = pedidos.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return (
     <>
-      <GridPainelPedidos status={cards} />
+      <GridPainelPedidos status={cards} entregadores={entregadores} />
 
       <Grid container spacing={1} sx={{ marginTop: 0, padding: "5px" }}>
         <Grid
@@ -291,7 +302,7 @@ export default function Home() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {pedidos?.map((pedido, index) => (
+                  {displayedData?.map((pedido, index) => (
                     <TableRow
                       key={index}
                       sx={{
@@ -383,6 +394,31 @@ export default function Home() {
                   ))}
                 </TableBody>
               </Table>
+              <TablePagination
+                rowsPerPageOptions={[25, 50, 100, 150, 200]}
+                component="div"
+                count={pedidos.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={(event, newPage) => setPage(newPage)}
+                onRowsPerPageChange={(event) => {
+                  setRowsPerPage(parseInt(event.target.value, 10));
+                  setPage(0);
+                }}
+                labelRowsPerPage="Linhas por página:"
+                labelDisplayedRows={({ from, to, count }) =>
+                  `${from}-${to} de ${count !== -1 ? count : "mais de " + to}`
+                }
+                labelPagination={(page) => `Página ${page + 1}`}
+                nextIconButtonProps={{
+                  "aria-label": "Próxima página",
+                  title: "Próxima página",
+                }}
+                previousIconButtonProps={{
+                  "aria-label": "Página anterior",
+                  title: "Página anterior",
+                }}
+              />
             </TableContainer>
           </Paper>
         </Grid>

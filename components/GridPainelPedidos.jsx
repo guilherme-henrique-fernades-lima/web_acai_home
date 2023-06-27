@@ -16,7 +16,10 @@ import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 export default function GridPainelPedidos(props) {
-  const { status } = props;
+  const { status, entregadores } = props;
+
+  console.log("STATUS: ", status);
+  console.log("ENTREGADORES: ", entregadores);
 
   return (
     <Grid container>
@@ -439,10 +442,10 @@ export default function GridPainelPedidos(props) {
             />
             <Box sx={{ displa: "flex", flexDirection: "column" }}>
               <Typography sx={{ color: "#858585", fontSize: 12 }}>
-                TOTAL DE
+                ENTREGADORES
               </Typography>
               <Typography sx={{ color: "#858585", fontSize: 12 }}>
-                ENTREGADORES
+                ATIVOS
               </Typography>
             </Box>
           </Stack>
@@ -454,7 +457,7 @@ export default function GridPainelPedidos(props) {
               color: "#858585",
             }}
           >
-            88
+            {entregadores?.length}
           </Typography>
         </CustomBox>
       </CustomGrid>
