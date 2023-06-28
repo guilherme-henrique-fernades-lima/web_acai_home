@@ -1,12 +1,14 @@
 import React, { useEffect, useContext, useState } from "react";
-import useWebSocket from "@/hooks/useWebSocket";
+
 import Image from "next/image";
+import moment from "moment";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
 //Hooks
 import { useFetchSWR } from "../hooks/useFetchSWR";
+import useWebSocket from "@/hooks/useWebSocket";
 
 //Mui components
 import Grid from "@mui/material/Grid";
@@ -44,6 +46,7 @@ import GridPainelPedidos from "components/GridPainelPedidos";
 import TableEntregadoresStatus from "components/TableEntregadoresStatus";
 import DatepickerField from "@/components/DatepickerField";
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
+import WarningNoDataFound from "@/components/WarningNoDataFound";
 import {
   StatusPedido,
   BadgeZonaEntrega,
@@ -60,6 +63,7 @@ import {
 export default function Home() {
   const { user } = useContext(AuthContext);
 
+  const [open, setOpen] = useState(false); //State para controle do modal
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
@@ -71,8 +75,14 @@ export default function Home() {
   const [statusPedido, setStatusPedido] = useState("TODAS");
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [dateFilter, setDateFilter] = useState(new Date());
+  const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
+  const [showMenssagemSemEntregadores, setShowMenssagemSemEntregadores] =
+    useState(false);
 
-  const [open, setOpen] = useState(false); //State para controle do modal
+  const dataFormatoMoment = moment(dateFilter);
+  const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
+
+  console.log("dataFormatada: ", dataFormatada);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -87,8 +97,10 @@ export default function Home() {
   }, [user]);
 
   const getPedidos = async () => {
+    setLoading(true);
+    setShowMenssagemSemPedidos(false);
     const response = await fetch(
-      `/api/home/?date=&tp_pag=${
+      `/api/home/?date=${dataFormatada}&tp_pag=${
         formaPagamento == "TODAS" ? "" : formaPagamento
       }&status=${statusPedido == "TODAS" ? "" : statusPedido}&zona=`,
       {
@@ -99,27 +111,38 @@ export default function Home() {
       }
     );
 
-    if (response.status == 200) {
+    if (response.ok) {
       const res = await response.json();
       setPedidos(res.data);
       setCards(res.status);
       setLoading(false);
     }
+
+    if (response.status == 404) {
+      setLoading(false);
+      setShowMenssagemSemPedidos(true);
+      setPedidos([]);
+      setCards([]);
+    }
   };
 
   const getEntregadoresDisponiveis = async () => {
+    setShowMenssagemSemEntregadores(false);
     const response = await fetch(`/api/home/entregadores`, {
       method: "GET",
       headers: {
         Authorization: user.token,
       },
     });
-
-    if (response.status == 200) {
+    if (response.ok) {
       const res = await response.json();
-      console.log(res);
       setEntregadores(res);
       setLoading(false);
+    }
+
+    if (response.status == 404) {
+      setLoading(false);
+      setShowMenssagemSemEntregadores(true);
     }
   };
 
@@ -430,33 +453,40 @@ export default function Home() {
                     ))}
                   </TableBody>
                 </Table>
-                <TablePagination
-                  rowsPerPageOptions={[25, 50, 100, 150, 200]}
-                  component="div"
-                  count={pedidos.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={(event, newPage) => setPage(newPage)}
-                  onRowsPerPageChange={(event) => {
-                    setRowsPerPage(parseInt(event.target.value, 10));
-                    setPage(0);
-                  }}
-                  labelRowsPerPage="Linhas por página:"
-                  labelDisplayedRows={({ from, to, count }) =>
-                    `${from}-${to} de ${count !== -1 ? count : "mais de " + to}`
-                  }
-                  labelPagination={(page) => `Página ${page + 1}`}
-                  nextIconButtonProps={{
-                    "aria-label": "Próxima página",
-                    title: "Próxima página",
-                  }}
-                  previousIconButtonProps={{
-                    "aria-label": "Página anterior",
-                    title: "Página anterior",
-                  }}
-                />
+
+                {!showMenssagemSemPedidos && (
+                  <TablePagination
+                    rowsPerPageOptions={[25, 50, 100, 150, 200]}
+                    component="div"
+                    count={pedidos.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={(event, newPage) => setPage(newPage)}
+                    onRowsPerPageChange={(event) => {
+                      setRowsPerPage(parseInt(event.target.value, 10));
+                      setPage(0);
+                    }}
+                    labelRowsPerPage="Linhas por página:"
+                    labelDisplayedRows={({ from, to, count }) =>
+                      `${from}-${to} de ${
+                        count !== -1 ? count : "mais de " + to
+                      }`
+                    }
+                    labelPagination={(page) => `Página ${page + 1}`}
+                    nextIconButtonProps={{
+                      "aria-label": "Próxima página",
+                      title: "Próxima página",
+                    }}
+                    previousIconButtonProps={{
+                      "aria-label": "Página anterior",
+                      title: "Página anterior",
+                    }}
+                  />
+                )}
               </TableContainer>
             )}
+
+            {showMenssagemSemPedidos && <WarningNoDataFound />}
           </Paper>
         </Grid>
 
@@ -472,6 +502,7 @@ export default function Home() {
           <TableEntregadoresStatus
             entregadores={entregadores}
             loading={loading}
+            showMenssagemSemEntregadores={showMenssagemSemEntregadores}
           />
         </Grid>
       </Grid>

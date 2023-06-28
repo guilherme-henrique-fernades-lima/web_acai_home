@@ -18,13 +18,9 @@ import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import FormGroup from "@mui/material/FormGroup";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 //Ícones
@@ -47,16 +43,13 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SendIcon from "@mui/icons-material/Send";
-import MapIcon from "@mui/icons-material/Map";
 
 //Contexto
-import { ThemeContext } from "@/context/ThemeContext";
 import { AuthContext } from "@/context/AuthContext";
 
 import { useRouter } from "next/router";
 
 export default function Layout(props) {
-  const { changeThemePalette } = useContext(ThemeContext);
   const theme = useTheme();
 
   const { children } = props;
@@ -139,22 +132,9 @@ export default function Layout(props) {
                   </IconButton>
                 )}
                 <Link href="/home">
-                  {/* <Typography
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{ ml: 3, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
-              >
-                AÇAI HOME
-              </Typography> */}
-
                   <BrandImageAcai />
                 </Link>
               </Box>
-
-              {/* <FormGroup>
-            <MaterialUISwitch onChange={changeThemePalette} />
-          </FormGroup> */}
             </Toolbar>
           </AppBar>
 
@@ -530,6 +510,7 @@ export default function Layout(props) {
               backgroundColor: "#F8F8F8",
               height: "100%",
               width: "100%",
+              border: "4px solid red",
             }}
           >
             <DrawerHeader />

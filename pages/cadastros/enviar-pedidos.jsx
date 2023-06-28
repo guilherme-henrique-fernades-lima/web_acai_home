@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
+import moment from "moment";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
@@ -33,8 +34,6 @@ import FormControl from "@mui/material/FormControl";
 import Skeleton from "@mui/material/Skeleton";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 //Icons
@@ -53,6 +52,7 @@ import {
   formatarValorBRL,
 } from "@/helpers/utils";
 import DatepickerField from "@/components/DatepickerField";
+import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
@@ -74,6 +74,9 @@ export default function EnviarPedidos() {
 
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
 
+  const dataFormatoMoment = moment(dateFilter);
+  const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
+
   useEffect(() => {
     if (user?.token) {
       getEntregadoresDisponiveis();
@@ -85,7 +88,7 @@ export default function EnviarPedidos() {
     setLoading(true);
     setShowMenssagemSemPedidos(false);
     const response = await fetch(
-      `/api/cadastros/enviar-pedidos/?date=${dateFilter}`,
+      `/api/cadastros/enviar-pedidos/?date=${dataFormatada}`,
       {
         method: "GET",
         headers: {
@@ -104,7 +107,8 @@ export default function EnviarPedidos() {
     if (response.status == 404) {
       setLoading(false);
       setShowMenssagemSemPedidos(true);
-      toast.error("Sem dados retornados");
+      setPedidos([]);
+      setCards([]);
     }
   };
 
@@ -263,7 +267,7 @@ export default function EnviarPedidos() {
                 sx={{ ml: 1 }}
                 disableElevation
                 fullWidth
-                onClick={() => {}}
+                onClick={getPedidos}
               >
                 Pesquisar
               </Button>
@@ -470,32 +474,7 @@ export default function EnviarPedidos() {
           </TableContainer>
         )}
 
-        {showMenssagemSemPedidos && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <Typography
-              variant="span"
-              component="span"
-              sx={{
-                fontWeight: 700,
-                fontSize: 14,
-                mt: 2,
-                mb: 2,
-                width: "100%",
-                textAlign: "center",
-                color: "red",
-              }}
-            >
-              Sem pedidos encontrados para a data informada
-            </Typography>
-          </Box>
-        )}
+        {showMenssagemSemPedidos && <WarningNoDataFound />}
 
         <Modal
           aria-labelledby="transition-modal-title"

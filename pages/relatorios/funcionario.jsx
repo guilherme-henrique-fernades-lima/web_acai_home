@@ -20,6 +20,11 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Skeleton from "@mui/material/Skeleton";
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+
+import DialogTitle from "@mui/material/DialogTitle";
 
 //Formatters
 import { formatCpf } from "@/helpers/utils";
@@ -27,12 +32,28 @@ import { formatCpf } from "@/helpers/utils";
 //Icons
 import EditIcon from "@mui/icons-material/Edit";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LockResetIcon from "@mui/icons-material/LockReset";
+
+import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function RelacaoFuncionario() {
   const { user } = useContext(AuthContext);
 
   const [dataSet, setDataset] = useState([]);
   const [loading, setLoading] = useState([]);
+  const [showMenssagemSemFuncionarios, setShowMenssagemSemFuncionarios] =
+    useState(false);
+
+  const [userChangePassword, setUserChangePassword] = useState({});
+
+  console.log("userChangePassword", userChangePassword);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleDialog = () => {
+    setOpenDialog(!openDialog);
+  };
 
   useEffect(() => {
     if (user?.token) {
@@ -42,7 +63,7 @@ export default function RelacaoFuncionario() {
 
   async function getUsersData() {
     setLoading(true);
-
+    setShowMenssagemSemFuncionarios(false);
     const response = await fetch(`/api/relatorios/funcionario/`, {
       method: "GET",
       headers: {
@@ -55,6 +76,34 @@ export default function RelacaoFuncionario() {
     if (response.ok) {
       setDataset(res);
       setLoading(false);
+    }
+
+    if (response.status == 404) {
+      setShowMenssagemSemFuncionarios(true);
+      setDataset([]);
+    }
+  }
+
+  async function alterarSenhaFuncionario() {
+    console.log("Entrou na alteração de senha do funcionário");
+
+    const payload = {
+      cpf: userChangePassword?.cpf,
+      oldPassword: userChangePassword?.password,
+      password: newPassword,
+    };
+
+    const response = await fetch(`/api/relatorios/funcionario/`, {
+      method: "POST",
+      headers: {
+        Authorization: user.token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      const res = await response.json();
+      console.log(res);
     }
   }
 
@@ -166,9 +215,13 @@ export default function RelacaoFuncionario() {
                       {funcionario?.celular}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
-                      <Tooltip
-                        title="Editar dados do funcionário"
-                        placement="top"
+                      <Stack
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          alignItems: "center",
+                          flexDirection: "row",
+                        }}
                       >
                         <Link
                           href={{
@@ -178,21 +231,123 @@ export default function RelacaoFuncionario() {
                             },
                           }}
                         >
-                          <IconButton
-                            sx={{ "&:hover": { svg: { color: "#842E6B" } } }}
+                          <Tooltip
+                            title="Editar dados do funcionário"
+                            placement="top"
                           >
-                            <EditIcon />
-                          </IconButton>
+                            <IconButton
+                              sx={{ "&:hover": { svg: { color: "#842E6B" } } }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
                         </Link>
-                      </Tooltip>
+
+                        <Tooltip
+                          title="Alterar a senha do funcionário"
+                          placement="top"
+                        >
+                          <IconButton
+                            sx={{
+                              ml: 1,
+                              "&:hover": { svg: { color: "#842E6B" } },
+                            }}
+                            onClick={() => {
+                              setUserChangePassword(funcionario);
+                              handleDialog();
+                            }}
+                          >
+                            <LockResetIcon sx={{ fontSize: 30 }} />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
                     </CustomTableCellBody>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
+
+          {showMenssagemSemFuncionarios && <WarningNoDataFound />}
         </Paper>
       )}
+
+      <Dialog
+        open={openDialog}
+        onClose={handleDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ margin: "10px" }}
+      >
+        <DialogTitle id="alert-dialog-title">Alterar a senha</DialogTitle>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            width: "100%",
+            p: 2,
+          }}
+        >
+          <TextField
+            id="password"
+            // {...register("username")}
+            // error={Boolean(errors.username)}
+            fullWidth
+            placeholder="Insira a nova senha"
+            type="text"
+            size="small"
+            value={newPassword || ""}
+            onChange={(e) => {
+              setNewPassword(e.target.value);
+            }}
+            InputLabelProps={{ shrink: true }}
+            autoComplete="off"
+            InputProps={{
+              style: {
+                // borderRadius: "28px",
+                color: "#3b3b3b",
+              },
+            }}
+          />
+
+          {/* <TextField
+            id="repeat_password"
+            // {...register("username")}
+            // error={Boolean(errors.username)}
+            fullWidth
+            placeholder="Repita a senha"
+            type="text"
+            size="small"
+            // value={userName || ""}
+            // onChange={(e) => {
+            //   setUserName(e.target.value);
+            // }}
+            InputLabelProps={{ shrink: true }}
+            autoComplete="off"
+            InputProps={{
+              style: {
+                // borderRadius: "28px",
+                color: "#3b3b3b",
+              },
+            }}
+            sx={{ mt: 1 }}
+          /> */}
+
+          <Button
+            variant="contained"
+            disableElevation
+            fullWidth
+            sx={{ mt: 2 }}
+            onClick={alterarSenhaFuncionario}
+            disabled={newPassword ? false : true}
+          >
+            SALVAR
+          </Button>
+        </Box>
+      </Dialog>
     </Container>
   );
 }

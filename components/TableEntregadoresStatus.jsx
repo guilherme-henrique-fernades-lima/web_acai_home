@@ -15,12 +15,13 @@ import Skeleton from "@mui/material/Skeleton";
 
 //Custom components
 import { BadgeStatusEntregador } from "@/helpers/utils";
+import WarningNoDataFound from "./WarningNoDataFound";
 
 //Icons
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function TableEntregadoresStatus(props) {
-  const { entregadores, loading } = props;
+  const { entregadores, loading, showMenssagemSemEntregadores } = props;
 
   return (
     <Paper
@@ -139,6 +140,8 @@ export default function TableEntregadoresStatus(props) {
           </Table>
         </TableContainer>
       )}
+
+      {showMenssagemSemEntregadores && <WarningNoDataFound />}
     </Paper>
   );
 }

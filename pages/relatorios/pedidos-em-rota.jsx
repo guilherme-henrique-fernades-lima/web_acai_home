@@ -30,6 +30,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 //Custom components
 import { formatarData, formatCpf } from "@/helpers/utils";
 import DatepickerField from "@/components/DatepickerField";
+import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function PedidosEmRota() {
   const { user } = useContext(AuthContext);
@@ -70,7 +71,6 @@ export default function PedidosEmRota() {
     if (response.status == 404) {
       setLoading(false);
       setShowMenssagemSemPedidos(true);
-      toast.error("Sem dados retornados");
     }
   };
 
@@ -288,32 +288,7 @@ export default function PedidosEmRota() {
           </TableContainer>
         )}
 
-        {showMenssagemSemPedidos && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
-            <Typography
-              variant="span"
-              component="span"
-              sx={{
-                fontWeight: 700,
-                fontSize: 14,
-                mt: 2,
-                mb: 2,
-                width: "100%",
-                textAlign: "center",
-                color: "red",
-              }}
-            >
-              Sem pedidos encontrados para a data informada
-            </Typography>
-          </Box>
-        )}
+        {showMenssagemSemPedidos && <WarningNoDataFound />}
       </Paper>
 
       <Dialog

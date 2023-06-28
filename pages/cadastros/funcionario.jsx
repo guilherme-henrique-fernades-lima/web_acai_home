@@ -30,7 +30,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 //Schema validação
-import { funcionarioSchema } from "@/schemas/funcionario";
+import {
+  funcionarioSchemaCadastro,
+  funcionarioSchemaUpdate,
+} from "@/schemas/funcionario";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
@@ -48,7 +51,9 @@ export default function CadastroFuncionario() {
     resetField,
   } = useForm({
     mode: "onChange",
-    resolver: yupResolver(funcionarioSchema),
+    resolver: yupResolver(
+      router.query?.id ? funcionarioSchemaUpdate : funcionarioSchemaCadastro
+    ),
   });
 
   const [userName, setUserName] = useState("");
@@ -72,12 +77,12 @@ export default function CadastroFuncionario() {
   useEffect(() => {
     if (user?.token) {
       if (router.query?.id) {
-        getUserData();
+        getUserDataById();
       }
     }
   }, []);
 
-  async function getUserData() {
+  async function getUserDataById() {
     setLoading(true);
     const response = await fetch(
       `/api/cadastros/funcionario/?id=${router.query?.id}`,
@@ -92,12 +97,22 @@ export default function CadastroFuncionario() {
     if (response.ok) {
       const res = await response.json();
 
+      console.log(res);
+
       setUserName(res.username);
       setCpf(res.cpf);
       setFuncao(res.funcao);
       setActive(res.is_active);
-      setShowPassword(res.password);
       setObservacaoEntregador(res.observacao);
+
+      // const [telefone, setTelefone] = useState("");
+      // const [cep, setCep] = useState("");
+      // const [logradouro, setLogradouro] = useState("");
+      // const [numLogr, setNumLogr] = useState("");
+      // const [complemento, setComplemento] = useState("");
+      // const [bairro, setBairro] = useState("");
+      // const [cidade, setCidade] = useState("");
+      // const [estado, setEstado] = useState("");
 
       setLoading(false);
     }
@@ -108,9 +123,7 @@ export default function CadastroFuncionario() {
   };
 
   async function salvarFuncionario() {
-    const payload = getPayload();
-
-    console.log(payload);
+    const payload = getPayloadCadastrar();
 
     const response = await fetch(`/api/auth/users/`, {
       method: "POST",
@@ -119,6 +132,8 @@ export default function CadastroFuncionario() {
 
     if (response.status == 201) {
       toast.success("Funcionário cadastrado com sucesso!");
+      setLoading(true);
+      clearDataFormStates();
     } else if (response.status == 403) {
       toast.error("Já existe um funcionário cadastrado com esse CPF");
     } else {
@@ -126,10 +141,39 @@ export default function CadastroFuncionario() {
     }
   }
 
+  function clearDataFormStates() {
+    clearErrors();
+
+    setUserName("");
+    setCpf("");
+    setFuncao("");
+    setTelefone("");
+    setActive(false);
+    setCep("");
+    setLogradouro("");
+    setNumLogr("");
+    setComplemento("");
+    setBairro("");
+    setCidade("");
+    setEstado("");
+    setObservacaoEntregador("");
+    setPassword("");
+
+    resetField("cpf");
+    resetField("username");
+    resetField("funcao");
+    resetField("is_active");
+    resetField("password");
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }
+
   async function editarDadosFuncionario() {
     console.log("Entrou na função de editar");
 
-    const payload = getPayload();
+    const payload = getPayloadEditar();
 
     const response = await fetch(``, {
       method: "PUT",
@@ -143,13 +187,13 @@ export default function CadastroFuncionario() {
     }
   }
 
-  function getPayload() {
+  function getPayloadCadastrar() {
     const payload = {
       username: userName.toUpperCase(),
       email: null,
       cpf: cpf,
       funcao: funcao,
-      is_active: false,
+      is_active: active,
       cep: cep ? cep : null,
       logradouro: logradouro ? logradouro.toUpperCase() : null,
       numLogr: numLogr ? numLogr.toUpperCase() : null,
@@ -162,6 +206,29 @@ export default function CadastroFuncionario() {
       avatar: null,
       celular: telefone ? telefone : null,
       flagUpdate: router.query?.id ? true : false,
+    };
+
+    return payload;
+  }
+
+  function getPayloadEditar() {
+    //Neste payload não é carregado o campo PASSWORD
+    const payload = {
+      username: userName.toUpperCase(),
+      email: null,
+      cpf: cpf,
+      funcao: funcao,
+      is_active: active,
+      cep: cep ? cep : null,
+      logradouro: logradouro ? logradouro.toUpperCase() : null,
+      numLogr: numLogr ? numLogr.toUpperCase() : null,
+      complLogr: complemento ? complemento.toUpperCase() : null,
+      bairro: bairro ? bairro.toUpperCase() : null,
+      cidade: cidade ? cidade.toUpperCase() : null,
+      estado: estado ? estado.toUpperCase() : null,
+      observacao: observacaoEntregador ? observacaoEntregador : null,
+      avatar: null,
+      celular: telefone ? telefone : null,
     };
 
     return payload;
@@ -655,71 +722,73 @@ export default function CadastroFuncionario() {
               </Typography>
             </Grid>
 
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <Typography
-                component="label"
-                htmlFor="password"
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  span: { color: "red", marginLeft: "3px" },
-                }}
-              >
-                Senha<span>*</span>
-              </Typography>
-              <TextField
-                id="password"
-                {...register("password")}
-                error={Boolean(errors.password)}
-                fullWidth
-                type={showPassword ? "text" : "password"}
-                size="small"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                InputLabelProps={{ shrink: true }}
-                autoComplete="off"
-                inputProps={{
-                  maxLength: 13,
-                }}
-                InputProps={{
-                  style: {
-                    // borderRadius: "28px",
-                    color: "#3b3b3b",
-                  },
+            {!router.query?.id && (
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Typography
+                  component="label"
+                  htmlFor="password"
+                  sx={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                    span: { color: "red", marginLeft: "3px" },
+                  }}
+                >
+                  Senha<span>*</span>
+                </Typography>
+                <TextField
+                  id="password"
+                  {...register("password")}
+                  error={Boolean(errors.password)}
+                  fullWidth
+                  type={showPassword ? "text" : "password"}
+                  size="small"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                  inputProps={{
+                    maxLength: 13,
+                  }}
+                  InputProps={{
+                    style: {
+                      // borderRadius: "28px",
+                      color: "#3b3b3b",
+                    },
 
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{ cursor: "pointer" }}
-                      onClick={handleShowPassword}
-                    >
-                      {showPassword ? (
-                        <VisibilityOffIcon
-                          sx={{
-                            color: "#3b3b3b",
-                            fontSize: 18,
-                            "&:hover": { color: "#7a7a7a" },
-                          }}
-                        />
-                      ) : (
-                        <VisibilityIcon
-                          sx={{
-                            color: "#3b3b3b",
-                            fontSize: 18,
-                            "&:hover": { color: "#7a7a7a" },
-                          }}
-                        />
-                      )}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Typography sx={{ color: "#f00", fontSize: "12px" }}>
-                {errors.password?.message}
-              </Typography>
-            </Grid>
+                    endAdornment: (
+                      <InputAdornment
+                        position="end"
+                        sx={{ cursor: "pointer" }}
+                        onClick={handleShowPassword}
+                      >
+                        {showPassword ? (
+                          <VisibilityOffIcon
+                            sx={{
+                              color: "#3b3b3b",
+                              fontSize: 18,
+                              "&:hover": { color: "#7a7a7a" },
+                            }}
+                          />
+                        ) : (
+                          <VisibilityIcon
+                            sx={{
+                              color: "#3b3b3b",
+                              fontSize: 18,
+                              "&:hover": { color: "#7a7a7a" },
+                            }}
+                          />
+                        )}
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <Typography sx={{ color: "#f00", fontSize: "12px" }}>
+                  {errors.password?.message}
+                </Typography>
+              </Grid>
+            )}
 
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <Typography

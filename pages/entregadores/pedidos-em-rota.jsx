@@ -42,6 +42,8 @@ export default function PedidosEmRota(props) {
   const [alturaPagina, setAlturaPagina] = useState(0);
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
 
+  console.log("pedidos....:", pedidos);
+
   useLayoutEffect(() => {
     if (user?.funcao == "admin") {
       router.push("/home");
