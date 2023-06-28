@@ -92,11 +92,11 @@ export const FORMA_PAGAMENTO = [
 
 export const IS_ACTIVE = [
   {
-    value: true,
+    value: 1,
     label: "SIM",
   },
   {
-    value: false,
+    value: 0,
     label: "NÃO",
   },
 ];

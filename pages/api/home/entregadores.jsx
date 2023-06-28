@@ -2,7 +2,7 @@ async function getEntregadoresDisponiveis(req, res) {
   const token = req.headers.authorization;
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/motoristas/ativos/`,
+    `${process.env.NEXT_URL_BACKEND}/motoristas/disponiveis/`,
     {
       method: "GET",
       headers: {

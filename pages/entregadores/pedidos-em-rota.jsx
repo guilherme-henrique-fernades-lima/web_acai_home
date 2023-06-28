@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 //Context
@@ -19,13 +19,20 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TextField from "@mui/material/TextField";
 import Modal from "@mui/material/Modal";
-
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 //Icons
 import CallIcon from "@mui/icons-material/Call";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
+import { useRouter } from "next/router";
 
 export default function PedidosEmRota(props) {
-  const { user } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
+  const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [observacao, setObservacao] = useState("");
@@ -33,10 +40,19 @@ export default function PedidosEmRota(props) {
   const [pedidoParaConcluir, setPedidoParaConcluir] = useState([]);
   const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
   const [alturaPagina, setAlturaPagina] = useState(0);
+  const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
 
-  //console.log("PEDIDOS: ", pedidos);
+  useLayoutEffect(() => {
+    if (user?.funcao == "admin") {
+      router.push("/home");
+    }
+  }, [user]);
 
   const handleOpenAndCloseModal = () => setOpen(!open);
+
+  const handleSairSistemaDialog = () => {
+    setOpenDialogSairSistema(!openDialogSairSistema);
+  };
 
   useEffect(() => {
     if (user?.token) {
@@ -122,8 +138,15 @@ export default function PedidosEmRota(props) {
             alignItems: "center",
             justifyContent: "center",
             backgroundColor: "#842E6B",
+            position: "relative",
           }}
         >
+          <IconButton
+            sx={{ position: "absolute", right: 10, top: 10 }}
+            onClick={handleSairSistemaDialog}
+          >
+            <PowerSettingsNewIcon sx={{ color: "#fff", fontSize: 26 }} />
+          </IconButton>
           <Box
             sx={{
               display: "flex",
@@ -131,14 +154,7 @@ export default function PedidosEmRota(props) {
               justifyContent: "center",
             }}
           >
-            <Box
-              sx={{
-                width: 60,
-                height: 60,
-                borderRadius: "50%",
-                backgroundColor: "#fff",
-              }}
-            />
+            <AccountCircleIcon sx={{ fontSize: 56, color: "#fff" }} />
             <Box
               sx={{
                 display: "flex",
@@ -921,6 +937,39 @@ export default function PedidosEmRota(props) {
           </Box>
         </Box>
       </Modal>
+
+      <Dialog
+        open={openDialogSairSistema}
+        onClose={handleSairSistemaDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Você deseja realmente sair do sistema?
+        </DialogTitle>
+
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleSairSistemaDialog}
+            disableElevation
+            fullWidth
+          >
+            NÃO
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={logout}
+            autoFocus
+            disableElevation
+            fullWidth
+          >
+            SIM
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

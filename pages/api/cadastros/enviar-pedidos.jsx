@@ -2,10 +2,10 @@ async function getPedidosDisponiveis(req, res) {
   const token = req.headers.authorization;
 
   var date = req.query.date ?? "";
+  console.log("date: ", date);
 
   const result = await fetch(
-    //`${process.env.NEXT_URL_BACKEND}/pedidos/pendentes/?date=2023-06-17`,
-    `${process.env.NEXT_URL_BACKEND}/pedidos/pendentes/?date=2023-06-17`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/pendentes/?date=2023-06-25`,
     {
       method: "GET",
       headers: {

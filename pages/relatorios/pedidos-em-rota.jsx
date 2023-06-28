@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { AuthContext } from "@/context/AuthContext";
 
 //Mui icons
+import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -38,6 +39,8 @@ export default function PedidosEmRota() {
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
 
+  const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
+
   const handleDialog = () => {
     setOpenDialogRetirarPedido(!openDialogRetirarPedido);
   };
@@ -50,6 +53,7 @@ export default function PedidosEmRota() {
 
   const getPedidos = async () => {
     setLoading(true);
+    setShowMenssagemSemPedidos(false);
     const response = await fetch(`/api/relatorios/pedidos-em-rota`, {
       method: "GET",
       headers: {
@@ -57,10 +61,16 @@ export default function PedidosEmRota() {
       },
     });
 
-    if (response.status == 200) {
+    if (response.ok) {
       const res = await response.json();
       setPedidos(res);
       setLoading(false);
+    }
+
+    if (response.status == 404) {
+      setLoading(false);
+      setShowMenssagemSemPedidos(true);
+      toast.error("Sem dados retornados");
     }
   };
 
@@ -158,7 +168,7 @@ export default function PedidosEmRota() {
                   },
                 }}
               >
-                Total de pedidos em rota: {pedidos?.length || "--"}
+                Total de pedidos em rota: {pedidos?.length || "0"}
               </Typography>
             )}
           </Stack>
@@ -276,6 +286,33 @@ export default function PedidosEmRota() {
               </TableBody>
             </Table>
           </TableContainer>
+        )}
+
+        {showMenssagemSemPedidos && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="span"
+              component="span"
+              sx={{
+                fontWeight: 700,
+                fontSize: 14,
+                mt: 2,
+                mb: 2,
+                width: "100%",
+                textAlign: "center",
+                color: "red",
+              }}
+            >
+              Sem pedidos encontrados para a data informada
+            </Typography>
+          </Box>
         )}
       </Paper>
 

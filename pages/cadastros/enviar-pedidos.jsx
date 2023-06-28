@@ -72,7 +72,7 @@ export default function EnviarPedidos() {
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
 
-  console.log(pedidoParaDeletar);
+  const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
 
   useEffect(() => {
     if (user?.token) {
@@ -83,20 +83,28 @@ export default function EnviarPedidos() {
 
   const getPedidos = async () => {
     setLoading(true);
-    const response = await fetch(`/api/cadastros/enviar-pedidos`, {
-      method: "GET",
-      headers: {
-        Authorization: user.token,
-      },
-    });
+    setShowMenssagemSemPedidos(false);
+    const response = await fetch(
+      `/api/cadastros/enviar-pedidos/?date=${dateFilter}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user.token,
+        },
+      }
+    );
 
-    if (response.status == 200) {
+    if (response.ok) {
       const res = await response.json();
-
       setPedidos(res.data);
       setCards(res.status);
-
       setLoading(false);
+    }
+
+    if (response.status == 404) {
+      setLoading(false);
+      setShowMenssagemSemPedidos(true);
+      toast.error("Sem dados retornados");
     }
   };
 
@@ -219,7 +227,6 @@ export default function EnviarPedidos() {
             width: "100%",
             mb: 1,
             mt: 1,
-            p: 1,
           }}
         >
           <Stack
@@ -236,16 +243,31 @@ export default function EnviarPedidos() {
               },
             }}
           >
-            <Button
-              variant="contained"
-              sx={{ mr: 1 }}
-              disableElevation
-              onClick={handleOpenCloseModalEnvio}
-              endIcon={<SendIcon />}
-              disabled={pedidosParaEntrega.length > 0 ? false : true}
+            <Box
+              sx={{
+                mt: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+              }}
             >
-              Enviar pedidos
-            </Button>
+              <DatepickerField
+                value={dateFilter}
+                textLabel="Data dos pedidos"
+                onChange={setDateFilter}
+              />
+
+              <Button
+                variant="contained"
+                sx={{ ml: 1 }}
+                disableElevation
+                fullWidth
+                onClick={() => {}}
+              >
+                Pesquisar
+              </Button>
+            </Box>
 
             <Typography
               sx={{
@@ -262,15 +284,18 @@ export default function EnviarPedidos() {
               Total de pedidos: {cards?.TOTAL || "--"}
             </Typography>
           </Stack>
-
-          <Box sx={{ mt: 1 }}>
-            <DatepickerField
-              value={dateFilter}
-              textLabel="Data dos pedidos"
-              onChange={setDateFilter}
-            />
-          </Box>
         </Stack>
+
+        <Button
+          variant="contained"
+          sx={{ mr: 1 }}
+          disableElevation
+          onClick={handleOpenCloseModalEnvio}
+          endIcon={<SendIcon />}
+          disabled={pedidosParaEntrega.length > 0 ? false : true}
+        >
+          Enviar pedidos
+        </Button>
 
         {loading ? (
           <SkeletonTable />
@@ -443,6 +468,33 @@ export default function EnviarPedidos() {
               </TableBody>
             </Table>
           </TableContainer>
+        )}
+
+        {showMenssagemSemPedidos && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="span"
+              component="span"
+              sx={{
+                fontWeight: 700,
+                fontSize: 14,
+                mt: 2,
+                mb: 2,
+                width: "100%",
+                textAlign: "center",
+                color: "red",
+              }}
+            >
+              Sem pedidos encontrados para a data informada
+            </Typography>
+          </Box>
         )}
 
         <Modal

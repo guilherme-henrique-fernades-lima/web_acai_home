@@ -30,6 +30,7 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
+import Skeleton from "@mui/material/Skeleton";
 
 //Mui icons
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -65,6 +66,7 @@ export default function Home() {
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
 
   //States para Filtros
+  const [loading, setLoading] = useState(true);
   const [zonaEntrega, setZonaEntrega] = useState("TODAS");
   const [statusPedido, setStatusPedido] = useState("TODAS");
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
@@ -101,6 +103,7 @@ export default function Home() {
       const res = await response.json();
       setPedidos(res.data);
       setCards(res.status);
+      setLoading(false);
     }
   };
 
@@ -114,7 +117,9 @@ export default function Home() {
 
     if (response.status == 200) {
       const res = await response.json();
+      console.log(res);
       setEntregadores(res);
+      setLoading(false);
     }
   };
 
@@ -130,7 +135,11 @@ export default function Home() {
 
   return (
     <>
-      <GridPainelPedidos status={cards} entregadores={entregadores} />
+      <GridPainelPedidos
+        status={cards}
+        entregadores={entregadores}
+        loading={loading}
+      />
 
       <Grid container spacing={1} sx={{ marginTop: 0, padding: "5px" }}>
         <Grid
@@ -155,9 +164,18 @@ export default function Home() {
             }}
             elevation={0}
           >
-            <FilterListIcon
-              sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
-            />
+            {loading ? (
+              <Skeleton
+                variant="rounded"
+                width={38}
+                height={38}
+                sx={{ marginLeft: "20px", marginRight: "20px" }}
+              />
+            ) : (
+              <FilterListIcon
+                sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
+              />
+            )}
             <Grid container spacing={1}>
               {/* <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 <TextField
@@ -206,45 +224,57 @@ export default function Home() {
               </Grid> */}
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                <TextField
-                  id="forma_pagamento"
-                  select
-                  fullWidth
-                  placeholder="Forma de pagamento"
-                  label="Forma de pagamento"
-                  size="small"
-                  value={formaPagamento}
-                  onChange={(e) => {
-                    setFormaPagamento(e.target.value);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  autoComplete="off"
-                >
-                  {FORMA_PAGAMENTO.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                {loading ? (
+                  <Skeleton variant="rounded" width={"100%"} height={38} />
+                ) : (
+                  <TextField
+                    id="forma_pagamento"
+                    select
+                    fullWidth
+                    placeholder="Forma de pagamento"
+                    label="Forma de pagamento"
+                    size="small"
+                    value={formaPagamento}
+                    onChange={(e) => {
+                      setFormaPagamento(e.target.value);
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    autoComplete="off"
+                  >
+                    {FORMA_PAGAMENTO.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
               </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                <DatepickerField
-                  value={dateFilter}
-                  textLabel="Data dos pedidos"
-                  onChange={setDateFilter}
-                />
+                {loading ? (
+                  <Skeleton variant="rounded" width={"100%"} height={38} />
+                ) : (
+                  <DatepickerField
+                    value={dateFilter}
+                    textLabel="Data dos pedidos"
+                    onChange={setDateFilter}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                <Button
-                  variant="contained"
-                  disableElevation
-                  fullWidth
-                  onClick={getPedidos}
-                >
-                  FILTRAR
-                </Button>
+                {loading ? (
+                  <Skeleton variant="rounded" width={"100%"} height={38} />
+                ) : (
+                  <Button
+                    variant="contained"
+                    disableElevation
+                    fullWidth
+                    onClick={getPedidos}
+                  >
+                    FILTRAR
+                  </Button>
+                )}
               </Grid>
             </Grid>
           </Paper>
@@ -257,172 +287,176 @@ export default function Home() {
             }}
             elevation={0}
           >
-            <TableContainer sx={{ width: "100%" }}>
-              <Table
-                size="small"
-                sx={{
-                  width: "100%",
-                  minWidth: 900,
-                  borderRadius: "8px",
-                  "& .tableCellClasses.root": {
-                    borderBottom: "none",
-                  },
-                }}
-              >
-                <TableHead
+            {loading ? (
+              <SkeletonTable />
+            ) : (
+              <TableContainer sx={{ width: "100%" }}>
+                <Table
+                  size="small"
                   sx={{
-                    height: 50,
-                    borderBottom: "1px solid #ccc",
-                    overflow: "hidden",
+                    width: "100%",
+                    minWidth: 900,
+                    borderRadius: "8px",
+                    "& .tableCellClasses.root": {
+                      borderBottom: "none",
+                    },
                   }}
                 >
-                  <TableRow sx={{ "& td": { border: 0 } }}>
-                    <CustomTableCellHeader align="center">
-                      SEQ.
-                    </CustomTableCellHeader>
+                  <TableHead
+                    sx={{
+                      height: 50,
+                      borderBottom: "1px solid #ccc",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <TableRow sx={{ "& td": { border: 0 } }}>
+                      <CustomTableCellHeader align="center">
+                        SEQ.
+                      </CustomTableCellHeader>
 
-                    <CustomTableCellHeader align="center">
-                      N° PEDIDO
-                    </CustomTableCellHeader>
-                    <CustomTableCellHeader align="center">
-                      VALOR
-                    </CustomTableCellHeader>
-                    <CustomTableCellHeader align="center">
-                      FORM. PAGAMENTO
-                    </CustomTableCellHeader>
-                    <CustomTableCellHeader align="center">
-                      ZONA
-                    </CustomTableCellHeader>
-                    <CustomTableCellHeader align="center">
-                      STATUS
-                    </CustomTableCellHeader>
-                    <CustomTableCellHeader align="center">
-                      DATA/HORA
-                    </CustomTableCellHeader>
-                    <CustomTableCellHeader align="center">
-                      AÇÕES
-                    </CustomTableCellHeader>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {displayedData?.map((pedido, index) => (
-                    <TableRow
-                      key={index}
-                      sx={{
-                        transition: "all 0.3s ease",
-                        height: 50,
-                        border: "none",
-                        "&:hover": { backgroundColor: "#f8e8ff" },
-                        ".MuiTableCell-root": {
-                          borderBottom: "none",
-                        },
-                      }}
-                    >
-                      <TableCell
-                        align="center"
+                      <CustomTableCellHeader align="center">
+                        N° PEDIDO
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        VALOR
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        FORM. PAGAMENTO
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        ZONA
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        STATUS
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        DATA/HORA
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        AÇÕES
+                      </CustomTableCellHeader>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {displayedData?.map((pedido, index) => (
+                      <TableRow
+                        key={index}
                         sx={{
-                          borderTopLeftRadius: "30px",
-                          borderBottomLeftRadius: "30px",
+                          transition: "all 0.3s ease",
+                          height: 50,
+                          border: "none",
+                          "&:hover": { backgroundColor: "#f8e8ff" },
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
                         }}
                       >
-                        {index + 1}
-                      </TableCell>
-                      <CustomTableCellBody align="center">
-                        {pedido.id}
-                      </CustomTableCellBody>
-                      <CustomTableCellBody align="center">
-                        {formatarValorBRL(pedido.valor)}
-                      </CustomTableCellBody>
-                      <CustomTableCellBody align="center">
-                        <RenderIconFormaPagamento
-                          formaPagamento={pedido.formaPagamento}
-                        />
-                      </CustomTableCellBody>
-                      <CustomTableCellBody align="center">
-                        {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
-                        ---
-                      </CustomTableCellBody>
-                      <CustomTableCellBody align="center">
-                        {/* <StatusPedido status={5}>ABERTO</StatusPedido> */}
-                        {pedido.status}
-                      </CustomTableCellBody>
-                      <CustomTableCellBody align="center">
-                        <Stack direction="column">
-                          <Typography
-                            variant="span"
-                            component="span"
-                            sx={{ fontWeight: 700, fontSize: 12 }}
-                          >
-                            {formatarData(pedido.data)}
-                          </Typography>
-                          <Typography
-                            variant="span"
-                            component="span"
-                            sx={{ fontWeight: 400, fontSize: 10 }}
-                          >
-                            {pedido.hora}
-                          </Typography>
-                        </Stack>
-                      </CustomTableCellBody>
-                      <CustomTableCellBody
-                        align="center"
-                        sx={{
-                          borderTopRightRadius: "30px",
-                          borderBottomRightRadius: "30px",
-                        }}
-                      >
-                        <IconButton
+                        <TableCell
+                          align="center"
                           sx={{
-                            transition: "all 0.3s ease",
-                            cursor: "pointer",
-                            border: "1px solid transparent",
-                            "&:hover": {
-                              color: "#B83E94",
-                              border: "1px solid #b83e94",
-                            },
-                          }}
-                          onClick={() => {
-                            setPedidosModalData(pedido);
-                            handleOpen();
+                            borderTopLeftRadius: "30px",
+                            borderBottomLeftRadius: "30px",
                           }}
                         >
-                          <ArticleOutlinedIcon
-                            sx={{
-                              fontSize: 24,
-                            }}
+                          {index + 1}
+                        </TableCell>
+                        <CustomTableCellBody align="center">
+                          {pedido.id}
+                        </CustomTableCellBody>
+                        <CustomTableCellBody align="center">
+                          {formatarValorBRL(pedido.valor)}
+                        </CustomTableCellBody>
+                        <CustomTableCellBody align="center">
+                          <RenderIconFormaPagamento
+                            formaPagamento={pedido.formaPagamento}
                           />
-                        </IconButton>
-                      </CustomTableCellBody>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <TablePagination
-                rowsPerPageOptions={[25, 50, 100, 150, 200]}
-                component="div"
-                count={pedidos.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={(event, newPage) => setPage(newPage)}
-                onRowsPerPageChange={(event) => {
-                  setRowsPerPage(parseInt(event.target.value, 10));
-                  setPage(0);
-                }}
-                labelRowsPerPage="Linhas por página:"
-                labelDisplayedRows={({ from, to, count }) =>
-                  `${from}-${to} de ${count !== -1 ? count : "mais de " + to}`
-                }
-                labelPagination={(page) => `Página ${page + 1}`}
-                nextIconButtonProps={{
-                  "aria-label": "Próxima página",
-                  title: "Próxima página",
-                }}
-                previousIconButtonProps={{
-                  "aria-label": "Página anterior",
-                  title: "Página anterior",
-                }}
-              />
-            </TableContainer>
+                        </CustomTableCellBody>
+                        <CustomTableCellBody align="center">
+                          {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
+                          ---
+                        </CustomTableCellBody>
+                        <CustomTableCellBody align="center">
+                          {/* <StatusPedido status={5}>ABERTO</StatusPedido> */}
+                          {pedido.status}
+                        </CustomTableCellBody>
+                        <CustomTableCellBody align="center">
+                          <Stack direction="column">
+                            <Typography
+                              variant="span"
+                              component="span"
+                              sx={{ fontWeight: 700, fontSize: 12 }}
+                            >
+                              {formatarData(pedido.data)}
+                            </Typography>
+                            <Typography
+                              variant="span"
+                              component="span"
+                              sx={{ fontWeight: 400, fontSize: 10 }}
+                            >
+                              {pedido.hora}
+                            </Typography>
+                          </Stack>
+                        </CustomTableCellBody>
+                        <CustomTableCellBody
+                          align="center"
+                          sx={{
+                            borderTopRightRadius: "30px",
+                            borderBottomRightRadius: "30px",
+                          }}
+                        >
+                          <IconButton
+                            sx={{
+                              transition: "all 0.3s ease",
+                              cursor: "pointer",
+                              border: "1px solid transparent",
+                              "&:hover": {
+                                color: "#B83E94",
+                                border: "1px solid #b83e94",
+                              },
+                            }}
+                            onClick={() => {
+                              setPedidosModalData(pedido);
+                              handleOpen();
+                            }}
+                          >
+                            <ArticleOutlinedIcon
+                              sx={{
+                                fontSize: 24,
+                              }}
+                            />
+                          </IconButton>
+                        </CustomTableCellBody>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <TablePagination
+                  rowsPerPageOptions={[25, 50, 100, 150, 200]}
+                  component="div"
+                  count={pedidos.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={(event, newPage) => setPage(newPage)}
+                  onRowsPerPageChange={(event) => {
+                    setRowsPerPage(parseInt(event.target.value, 10));
+                    setPage(0);
+                  }}
+                  labelRowsPerPage="Linhas por página:"
+                  labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} de ${count !== -1 ? count : "mais de " + to}`
+                  }
+                  labelPagination={(page) => `Página ${page + 1}`}
+                  nextIconButtonProps={{
+                    "aria-label": "Próxima página",
+                    title: "Próxima página",
+                  }}
+                  previousIconButtonProps={{
+                    "aria-label": "Página anterior",
+                    title: "Página anterior",
+                  }}
+                />
+              </TableContainer>
+            )}
           </Paper>
         </Grid>
 
@@ -435,7 +469,10 @@ export default function Home() {
           xl={3}
           sx={{ height: "auto" }}
         >
-          <TableEntregadoresStatus entregadores={entregadores} />
+          <TableEntregadoresStatus
+            entregadores={entregadores}
+            loading={loading}
+          />
         </Grid>
       </Grid>
 
@@ -825,5 +862,34 @@ function RenderModoPagamento(props) {
         />
       </Box>
     </Box>
+  );
+}
+
+function SkeletonTable() {
+  return (
+    <Paper
+      sx={{
+        width: "100%",
+        padding: "20px",
+        marginBottom: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+      }}
+      elevation={0}
+    >
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(
+        (item, index) => (
+          <Skeleton
+            key={index}
+            variant="rounded"
+            width={"100%"}
+            height={20}
+            sx={{ mt: 1, mb: 1 }}
+          />
+        )
+      )}
+    </Paper>
   );
 }

@@ -161,6 +161,7 @@ export default function CadastroFuncionario() {
       password: password,
       avatar: null,
       celular: telefone ? telefone : null,
+      flagUpdate: router.query?.id ? true : false,
     };
 
     return payload;

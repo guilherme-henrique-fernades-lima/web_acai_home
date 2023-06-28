@@ -10,7 +10,7 @@ export const getServerSideProps = ({ req, res }) => {
   console.log("token: ", token);
 
   if (token) {
-    if (token?.funcao) {
+    if (token.funcao == "entregador") {
       return {
         redirect: {
           permanent: true,
@@ -18,7 +18,6 @@ export const getServerSideProps = ({ req, res }) => {
         },
       };
     }
-
     return {
       redirect: {
         permanent: true,

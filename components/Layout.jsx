@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useLayoutEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -53,16 +53,26 @@ import MapIcon from "@mui/icons-material/Map";
 import { ThemeContext } from "@/context/ThemeContext";
 import { AuthContext } from "@/context/AuthContext";
 
+import { useRouter } from "next/router";
+
 export default function Layout(props) {
   const { changeThemePalette } = useContext(ThemeContext);
   const theme = useTheme();
 
   const { children } = props;
 
+  const router = useRouter();
+
   const { logout, user } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
   const [activeOption, setActiveOption] = useState("");
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
+
+  useLayoutEffect(() => {
+    if (user?.funcao == "entregador") {
+      router.push("/entregadores/pedidos-em-rota");
+    }
+  }, [user]);
 
   const handleSairSistemaDialog = () => {
     setOpenDialogSairSistema(!openDialogSairSistema);
