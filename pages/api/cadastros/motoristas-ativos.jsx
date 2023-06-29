@@ -1,8 +1,8 @@
-async function getEntregadoresDisponiveis(req, res) {
+async function getEntregadoresAtivos(req, res) {
   const token = req.headers.authorization;
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/motoristas/disponiveis/`,
+    `${process.env.NEXT_URL_BACKEND}/motoristas/ativos/`,
     {
       method: "GET",
       headers: {
@@ -20,7 +20,7 @@ async function getEntregadoresDisponiveis(req, res) {
 
 export default async function handler(req, res) {
   if (req.method == "GET") {
-    getEntregadoresDisponiveis(req, res);
+    getEntregadoresAtivos(req, res);
   } else {
     res.status(405).send();
   }

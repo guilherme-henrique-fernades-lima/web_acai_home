@@ -43,7 +43,7 @@ export default function PedidosEmRota(props) {
   const [alturaPagina, setAlturaPagina] = useState(0);
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
 
-  console.log("pedidos....:", pedidos);
+  console.log("pedidos....:", pedidoParaConcluir);
 
   // useLayoutEffect(() => {
   //   if (user?.funcao == "admin") {
@@ -77,7 +77,7 @@ export default function PedidosEmRota(props) {
   function getPayload() {
     const data = {
       idPedido: pedidoParaConcluir?.idPedido,
-      cpf_motorista: "1234567890",
+      cpf_motorista: pedidoParaConcluir?.cpf_motorista,
       motorista: pedidoParaConcluir?.motorista,
       observacao: observacao ? observacao : null,
     };

@@ -46,12 +46,11 @@ export default function RelacaoFuncionario() {
 
   const [userChangePassword, setUserChangePassword] = useState({});
 
-  console.log("userChangePassword", userChangePassword);
-
   const [openDialog, setOpenDialog] = useState(false);
   const [newPassword, setNewPassword] = useState("");
 
   const handleDialog = () => {
+    setNewPassword("");
     setOpenDialog(!openDialog);
   };
 
@@ -62,6 +61,7 @@ export default function RelacaoFuncionario() {
   }, [user]);
 
   async function getUsersData() {
+    setOpenDialog(false);
     setLoading(true);
     setShowMenssagemSemFuncionarios(false);
     const response = await fetch(`/api/relatorios/funcionario/`, {
@@ -89,7 +89,6 @@ export default function RelacaoFuncionario() {
 
     const payload = {
       cpf: userChangePassword?.cpf,
-      oldPassword: userChangePassword?.password,
       password: newPassword,
     };
 
@@ -100,6 +99,8 @@ export default function RelacaoFuncionario() {
       },
       body: JSON.stringify(payload),
     });
+
+    console.log(response);
 
     if (response.ok) {
       const res = await response.json();
@@ -279,7 +280,9 @@ export default function RelacaoFuncionario() {
         aria-describedby="alert-dialog-description"
         sx={{ margin: "10px" }}
       >
-        <DialogTitle id="alert-dialog-title">Alterar a senha</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          Alterar a senha de {userChangePassword?.username}
+        </DialogTitle>
 
         <Box
           sx={{

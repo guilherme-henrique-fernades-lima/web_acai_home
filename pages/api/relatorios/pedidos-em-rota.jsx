@@ -2,7 +2,7 @@ async function listarPedidosEmRotaDeEntrega(req, res) {
   const token = req.headers.authorization;
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/entrega/?date=2023-06-25`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/entrega/`,
     {
       method: "GET",
       headers: {
@@ -23,8 +23,6 @@ async function removerPedidoEntregador(req, res) {
   const token = req.headers.authorization;
 
   const data = req.body;
-
-  console.log(data);
 
   const response = await fetch(
     `${process.env.NEXT_URL_BACKEND}/pedidos/remover/`,

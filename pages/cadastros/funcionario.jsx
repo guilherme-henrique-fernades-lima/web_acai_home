@@ -69,6 +69,7 @@ export default function CadastroFuncionario() {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
   const [observacaoEntregador, setObservacaoEntregador] = useState("");
+
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -97,22 +98,18 @@ export default function CadastroFuncionario() {
     if (response.ok) {
       const res = await response.json();
 
-      console.log(res);
-
       setUserName(res.username);
       setCpf(res.cpf);
       setFuncao(res.funcao);
       setActive(res.is_active);
       setObservacaoEntregador(res.observacao);
-
-      // const [telefone, setTelefone] = useState("");
-      // const [cep, setCep] = useState("");
-      // const [logradouro, setLogradouro] = useState("");
-      // const [numLogr, setNumLogr] = useState("");
-      // const [complemento, setComplemento] = useState("");
-      // const [bairro, setBairro] = useState("");
-      // const [cidade, setCidade] = useState("");
-      // const [estado, setEstado] = useState("");
+      setTelefone(res.celular);
+      setCep(res.cep);
+      setNumLogr(res.numLogr);
+      setComplemento(res.complLogr);
+      setBairro(res.bairro);
+      setCidade(res.cidade);
+      setEstado(res.estado);
 
       setLoading(false);
     }
@@ -124,13 +121,17 @@ export default function CadastroFuncionario() {
 
   async function salvarFuncionario() {
     const payload = getPayloadCadastrar();
+    console.log(payload);
 
     const response = await fetch(`/api/auth/users/`, {
       method: "POST",
       body: JSON.stringify(payload),
+      headers: {
+        Authorization: user?.token,
+      },
     });
 
-    if (response.status == 201) {
+    if (response.ok) {
       toast.success("Funcionário cadastrado com sucesso!");
       setLoading(true);
       clearDataFormStates();
@@ -148,7 +149,7 @@ export default function CadastroFuncionario() {
     setCpf("");
     setFuncao("");
     setTelefone("");
-    setActive(false);
+    setActive("");
     setCep("");
     setLogradouro("");
     setNumLogr("");
@@ -171,16 +172,18 @@ export default function CadastroFuncionario() {
   }
 
   async function editarDadosFuncionario() {
-    console.log("Entrou na função de editar");
-
+    console.log("entrou no editar");
     const payload = getPayloadEditar();
 
-    const response = await fetch(``, {
-      method: "PUT",
+    const response = await fetch(`/api/cadastros/funcionario/`, {
+      method: "POST",
       body: JSON.stringify(payload),
+      headers: {
+        Authorization: user?.token,
+      },
     });
 
-    if (response.status == 200) {
+    if (response.ok) {
       toast.success("Dados atualizados com sucesso!");
     } else {
       toast.error("Erro ao atualizar cadastro do funcionário!");
@@ -205,7 +208,6 @@ export default function CadastroFuncionario() {
       password: password,
       avatar: null,
       celular: telefone ? telefone : null,
-      flagUpdate: router.query?.id ? true : false,
     };
 
     return payload;
@@ -287,7 +289,11 @@ export default function CadastroFuncionario() {
       <Box
         component="form"
         onSubmit={handleSubmit(() => {
-          salvarFuncionario();
+          if (router?.query?.id) {
+            editarDadosFuncionario();
+          } else {
+            salvarFuncionario();
+          }
         })}
       >
         {loading ? (
@@ -522,7 +528,7 @@ export default function CadastroFuncionario() {
               <TextField
                 id="complemento"
                 fullWidth
-                placeholder="Digite a cidade"
+                placeholder="Complemento e ponto de referência"
                 type="text"
                 size="small"
                 value={complemento}
@@ -828,7 +834,7 @@ export default function CadastroFuncionario() {
                 endIcon={<SaveIcon />}
                 disableElevation
               >
-                CADASTRAR
+                {router.query?.id ? "EDITAR" : "CADASTRAR"}
               </Button>
             </Grid>
           </Grid>

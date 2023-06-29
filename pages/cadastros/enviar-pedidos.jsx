@@ -113,7 +113,7 @@ export default function EnviarPedidos() {
   };
 
   const getEntregadoresDisponiveis = async () => {
-    const response = await fetch(`/api/home/entregadores/?date=${dateFilter}`, {
+    const response = await fetch(`/api/cadastros/motoristas-ativos`, {
       method: "GET",
       headers: {
         Authorization: user.token,
