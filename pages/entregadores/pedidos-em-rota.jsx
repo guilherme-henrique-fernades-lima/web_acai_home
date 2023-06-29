@@ -57,6 +57,14 @@ export default function PedidosEmRota(props) {
     setOpenDialogSairSistema(!openDialogSairSistema);
   };
 
+  const handleOpenWhatsapp = (number) => {
+    window.open(`whatsapp://send?phone=55${number}`, "_blank");
+  };
+
+  const handleOpenCallNumber = (number) => {
+    window.open(`tel:+55${number}`, "_blank");
+  };
+
   useEffect(() => {
     if (user?.token) {
       getPedidosParaEntrega();
@@ -108,12 +116,15 @@ export default function PedidosEmRota(props) {
 
   async function getPedidosParaEntrega() {
     setLoading(true);
-    const response = await fetch(`/api/entregadores/pedidos-em-rota`, {
-      method: "GET",
-      headers: {
-        Authorization: user.token,
-      },
-    });
+    const response = await fetch(
+      `/api/entregadores/pedidos-em-rota/?date=2023-06-28&cpf_motorista=05251596308`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user.token,
+        },
+      }
+    );
 
     if (response.ok) {
       const res = await response.json();
@@ -290,6 +301,9 @@ export default function PedidosEmRota(props) {
                                 marginRight: "5px",
                               }}
                               color="primary"
+                              onClick={() => {
+                                handleOpenWhatsapp(pedido.celular);
+                              }}
                             >
                               <WhatsAppIcon sx={{ color: "#25d366" }} />
                             </IconButton>
@@ -298,6 +312,9 @@ export default function PedidosEmRota(props) {
                               size="small"
                               variant="contained"
                               color="primary"
+                              onClick={() => {
+                                handleOpenCallNumber(pedido.celular);
+                              }}
                             >
                               <CallIcon sx={{ color: "#221446" }} />
                             </IconButton>
@@ -521,6 +538,9 @@ export default function PedidosEmRota(props) {
                                 marginRight: "5px",
                               }}
                               color="primary"
+                              onClick={() => {
+                                handleOpenWhatsapp(pedido.celular);
+                              }}
                             >
                               <WhatsAppIcon sx={{ color: "#25d366" }} />
                             </IconButton>
@@ -529,6 +549,9 @@ export default function PedidosEmRota(props) {
                               size="small"
                               variant="contained"
                               color="primary"
+                              onClick={() => {
+                                handleOpenCallNumber(pedido.celular);
+                              }}
                             >
                               <CallIcon sx={{ color: "#221446" }} />
                             </IconButton>

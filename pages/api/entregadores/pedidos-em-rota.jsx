@@ -1,8 +1,11 @@
 async function listarPedidosEntregador(req, res) {
   const token = req.headers.authorization;
 
+  const date = req.query.date ?? "";
+  const cpf_motorista = req.query.cpf_motorista ?? "";
+
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/?date=2023-06-28&cpf_motorista=1234567890`,
+    `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/?date=${date}&cpf_motorista=${cpf_motorista}`,
     {
       method: "GET",
       headers: {

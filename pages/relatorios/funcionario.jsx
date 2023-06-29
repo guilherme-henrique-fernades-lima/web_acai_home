@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import Link from "next/link";
 
+//Third party libraries
+import toast, { Toaster } from "react-hot-toast";
+
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
@@ -100,16 +103,16 @@ export default function RelacaoFuncionario() {
       body: JSON.stringify(payload),
     });
 
-    console.log(response);
-
     if (response.ok) {
       const res = await response.json();
-      console.log(res);
+      toast.success("Senha alterada com sucesso");
+      handleDialog();
     }
   }
 
   return (
     <Container>
+      <Toaster position="bottom-center" reverseOrder={true} />
       {loading ? (
         <SkeletonTable />
       ) : (
