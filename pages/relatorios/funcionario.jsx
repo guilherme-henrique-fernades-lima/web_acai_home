@@ -219,7 +219,7 @@ export default function RelacaoFuncionario() {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          alignItems: "center",
+                          justifyContent: "center",
                           flexDirection: "row",
                         }}
                       >

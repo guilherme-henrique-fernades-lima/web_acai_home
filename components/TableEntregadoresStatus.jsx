@@ -71,7 +71,7 @@ export default function TableEntregadoresStatus(props) {
               },
             }}
           >
-            ENTREGADORES DISPONÍVEIS: <span>{entregadores?.length}</span>
+            ENTREGADORES ATIVOS: <span>{entregadores?.length}</span>
           </Typography>
         </Box>
       )}

@@ -510,7 +510,6 @@ export default function Layout(props) {
               backgroundColor: "#F8F8F8",
               height: "100%",
               width: "100%",
-              border: "4px solid red",
             }}
           >
             <DrawerHeader />
@@ -522,9 +521,35 @@ export default function Layout(props) {
                 justifyContent: "flex-start",
                 flexDirection: "column",
                 backgroundColor: "#F8F8F8",
+                // position: "relative",
+                // border: "3px solid red",
               }}
             >
               {children}
+
+              {/* <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "absolute",
+                  backgroundColor: "#F8F8F8",
+                  bottom: "0px",
+                  width: "100%",
+                  mt: 3,
+                }}
+              >
+                <Typography
+                  variant="h4"
+                  component="h4"
+                  sx={{
+                    fontSize: 14,
+                    fontWeight: 700,
+                  }}
+                >
+                  GTECH SERVIÇOS
+                </Typography>
+              </Box> */}
             </Box>
           </Box>
 

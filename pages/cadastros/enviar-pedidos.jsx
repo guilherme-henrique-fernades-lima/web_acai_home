@@ -225,81 +225,40 @@ export default function EnviarPedidos() {
         <Stack
           sx={{
             display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexDirection: "row",
             width: "100%",
             mb: 1,
             mt: 1,
           }}
         >
-          <Stack
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              flexDirection: "row",
-              width: "100%",
+          <Button
+            variant="contained"
+            sx={{ mr: 1 }}
+            disableElevation
+            onClick={handleOpenCloseModalEnvio}
+            endIcon={<SendIcon />}
+            disabled={pedidosParaEntrega.length > 0 ? false : true}
+          >
+            Enviar pedidos
+          </Button>
 
+          <Typography
+            sx={{
+              border: "2px solid #842E6B",
+              padding: "5px 10px",
+              color: "#842E6B",
+              borderRadius: "8px",
+              fontWeight: 900,
               ["@media (max-width:599px)"]: {
-                flexDirection: "column",
-                alignItems: "flex-start",
+                display: "none",
               },
             }}
           >
-            <Box
-              sx={{
-                mt: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-              }}
-            >
-              <DatepickerField
-                value={dateFilter}
-                textLabel="Data dos pedidos"
-                onChange={setDateFilter}
-              />
-
-              <Button
-                variant="contained"
-                sx={{ ml: 1 }}
-                disableElevation
-                fullWidth
-                onClick={getPedidos}
-              >
-                Pesquisar
-              </Button>
-            </Box>
-
-            <Typography
-              sx={{
-                border: "2px solid #842E6B",
-                padding: "5px 10px",
-                color: "#842E6B",
-                borderRadius: "8px",
-                fontWeight: 900,
-                ["@media (max-width:599px)"]: {
-                  display: "none",
-                },
-              }}
-            >
-              Total de pedidos: {cards?.TOTAL || "--"}
-            </Typography>
-          </Stack>
+            Total de pedidos: {cards?.TOTAL || "--"}
+          </Typography>
         </Stack>
-
-        <Button
-          variant="contained"
-          sx={{ mr: 1 }}
-          disableElevation
-          onClick={handleOpenCloseModalEnvio}
-          endIcon={<SendIcon />}
-          disabled={pedidosParaEntrega.length > 0 ? false : true}
-        >
-          Enviar pedidos
-        </Button>
 
         {loading ? (
           <SkeletonTable />

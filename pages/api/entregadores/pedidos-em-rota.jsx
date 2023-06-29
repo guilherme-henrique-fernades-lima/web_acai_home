@@ -2,7 +2,7 @@ async function listarPedidosEntregador(req, res) {
   const token = req.headers.authorization;
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/?date=2023-06-25&cpf_motorista=123`,
+    `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/?date=2023-06-28&cpf_motorista=1234567890`,
     {
       method: "GET",
       headers: {
@@ -33,8 +33,11 @@ async function concluirEntrega(req, res) {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: `Bearer ${token}`,
       },
+      body: data,
     }
   );
+
+  console.log(result);
 
   const json = await result.json();
 
