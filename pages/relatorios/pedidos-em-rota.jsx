@@ -65,7 +65,10 @@ export default function PedidosEmRota() {
     if (response.ok) {
       const res = await response.json();
       setPedidos(res);
-      setLoading(false);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     }
 
     if (response.status == 404) {
@@ -98,12 +101,10 @@ export default function PedidosEmRota() {
     });
 
     if (response.ok) {
-      toast.success(`Pedido ${payload.pedidos[0]} removido com sucesso!`);
       getPedidos();
+      toast.success(`Pedido ${payload.pedidos[0]} removido com sucesso!`);
       handleDialog();
-      setTimeout(() => {
-        setPedidoParaDeletar(null);
-      }, 500);
+      setPedidoParaDeletar(null);
     } else {
       toast.error(
         `Erro ao remover pedido, tente novamente ou recarregue a página.`

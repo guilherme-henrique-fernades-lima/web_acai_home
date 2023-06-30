@@ -10,27 +10,32 @@ const TextStatusPedido = styled(Typography)((props) => ({
   borderRadius: "30px",
   textAlign: "center",
 
-  ...(props.status == 1 && {
+  ...(props.status == "ABERTO" && {
     color: "#B83E94",
     backgroundColor: "#f8e8ff",
   }),
 
-  ...(props.status == 2 && {
+  ...(props.status == "EM_PRODUCAO" && {
     color: "#FF8000",
     backgroundColor: "#ffdebd",
   }),
 
-  ...(props.status == 3 && {
+  ...(props.status == "ENVIADO" && {
     color: "#0563CE",
     backgroundColor: "#b0d5ff",
   }),
 
-  ...(props.status == 4 && {
+  ...(props.status == "CANCELADO" && {
     color: "#e81f10",
     backgroundColor: "#ffbab5",
   }),
 
-  ...(props.status == 5 && {
+  ...(props.status == "AGUARDANDO_PAGAMENTO" && {
+    color: "#36b5ad",
+    backgroundColor: "#d9fffd",
+  }),
+
+  ...(props.status == "CONCLUIDO" && {
     color: "#45B802",
     backgroundColor: "#c0fc9d",
   }),
@@ -88,17 +93,26 @@ const TextStatusEntregador = styled(Typography)((props) => ({
   }),
 }));
 
+export function renderTextStatusPedido(status) {
+  if (status == "ABERTO") {
+    return "ABERTO";
+  } else if (status == "EM_PRODUCAO") {
+    return "EM PRODUÇÃO";
+  } else if (status == "ENVIADO") {
+    return "ENVIADO";
+  } else if (status == "CONCLUIDO") {
+    return "CONCLUÍDO";
+  } else if (status == "CANCELADO") {
+    return "CANCELADO";
+  } else if (status == "AGUARDANDO_PAGAMENTO") {
+    return "AGUARDANDO PAG.";
+  } else {
+    return "---";
+  }
+}
+
 export function StatusPedido(props) {
   const { children } = props;
-
-  /**
-   *  ABERTO
-   *  EM_PRODUCAO
-   *  ENVIADO
-   *  CONCLUIDO
-   *  CANCELADO
-   *  AGUARDANDO_PAGAMENTO
-   */
 
   return <TextStatusPedido status={props.status}>{children}</TextStatusPedido>;
 }

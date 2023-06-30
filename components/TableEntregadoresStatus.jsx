@@ -104,9 +104,9 @@ export default function TableEntregadoresStatus(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {entregadores?.map((entregador) => (
+              {entregadores?.map((entregador, index) => (
                 <TableRow
-                  key={entregador.id}
+                  key={index}
                   sx={{
                     transition: "all 0.3s ease",
                     height: 50,

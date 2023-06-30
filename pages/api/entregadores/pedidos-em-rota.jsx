@@ -4,6 +4,9 @@ async function listarPedidosEntregador(req, res) {
   const date = req.query.date ?? "";
   const cpf_motorista = req.query.cpf_motorista ?? "";
 
+  console.log(date);
+  console.log(cpf_motorista);
+
   const result = await fetch(
     `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/?date=${date}&cpf_motorista=${cpf_motorista}`,
     {
@@ -22,10 +25,12 @@ async function listarPedidosEntregador(req, res) {
 }
 
 async function concluirEntrega(req, res) {
-  console.log("ENTROU NA CONCLUSAO DO PEDIDO");
+  console.log("CONCLUSAO DO PEDIDO");
+
   const token = req.headers.authorization;
 
   const data = req.body;
+  console.log("data: ", data);
 
   const result = await fetch(
     `${process.env.NEXT_URL_BACKEND}/motoristas/pedidos/finalizar/`,
@@ -41,9 +46,7 @@ async function concluirEntrega(req, res) {
   );
 
   console.log(result);
-
   const json = await result.json();
-
   return res.status(result.status).json(json);
 }
 

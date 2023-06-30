@@ -411,20 +411,6 @@ export default function EnviarPedidos() {
                           }}
                         />
                       </IconButton>
-
-                      <IconButton
-                        color="error"
-                        onClick={() => {
-                          handleDialog();
-                          setPedidoParaDeletar(pedido);
-                        }}
-                      >
-                        <DeleteForeverIcon
-                          sx={{
-                            fontSize: 24,
-                          }}
-                        />
-                      </IconButton>
                     </CustomTableCellBody>
                   </TableRow>
                 ))}

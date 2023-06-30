@@ -16,7 +16,6 @@ async function listarUsuarios(req, res) {
 }
 
 async function trocarSenhaUsuario(req, res) {
-  console.log("TROCAR SENHA");
   const token = req.headers.authorization;
 
   const data = req.body;
@@ -34,7 +33,7 @@ async function trocarSenhaUsuario(req, res) {
     }
   );
 
-  return res.status(result.status);
+  return res.status(result.status).json({ message: "senha alterada" });
 }
 
 export default async function handler(req, res) {

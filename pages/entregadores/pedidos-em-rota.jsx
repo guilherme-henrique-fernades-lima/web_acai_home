@@ -87,7 +87,7 @@ export default function PedidosEmRota(props) {
       idPedido: pedidoParaConcluir?.idPedido,
       cpf_motorista: pedidoParaConcluir?.cpf_motorista,
       motorista: pedidoParaConcluir?.motorista,
-      observacao: observacao ? observacao : null,
+      observacao: observacao ? observacao : "",
     };
 
     return data;
@@ -95,7 +95,10 @@ export default function PedidosEmRota(props) {
 
   async function concluirEntrega() {
     const payload = getPayload();
+
+    console.log("Entrou na função de concluir entrega");
     console.log("PAYLOAD: ", payload);
+
     const response = await fetch(`/api/entregadores/pedidos-em-rota`, {
       method: "POST",
       headers: {
@@ -103,6 +106,8 @@ export default function PedidosEmRota(props) {
       },
       body: JSON.stringify(payload),
     });
+
+    console.log(response);
 
     if (response.ok) {
       const res = await response.json();
@@ -117,7 +122,7 @@ export default function PedidosEmRota(props) {
   async function getPedidosParaEntrega() {
     setLoading(true);
     const response = await fetch(
-      `/api/entregadores/pedidos-em-rota/?date=2023-06-28&cpf_motorista=05251596308`,
+      `/api/entregadores/pedidos-em-rota/?date=2023-06-29&cpf_motorista=05251596308`,
       {
         method: "GET",
         headers: {

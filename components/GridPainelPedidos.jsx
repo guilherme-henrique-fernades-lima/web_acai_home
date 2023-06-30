@@ -13,9 +13,10 @@ import Skeleton from "@mui/material/Skeleton";
 
 import DoneIcon from "@mui/icons-material/Done";
 import DescriptionIcon from "@mui/icons-material/Description";
-import GroupsIcon from "@mui/icons-material/Groups";
 import NoteAltIcon from "@mui/icons-material/NoteAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 export default function GridPainelPedidos(props) {
   const { status, entregadores, loading } = props;
@@ -24,7 +25,7 @@ export default function GridPainelPedidos(props) {
     <Grid container>
       {loading ? (
         <>
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -61,7 +62,7 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={1.71} xl={1.71}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -98,7 +99,7 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -135,7 +136,7 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -172,7 +173,7 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -209,7 +210,44 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
+            <CustomBox elevation={0}>
+              <Stack
+                direction="row"
+                sx={{
+                  wordBreak: "break-all",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Skeleton
+                  variant="circular"
+                  width={30}
+                  height={30}
+                  sx={{ marginRight: "10px" }}
+                />
+                <Box sx={{ displa: "flex", flexDirection: "column" }}>
+                  <Skeleton variant="rounded" width={70} height={16} />
+                  <Skeleton
+                    variant="rounded"
+                    width={70}
+                    height={16}
+                    sx={{ marginTop: 1 }}
+                  />
+                </Box>
+              </Stack>
+
+              <Skeleton
+                variant="rounded"
+                width={20}
+                height={30}
+                sx={{ marginLeft: "20px" }}
+              />
+            </CustomBox>
+          </CustomGrid>
+
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -248,7 +286,7 @@ export default function GridPainelPedidos(props) {
         </>
       ) : (
         <>
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -283,7 +321,7 @@ export default function GridPainelPedidos(props) {
               </Typography>
             </CustomBox>
           </CustomGrid>
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -302,7 +340,7 @@ export default function GridPainelPedidos(props) {
                     PEDIDOS
                   </Typography>
                   <Typography sx={{ color: "#FF8000", fontSize: 12 }}>
-                    PENDENTES
+                    EM PRODUÇÃO
                   </Typography>
                 </Box>
               </Stack>
@@ -318,7 +356,7 @@ export default function GridPainelPedidos(props) {
               </Typography>
             </CustomBox>
           </CustomGrid>
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -354,7 +392,7 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -366,13 +404,13 @@ export default function GridPainelPedidos(props) {
                 }}
               >
                 <CancelIcon
-                  sx={{ fontSize: 28, marginRight: "10px", color: "#c51010" }}
+                  sx={{ fontSize: 28, marginRight: "10px", color: "#e81f10" }}
                 />
                 <Box sx={{ displa: "flex", flexDirection: "column" }}>
-                  <Typography sx={{ color: "#c51010", fontSize: 12 }}>
+                  <Typography sx={{ color: "#e81f10", fontSize: 12 }}>
                     PEDIDOS
                   </Typography>
-                  <Typography sx={{ color: "#c51010", fontSize: 12 }}>
+                  <Typography sx={{ color: "#e81f10", fontSize: 12 }}>
                     CANCELADOS
                   </Typography>
                 </Box>
@@ -382,7 +420,7 @@ export default function GridPainelPedidos(props) {
                   fontSize: 32,
                   fontWeight: "bold",
                   marginLeft: "20px",
-                  color: "#c51010",
+                  color: "#e81f10",
                 }}
               >
                 {status?.CANCELADO ?? 0}
@@ -390,7 +428,79 @@ export default function GridPainelPedidos(props) {
             </CustomBox>
           </CustomGrid>
 
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
+            <CustomBox elevation={0}>
+              <Stack
+                direction="row"
+                sx={{
+                  wordBreak: "break-all",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <HourglassTopIcon
+                  sx={{ fontSize: 28, marginRight: "10px", color: "#36b5ad" }}
+                />
+                <Box sx={{ displa: "flex", flexDirection: "column" }}>
+                  <Typography sx={{ color: "#36b5ad", fontSize: 12 }}>
+                    PEDIDOS
+                  </Typography>
+                  <Typography sx={{ color: "#36b5ad", fontSize: 12 }}>
+                    AGUARDANDO PAG.
+                  </Typography>
+                </Box>
+              </Stack>
+              <Typography
+                sx={{
+                  fontSize: 32,
+                  fontWeight: "bold",
+                  marginLeft: "20px",
+                  color: "#36b5ad",
+                }}
+              >
+                {entregadores?.length}
+              </Typography>
+            </CustomBox>
+          </CustomGrid>
+
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
+            <CustomBox elevation={0}>
+              <Stack
+                direction="row"
+                sx={{
+                  wordBreak: "break-all",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <DeliveryDiningIcon
+                  sx={{ fontSize: 28, marginRight: "10px", color: "#0563CE" }}
+                />
+                <Box sx={{ displa: "flex", flexDirection: "column" }}>
+                  <Typography sx={{ color: "#0563CE", fontSize: 12 }}>
+                    PEDIDOS
+                  </Typography>
+                  <Typography sx={{ color: "#0563CE", fontSize: 12 }}>
+                    ENVIADOS
+                  </Typography>{" "}
+                </Box>
+              </Stack>
+              <Typography
+                sx={{
+                  fontSize: 32,
+                  fontWeight: "bold",
+                  marginLeft: "20px",
+                  color: "#0563CE",
+                }}
+              >
+                {status?.ENVIADO ?? 0}
+              </Typography>
+            </CustomBox>
+          </CustomGrid>
+
+          <CustomGrid item xs={12} sm={6} md={4} lg={2.4} xl={1.7}>
             <CustomBox elevation={0}>
               <Stack
                 direction="row"
@@ -422,41 +532,6 @@ export default function GridPainelPedidos(props) {
                 }}
               >
                 {status?.TOTAL ?? 0}
-              </Typography>
-            </CustomBox>
-          </CustomGrid>
-          <CustomGrid item xs={12} sm={6} md={4} lg={2} xl={2}>
-            <CustomBox elevation={0}>
-              <Stack
-                direction="row"
-                sx={{
-                  wordBreak: "break-all",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <GroupsIcon
-                  sx={{ fontSize: 28, marginRight: "10px", color: "#858585" }}
-                />
-                <Box sx={{ displa: "flex", flexDirection: "column" }}>
-                  <Typography sx={{ color: "#858585", fontSize: 12 }}>
-                    ENTREGADORES
-                  </Typography>
-                  <Typography sx={{ color: "#858585", fontSize: 12 }}>
-                    ATIVOS
-                  </Typography>
-                </Box>
-              </Stack>
-              <Typography
-                sx={{
-                  fontSize: 32,
-                  fontWeight: "bold",
-                  marginLeft: "20px",
-                  color: "#858585",
-                }}
-              >
-                {entregadores?.length}
               </Typography>
             </CustomBox>
           </CustomGrid>

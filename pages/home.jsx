@@ -1,7 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
 
 import Image from "next/image";
+
+//Third party libs
 import moment from "moment";
+import useSWR from "swr";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
@@ -53,6 +56,7 @@ import {
   BadgeStatusEntregador,
   formatarData,
   formatarValorBRL,
+  renderTextStatusPedido,
 } from "@/helpers/utils";
 import {
   FORMA_PAGAMENTO,
@@ -63,12 +67,21 @@ import {
 export default function Home() {
   const { user } = useContext(AuthContext);
 
+  const { evento } = useWebSocket();
+
+  useEffect(() => {
+    if (evento.NOVO_PEDIDO) {
+      //Logica de negocio
+      console.log("EVENTO>>>", evento);
+    }
+  }, [evento]);
+
   const [open, setOpen] = useState(false); //State para controle do modal
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
-
+  console.log(pedidosModalData);
   //States para Filtros
   const [loading, setLoading] = useState(true);
   const [zonaEntrega, setZonaEntrega] = useState("TODAS");
@@ -82,12 +95,8 @@ export default function Home() {
   const dataFormatoMoment = moment(dateFilter);
   const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
 
-  console.log("dataFormatada: ", dataFormatada);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  //var { data, error, loading } = useFetchSWR("/api/auth/users/");
 
   useEffect(() => {
     if (user?.token) {
@@ -95,6 +104,31 @@ export default function Home() {
       getEntregadoresDisponiveis();
     }
   }, [user]);
+
+  //   const data = DataSWR();
+
+  //  export function useFetchSWR(url) {
+  //    const { user } = useContext(AuthContext);
+  //    const [loading, setLoading] = useState(true);
+
+  //    const { data, error, isLoading } = useSWR(url, async (url) => {
+  //      if (user?.token.length > 0) {
+  //        const response = await fetch(url, {
+  //          headers: {
+  //            Authorization: user.token,
+  //          },
+  //        });
+
+  //        if (response.status == 200) {
+  //          const data = await response.json();
+  //          setLoading(false);
+  //          return data;
+  //        }
+  //      }
+  //    });
+
+  //    return { data, error, loading };
+  //  }
 
   const getPedidos = async () => {
     setLoading(true);
@@ -346,9 +380,7 @@ export default function Home() {
                       <CustomTableCellHeader align="center">
                         FORM. PAGAMENTO
                       </CustomTableCellHeader>
-                      <CustomTableCellHeader align="center">
-                        ZONA
-                      </CustomTableCellHeader>
+
                       <CustomTableCellHeader align="center">
                         STATUS
                       </CustomTableCellHeader>
@@ -395,12 +427,9 @@ export default function Home() {
                           />
                         </CustomTableCellBody>
                         <CustomTableCellBody align="center">
-                          {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
-                          ---
-                        </CustomTableCellBody>
-                        <CustomTableCellBody align="center">
-                          {/* <StatusPedido status={5}>ABERTO</StatusPedido> */}
-                          {pedido.status}
+                          <StatusPedido status={pedido.status}>
+                            {renderTextStatusPedido(pedido.status)}
+                          </StatusPedido>
                         </CustomTableCellBody>
                         <CustomTableCellBody align="center">
                           <Stack direction="column">
@@ -527,7 +556,8 @@ export default function Home() {
               top: "50%",
               left: "50%",
               transform: "translate(-50%, -50%)",
-              width: 400,
+              width: "100%",
+              maxWidth: 500,
               bgcolor: "background.paper",
               boxShadow: 24,
               borderRadius: "8px",
@@ -537,6 +567,11 @@ export default function Home() {
               justifyContent: "flex-start",
               flexDirection: "column",
               minHeight: 400,
+              maxHeight: 900,
+              height: "auto",
+              maxHeight: "80%",
+              overflowY: "scroll",
+              overflowX: "hidden",
             }}
           >
             <Typography
@@ -544,7 +579,7 @@ export default function Home() {
               component="h3"
               sx={{ color: "#B83E94", fontWeight: 900, fontSize: 16 }}
             >
-              Ações
+              Detalhes do pedido
             </Typography>
 
             <Divider sx={{ width: "100%", marginBottom: 2, marginTop: 2 }} />
@@ -553,45 +588,24 @@ export default function Home() {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "flex-start",
+                justifyContent: "space-between",
+                flexDirection: "row",
                 width: "100%",
-                //height: 170,
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "50%",
-                  height: "100%",
-                }}
-              >
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_URL_IMAGE}/${pedidosModalData?.imagem}`}
-                  alt={`${pedidosModalData?.descricao}`}
-                  // layout="fill"
-                  // objectFit="contain"
-                  width="90"
-                  height="90"
-                />
-              </Box>
-
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "flex-start",
                   justifyContent: "flex-start",
                   flexDirection: "column",
-                  width: "50%",
-                  height: "100%",
-                  padding: "10px",
+                  width: "100%",
                 }}
               >
                 <Typography
                   variant="h6"
                   component="span"
-                  sx={{ color: "#212529", fontWeight: 700, fontSize: 10 }}
+                  sx={{ color: "#212529", fontWeight: 700, fontSize: 12 }}
                 >
                   N° Pedido
                 </Typography>
@@ -613,156 +627,405 @@ export default function Home() {
                 >
                   {pedidosModalData?.id}
                 </Typography>
+              </Box>
 
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "flex-end",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
                 <Typography
                   variant="h6"
                   component="span"
-                  sx={{ color: "#B7B7B7", fontWeight: 300, fontSize: 10 }}
+                  sx={{ color: "#000", fontWeight: 900, fontSize: 26 }}
                 >
-                  {/* {formatarData(pedidosModalData?.data)}{" "}
-                  {pedidosModalData?.hora} */}
-                  ---
+                  {pedidosModalData?.valor &&
+                    formatarValorBRL(pedidosModalData?.valor)}
                 </Typography>
 
-                <Typography
-                  variant="h6"
-                  component="span"
-                  sx={{ color: "#000", fontWeight: 900, fontSize: 14 }}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "flex-end",
+                    width: "100%",
+                  }}
                 >
-                  {pedidosModalData?.descricao}
-                </Typography>
+                  <StatusPedido status={pedidosModalData?.status}>
+                    {renderTextStatusPedido(pedidosModalData?.status)}
+                  </StatusPedido>
+                </Box>
               </Box>
             </Box>
-
-            <Divider sx={{ width: "100%", marginTop: 1, marginBottom: 2 }} />
-
-            <Typography
-              variant="h6"
-              component="span"
-              sx={{ color: "#000", fontWeight: 900, fontSize: 26 }}
-            >
-              {/* {formatarValorBRL(pedidosModalData?.valor)} --- */}
-            </Typography>
 
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
+                alignItems: "center",
                 width: "100%",
-                marginTop: "20px",
-                marginBottom: "10px",
               }}
             >
-              {/* <BadgeZonaEntrega zona="norte">ZONA NORTE</BadgeZonaEntrega> */}{" "}
-              ---
-              <Box sx={{ marginRight: "5px", marginLeft: "5px" }} />
-              {/* <StatusPedido status={1}>PENDENTE</StatusPedido> */}
-              {pedidosModalData?.status}
+              <TableContainer
+                sx={{
+                  mt: 1,
+                  mb: 1,
+                  border: "1px solid #ebebeb",
+                  borderRadius: "8px",
+                }}
+              >
+                <Table
+                  size="small"
+                  sx={{
+                    width: "100%",
+                    borderRadius: "8px",
+                    "& .tableCellClasses.root": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  <TableBody>
+                    <TableRow
+                      sx={{
+                        height: 20,
+                        border: "none",
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Cliente
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.nome}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow
+                      sx={{
+                        height: 20,
+                        border: "none",
+                        backgroundColor: "#f5f5f5",
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Telefone
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.celular}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow
+                      sx={{
+                        height: 14,
+                        border: "none",
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Endereço
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.logradouro} -{" "}
+                        {pedidosModalData?.numLogr}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow
+                      sx={{
+                        height: 20,
+                        border: "none",
+                        backgroundColor: "#f5f5f5",
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Complemento
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.complLogr}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow
+                      sx={{
+                        height: 20,
+                        border: "none",
+
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Ponto de referência
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.pontoreferencia}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow
+                      sx={{
+                        height: 20,
+                        border: "none",
+                        backgroundColor: "#f5f5f5",
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Bairro
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.bairro}
+                      </TableCell>
+                    </TableRow>
+
+                    <TableRow
+                      sx={{
+                        height: 20,
+                        border: "none",
+
+                        ".MuiTableCell-root": {
+                          borderBottom: "none",
+                        },
+                      }}
+                    >
+                      <TableCell
+                        align="left"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopLeftRadius: "2px",
+                          borderBottomLeftRadius: "2px",
+                        }}
+                      >
+                        Observação do pedido
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          borderTopRightRadius: "2px",
+                          borderBottomRightRadius: "2px",
+                        }}
+                      >
+                        {pedidosModalData?.observacao}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
 
-            <Box>
-              <RenderModoPagamento
-                formaPagamento={pedidosModalData?.formaPagamento}
-              />
+            <Divider sx={{ marginTop: 1, marginBottom: 1 }} />
+
+            <RenderModoPagamento
+              formaPagamento={pedidosModalData?.formaPagamento}
+            />
+
+            <Divider sx={{ marginTop: 1, marginBottom: 1 }} />
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <TableContainer
+                sx={{
+                  mt: 1,
+                  mb: 1,
+                  border: "1px solid #ebebeb",
+                  borderRadius: "8px",
+                }}
+              >
+                <Table
+                  size="small"
+                  sx={{
+                    width: "100%",
+                    borderRadius: "8px",
+                    "& .tableCellClasses.root": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  <TableHead
+                    sx={{
+                      height: 20,
+                      borderBottom: "1px solid #ccc",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <TableRow sx={{ "& td": { border: 0 } }}>
+                      <TableCell
+                        align="left"
+                        sx={{ fontSize: 10, fontWeight: 900 }}
+                      >
+                        PRODUTO(S)
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{ fontSize: 10, fontWeight: 900 }}
+                      >
+                        N° PEDIDO
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {pedidosModalData?.produtos?.map((produto, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{
+                          height: 20,
+                          border: "none",
+                          ".MuiTableCell-root": {
+                            borderBottom: "none",
+                          },
+                        }}
+                      >
+                        <TableCell
+                          align="left"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopLeftRadius: "2px",
+                            borderBottomLeftRadius: "2px",
+                          }}
+                        >
+                          {produto?.titulo}
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{
+                            fontSize: 10,
+                            fontWeight: 400,
+                            borderTopRightRadius: "2px",
+                            borderBottomRightRadius: "2px",
+                          }}
+                        >
+                          {produto?.quantidade}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Box>
-
-            <Divider sx={{ width: "100%", marginTop: 2, marginBottom: 2 }} />
-
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Cliente: {pedidosModalData?.nome}
-            </Typography>
-
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Telefone: {pedidosModalData?.celular}
-            </Typography>
-
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Endereço: {pedidosModalData?.logradouro}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Complemento: {pedidosModalData?.complLogr}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Ponto de referência: {pedidosModalData?.pontoReferencia}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Bairro: {pedidosModalData?.bairro}
-            </Typography>
-
-            <Typography
-              variant="h6"
-              component="p"
-              sx={{
-                color: "#202020",
-                fontWeight: 400,
-                fontSize: 12,
-                textAlign: "left",
-                width: "100%",
-              }}
-            >
-              Observação do pedido: {pedidosModalData?.observacao}
-            </Typography>
           </Box>
         </Fade>
       </Modal>

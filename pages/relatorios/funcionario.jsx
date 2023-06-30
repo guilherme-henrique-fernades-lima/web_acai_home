@@ -53,7 +53,6 @@ export default function RelacaoFuncionario() {
   const [newPassword, setNewPassword] = useState("");
 
   const handleDialog = () => {
-    setNewPassword("");
     setOpenDialog(!openDialog);
   };
 
@@ -88,8 +87,6 @@ export default function RelacaoFuncionario() {
   }
 
   async function alterarSenhaFuncionario() {
-    console.log("Entrou na alteração de senha do funcionário");
-
     const payload = {
       cpf: userChangePassword?.cpf,
       password: newPassword,
@@ -104,9 +101,9 @@ export default function RelacaoFuncionario() {
     });
 
     if (response.ok) {
-      const res = await response.json();
       toast.success("Senha alterada com sucesso");
       handleDialog();
+      setNewPassword("");
     }
   }
 
@@ -169,9 +166,9 @@ export default function RelacaoFuncionario() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dataSet?.map((funcionario) => (
+                {dataSet?.map((funcionario, index) => (
                   <TableRow
-                    key={funcionario.id}
+                    key={index}
                     sx={{
                       transition: "all 0.3s ease",
                       height: 50,
