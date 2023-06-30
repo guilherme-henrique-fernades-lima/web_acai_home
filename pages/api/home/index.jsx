@@ -1,4 +1,5 @@
 async function getPedidos(req, res) {
+  console.log("ENTROU NO GET PEDIDOS DA HOME");
   const token = req.headers.authorization;
 
   var date = req.query.date ?? "";
@@ -7,7 +8,7 @@ async function getPedidos(req, res) {
   var zona = req.query.zona ?? "";
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/?date=${date}&status=${status}&tp_pag=${tp_pag}&zona=${zona}`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/?date=2023-06-29&status=${status}&tp_pag=${tp_pag}&zona=${zona}`,
     {
       method: "GET",
       headers: {

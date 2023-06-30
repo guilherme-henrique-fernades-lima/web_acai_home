@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Image from "next/image";
 
 //Context
@@ -12,6 +12,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
 import Dialog from "@mui/material/Dialog";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 import DialogTitle from "@mui/material/DialogTitle";
 
@@ -24,14 +27,38 @@ export default function SingIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [cpf, setCpf] = useState("");
   const [password, setPassword] = useState("");
-
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [lembrarCpf, setLembrarCpf] = useState(false);
+
+  useEffect(() => {
+    const getCpfLocalStorage = () => {
+      const cpf = localStorage.getItem("@acaihomedelivery");
+
+      if (cpf) {
+        setLembrarCpf(true);
+        setCpf(cpf);
+      }
+    };
+
+    getCpfLocalStorage();
+  });
+
+  function handleSaveCpfLocalStorage() {
+    if (lembrarCpf) {
+      localStorage.removeItem("@acaihomedelivery");
+      setLembrarCpf(false);
+    } else {
+      localStorage.setItem("@acaihomedelivery", JSON.stringify(cpf));
+      setLembrarCpf(true);
+    }
+  }
 
   const handleDialog = () => {
     setOpenDialog(!openDialog);
   };
 
-  const handleMatricula = (event) => {
+  const handleCPFform = (event) => {
     setCpf(event.target.value);
   };
 
@@ -46,6 +73,10 @@ export default function SingIn() {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  // const [remember, setRemember] = useState(false);
+  // localStorage.setItem("@atomus.email", JSON.stringify(email));
+  // !save ? localStorage.removeItem("@atomus.email") : null;
 
   return (
     <>
@@ -106,10 +137,10 @@ export default function SingIn() {
             type="text"
             size="small"
             value={cpf}
-            onChange={handleMatricula}
+            onChange={handleCPFform}
             error={Boolean(error)}
             InputLabelProps={{ shrink: true }}
-            sx={{ width: 240 }}
+            sx={{ width: 280 }}
             InputProps={{
               style: {
                 backgroundColor: "#F8F8F8",
@@ -125,6 +156,7 @@ export default function SingIn() {
                 .replace(/(\..*?)\..*/g, "$1"))
             }
           />
+
           <TextField
             value={password}
             onChange={handlePassword}
@@ -133,7 +165,7 @@ export default function SingIn() {
             sx={{
               marginTop: "20px",
               fontSize: 12,
-              width: 240,
+              width: 280,
             }}
             size="small"
             type={showPassword ? "text" : "password"}
@@ -183,20 +215,54 @@ export default function SingIn() {
               * {error.message}
             </Typography>
           )}
+
           <Box
             sx={{
-              width: 225,
+              width: 280,
               display: "flex",
               alignItems: "center",
-              justifyContent: "flex-end",
+              justifyContent: "space-between",
             }}
           >
+            <FormGroup
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "center",
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    sx={{
+                      color: "#842E6B",
+                      "&.Mui-checked": {
+                        color: "#fff",
+                      },
+                      // "& .MuiSvgIcon-root": { fontSize: 50 },
+                    }}
+                    checked={lembrarCpf}
+                    onChange={handleSaveCpfLocalStorage}
+                  />
+                }
+                label={
+                  <Typography
+                    sx={{ fontWeight: 700, fontSize: 10, color: "#fff" }}
+                  >
+                    Lembrar CPF?
+                  </Typography>
+                }
+              />
+            </FormGroup>
+
             <Typography
               sx={{
                 fontSize: 10,
                 color: "#B83E94",
                 fontWeight: "bold",
-                mt: 1,
+                width: "100%",
+                textAlign: "right",
                 "&:hover": { cursor: "pointer", textDecoration: "underline" },
 
                 ["@media (max-width:600px)"]: {

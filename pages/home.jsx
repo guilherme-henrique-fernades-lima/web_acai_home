@@ -64,6 +64,9 @@ import {
   ZONA_ENTREGA,
 } from "@/helpers/constants";
 
+const fetcher = (url, token) =>
+  fetch(url, { headers: { Authorization: token } }).then((res) => res.json());
+
 export default function Home() {
   const { user } = useContext(AuthContext);
 
@@ -81,7 +84,7 @@ export default function Home() {
   const [cards, setCards] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
-  console.log(pedidosModalData);
+
   //States para Filtros
   const [loading, setLoading] = useState(true);
   const [zonaEntrega, setZonaEntrega] = useState("TODAS");
@@ -95,40 +98,33 @@ export default function Home() {
   const dataFormatoMoment = moment(dateFilter);
   const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
 
+  const [tokenUser, setTokenUser] = useState("");
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
     if (user?.token) {
+      setTokenUser(user?.token);
       getPedidos();
       getEntregadoresDisponiveis();
     }
   }, [user]);
 
-  //   const data = DataSWR();
+  const fetcher = (url) =>
+    fetch("/api/home/", {
+      method: "GET",
+      headers: {
+        Authorization: tokenUser,
+      },
+    }).then((res) => res.json());
 
-  //  export function useFetchSWR(url) {
-  //    const { user } = useContext(AuthContext);
-  //    const [loading, setLoading] = useState(true);
+  const { data, error } = useSWR("/api/home/", fetcher);
 
-  //    const { data, error, isLoading } = useSWR(url, async (url) => {
-  //      if (user?.token.length > 0) {
-  //        const response = await fetch(url, {
-  //          headers: {
-  //            Authorization: user.token,
-  //          },
-  //        });
+  console.log("tokenUser: ", tokenUser);
 
-  //        if (response.status == 200) {
-  //          const data = await response.json();
-  //          setLoading(false);
-  //          return data;
-  //        }
-  //      }
-  //    });
-
-  //    return { data, error, loading };
-  //  }
+  console.log("DATA SWR...: ", data);
+  console.log("ERRO SWR...: ", error);
 
   const getPedidos = async () => {
     setLoading(true);
