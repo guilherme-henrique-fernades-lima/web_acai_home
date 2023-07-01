@@ -308,6 +308,9 @@ export default function RelacaoFuncionario() {
             }}
             InputLabelProps={{ shrink: true }}
             autoComplete="off"
+            inputProps={{
+              maxLength: 8,
+            }}
             InputProps={{
               style: {
                 // borderRadius: "28px",
@@ -316,36 +319,13 @@ export default function RelacaoFuncionario() {
             }}
           />
 
-          {/* <TextField
-            id="repeat_password"
-            // {...register("username")}
-            // error={Boolean(errors.username)}
-            fullWidth
-            placeholder="Repita a senha"
-            type="text"
-            size="small"
-            // value={userName || ""}
-            // onChange={(e) => {
-            //   setUserName(e.target.value);
-            // }}
-            InputLabelProps={{ shrink: true }}
-            autoComplete="off"
-            InputProps={{
-              style: {
-                // borderRadius: "28px",
-                color: "#3b3b3b",
-              },
-            }}
-            sx={{ mt: 1 }}
-          /> */}
-
           <Button
             variant="contained"
             disableElevation
             fullWidth
             sx={{ mt: 2 }}
             onClick={alterarSenhaFuncionario}
-            disabled={newPassword ? false : true}
+            disabled={newPassword.length > 5 ? false : true}
           >
             SALVAR
           </Button>

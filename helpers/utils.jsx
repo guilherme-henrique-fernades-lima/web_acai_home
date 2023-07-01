@@ -218,3 +218,13 @@ export function formatarValorBRL(valor) {
   const valorFormatado = valor.toLocaleString("pt-BR", options);
   return valorFormatado;
 }
+
+export function formatarCPFSemAnonimidade(cpf) {
+  // Remove todos os caracteres que não sejam números
+  cpf = cpf.replace(/\D/g, "");
+
+  // Aplica a formatação
+  cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+
+  return cpf;
+}

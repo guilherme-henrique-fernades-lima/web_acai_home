@@ -12,11 +12,10 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import InputAdornment from "@mui/material/InputAdornment";
 import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-
-import DialogTitle from "@mui/material/DialogTitle";
 
 //Icons
 import VisibilityIcon from "@mui/icons-material/Visibility";

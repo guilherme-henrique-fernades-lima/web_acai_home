@@ -10,7 +10,6 @@ import useSWR from "swr";
 import { AuthContext } from "@/context/AuthContext";
 
 //Hooks
-import { useFetchSWR } from "../hooks/useFetchSWR";
 import useWebSocket from "@/hooks/useWebSocket";
 
 //Mui components
@@ -36,6 +35,9 @@ import Fade from "@mui/material/Fade";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
 
 //Mui icons
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -43,6 +45,7 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PixIcon from "@mui/icons-material/Pix";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
 
 //Custom components
 import GridPainelPedidos from "components/GridPainelPedidos";
@@ -60,41 +63,28 @@ import {
 } from "@/helpers/utils";
 import { FORMA_PAGAMENTO, STATUS_PEDIDO } from "@/helpers/constants";
 
-const fetcher = (url, token) =>
-  fetch(url, { headers: { Authorization: token } }).then((res) => res.json());
-
 export default function Home() {
   const { user } = useContext(AuthContext);
 
   const { evento } = useWebSocket();
 
-  useEffect(() => {
-    if (evento) {
-      //Logica de negocio
-      console.log("EVENTO>>>", evento);
-    }
-  }, [evento]);
-
   const [open, setOpen] = useState(false); //State para controle do modal
   const [pedidos, setPedidos] = useState([]);
-
-  for (var i; i < pedidos.length; i++) {
-    console.log(pedidos[i]["status"]);
-  }
-
   const [cards, setCards] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
 
   //States para Filtros
   const [loading, setLoading] = useState(true);
-  const [zonaEntrega, setZonaEntrega] = useState("TODAS");
   const [statusPedido, setStatusPedido] = useState("TODAS");
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [dateFilter, setDateFilter] = useState(new Date());
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
   const [showMenssagemSemEntregadores, setShowMenssagemSemEntregadores] =
     useState(false);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [observacaoSobreEntrega, setObservacaoSobreEntrega] = useState("");
 
   const dataFormatoMoment = moment(dateFilter);
   const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
@@ -103,6 +93,17 @@ export default function Home() {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleDialog = () => {
+    setOpenDialog(!openDialog);
+  };
+
+  useEffect(() => {
+    if (evento) {
+      //Logica de negocio
+      console.log("EVENTO>>>", evento);
+    }
+  }, [evento]);
 
   useEffect(() => {
     if (user?.token) {
@@ -366,7 +367,10 @@ export default function Home() {
                         DATA/HORA
                       </CustomTableCellHeader>
                       <CustomTableCellHeader align="center">
-                        AÇÕES
+                        OBS ENTREGA
+                      </CustomTableCellHeader>
+                      <CustomTableCellHeader align="center">
+                        DETALHES
                       </CustomTableCellHeader>
                     </TableRow>
                   </TableHead>
@@ -427,6 +431,39 @@ export default function Home() {
                             </Typography>
                           </Stack>
                         </CustomTableCellBody>
+                        <CustomTableCellBody align="center">
+                          {pedido?.observacao ? (
+                            <Tooltip
+                              title="Visualizar observação sob entrega"
+                              placement="top"
+                            >
+                              <IconButton
+                                sx={{
+                                  transition: "all 0.3s ease",
+                                  cursor: "pointer",
+                                  border: "1px solid transparent",
+                                  "&:hover": {
+                                    color: "#B83E94",
+                                    border: "1px solid #b83e94",
+                                  },
+                                }}
+                                onClick={() => {
+                                  setObservacaoSobreEntrega(pedido?.observacao);
+                                  handleDialog();
+                                }}
+                              >
+                                <MarkUnreadChatAltIcon
+                                  sx={{
+                                    fontSize: 24,
+                                  }}
+                                />
+                              </IconButton>
+                            </Tooltip>
+                          ) : (
+                            "---"
+                          )}
+                        </CustomTableCellBody>
+
                         <CustomTableCellBody
                           align="center"
                           sx={{
@@ -434,27 +471,32 @@ export default function Home() {
                             borderBottomRightRadius: "30px",
                           }}
                         >
-                          <IconButton
-                            sx={{
-                              transition: "all 0.3s ease",
-                              cursor: "pointer",
-                              border: "1px solid transparent",
-                              "&:hover": {
-                                color: "#B83E94",
-                                border: "1px solid #b83e94",
-                              },
-                            }}
-                            onClick={() => {
-                              setPedidosModalData(pedido);
-                              handleOpen();
-                            }}
+                          <Tooltip
+                            title="Visualizar detalhes do pedido"
+                            placement="top"
                           >
-                            <ArticleOutlinedIcon
+                            <IconButton
                               sx={{
-                                fontSize: 24,
+                                transition: "all 0.3s ease",
+                                cursor: "pointer",
+                                border: "1px solid transparent",
+                                "&:hover": {
+                                  color: "#B83E94",
+                                  border: "1px solid #b83e94",
+                                },
                               }}
-                            />
-                          </IconButton>
+                              onClick={() => {
+                                setPedidosModalData(pedido);
+                                handleOpen();
+                              }}
+                            >
+                              <ArticleOutlinedIcon
+                                sx={{
+                                  fontSize: 24,
+                                }}
+                              />
+                            </IconButton>
+                          </Tooltip>
                         </CustomTableCellBody>
                       </TableRow>
                     ))}
@@ -515,8 +557,6 @@ export default function Home() {
       </Grid>
 
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
         open={open}
         onClose={handleClose}
         closeAfterTransition
@@ -646,6 +686,7 @@ export default function Home() {
                 alignItems: "center",
                 alignItems: "center",
                 width: "100%",
+                mt: 2,
               }}
             >
               <TableContainer
@@ -679,7 +720,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -690,7 +731,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -713,7 +754,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -724,7 +765,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -746,7 +787,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -757,7 +798,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -781,7 +822,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -792,7 +833,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -815,7 +856,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -826,7 +867,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -849,7 +890,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -860,7 +901,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -883,7 +924,7 @@ export default function Home() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -894,7 +935,7 @@ export default function Home() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -952,13 +993,13 @@ export default function Home() {
                     <TableRow sx={{ "& td": { border: 0 } }}>
                       <TableCell
                         align="left"
-                        sx={{ fontSize: 10, fontWeight: 900 }}
+                        sx={{ fontSize: 12, fontWeight: 900 }}
                       >
                         PRODUTO(S)
                       </TableCell>
                       <TableCell
                         align="right"
-                        sx={{ fontSize: 10, fontWeight: 900 }}
+                        sx={{ fontSize: 12, fontWeight: 900 }}
                       >
                         N° PEDIDO
                       </TableCell>
@@ -971,6 +1012,7 @@ export default function Home() {
                         sx={{
                           height: 20,
                           border: "none",
+                          backgroundColor: index % 2 ? "#f5f5f5" : "#fff",
                           ".MuiTableCell-root": {
                             borderBottom: "none",
                           },
@@ -979,18 +1021,28 @@ export default function Home() {
                         <TableCell
                           align="left"
                           sx={{
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: 400,
                             borderTopLeftRadius: "2px",
                             borderBottomLeftRadius: "2px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
                           }}
                         >
+                          <Image
+                            src={`https://www.acaihomedelivery.com.br/sistema/images/arquivos/${produto?.imagem}`}
+                            alt={produto?.titulo}
+                            width={50}
+                            height={50}
+                          />
+                          <Box sx={{ ml: 1 }} />
                           {produto?.titulo}
                         </TableCell>
                         <TableCell
                           align="right"
                           sx={{
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: 400,
                             borderTopRightRadius: "2px",
                             borderBottomRightRadius: "2px",
@@ -1007,6 +1059,18 @@ export default function Home() {
           </Box>
         </Fade>
       </Modal>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ margin: "10px" }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          Obs.: {observacaoSobreEntrega}
+        </DialogTitle>
+      </Dialog>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useLayoutEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 //Mui components
 import { styled, useTheme } from "@mui/material/styles";
@@ -18,12 +19,11 @@ import ListItemText from "@mui/material/ListItemText";
 import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 
-//Ícones
+//Icons
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -43,11 +43,13 @@ import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SendIcon from "@mui/icons-material/Send";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 //Contexto
 import { AuthContext } from "@/context/AuthContext";
 
-import { useRouter } from "next/router";
+//Custom components
+import { formatarCPFSemAnonimidade } from "@/helpers/utils";
 
 export default function Layout(props) {
   const theme = useTheme();
@@ -94,7 +96,7 @@ export default function Layout(props) {
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-start",
                 }}
               >
                 {open ? (
@@ -117,24 +119,44 @@ export default function Layout(props) {
                     />
                   </IconButton>
                 ) : (
-                  <IconButton
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    size="small"
-                    sx={{
-                      marginLeft: "-10px",
-                      "&:hover": {
-                        opacity: 0.7,
-                      },
-                    }}
-                  >
-                    <MenuIcon sx={{ color: "#fff", fontSize: 28 }} />
-                  </IconButton>
+                  <>
+                    <IconButton
+                      aria-label="open drawer"
+                      onClick={handleDrawerOpen}
+                      size="small"
+                      sx={{
+                        marginLeft: "-10px",
+                        "&:hover": {
+                          opacity: 0.7,
+                        },
+                      }}
+                    >
+                      <MenuIcon sx={{ color: "#fff", fontSize: 28 }} />
+                    </IconButton>
+                  </>
                 )}
                 <Link href="/home">
                   <BrandImageAcai />
                 </Link>
               </Box>
+
+              <Typography
+                variant="a"
+                component="a"
+                sx={{
+                  fontSize: { xs: 10, sm: 12, md: 14, lg: 14, xl: 14 },
+                  fontWeight: 700,
+                  "&:hover": {
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  },
+                }}
+                onClick={() => {
+                  window.open("https://wa.me/5586988676076", "_blank");
+                }}
+              >
+                Desenvolvido por: GTECH SERVIÇOS
+              </Typography>
             </Toolbar>
           </AppBar>
 
@@ -157,21 +179,14 @@ export default function Layout(props) {
                   flexDirection: "row",
                 }}
               >
-                <Box
-                  sx={{
-                    width: "50px",
-                    height: "50px",
-                    borderRadius: "50%",
-                    backgroundColor: theme.palette.colors.brand,
-                    mr: 1,
-                  }}
-                />
+                <AccountCircleIcon sx={{ fontSize: 50, color: "#842E6B" }} />
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "flex-start",
                     justifyContent: "center",
                     flexDirection: "column",
+                    ml: 1,
                   }}
                 >
                   <Typography
@@ -192,7 +207,7 @@ export default function Layout(props) {
                       fontSize: 12,
                     }}
                   >
-                    {user?.cpf}
+                    {formatarCPFSemAnonimidade(user?.cpf)}
                   </Typography>
                 </Box>
               </Box>
@@ -208,14 +223,7 @@ export default function Layout(props) {
                 height: 120,
               }}
             >
-              <Box
-                sx={{
-                  width: "40px",
-                  height: "40px",
-                  borderRadius: "50%",
-                  backgroundColor: theme.palette.primary.main,
-                }}
-              />
+              <AccountCircleIcon sx={{ fontSize: 50, color: "#842E6B" }} />
             </Box>
 
             {!open && <Divider sx={{ margin: "0px 10px 20px 10px" }} />}
@@ -526,30 +534,6 @@ export default function Layout(props) {
               }}
             >
               {children}
-
-              {/* <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "absolute",
-                  backgroundColor: "#F8F8F8",
-                  bottom: "0px",
-                  width: "100%",
-                  mt: 3,
-                }}
-              >
-                <Typography
-                  variant="h4"
-                  component="h4"
-                  sx={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                  }}
-                >
-                  GTECH SERVIÇOS
-                </Typography>
-              </Box> */}
             </Box>
           </Box>
 
@@ -793,7 +777,7 @@ function BrandImageAcai() {
             fontWeight: 900,
           }}
         >
-          AÇAI HOME
+          Açai Home
         </Typography>
       </Box>
     </Link>

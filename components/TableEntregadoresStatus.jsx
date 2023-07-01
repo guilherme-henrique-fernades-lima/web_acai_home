@@ -185,8 +185,8 @@ function RenderUser(props) {
           variant="body1"
           sx={{
             fontFamily: "Lato, sans-serif",
-            fontWeight: 900,
-            fontSize: 14,
+            fontWeight: 700,
+            fontSize: 12,
           }}
         >
           {entregador.username}

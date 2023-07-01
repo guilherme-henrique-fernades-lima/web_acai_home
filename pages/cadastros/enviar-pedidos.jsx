@@ -60,8 +60,9 @@ import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
-  const [open, setOpen] = useState(false);
 
+  const [open, setOpen] = useState(false);
+  const [openModalDetalhes, setOpenModalDetalhes] = useState(false);
   const [loading, setLoading] = useState(true);
   const [entregadoresAtivos, setEntregadoresAtivos] = useState([]);
   const [entregadoresAtivosFiltro, setEntregadoresAtivosFiltro] = useState([]);
@@ -71,14 +72,10 @@ export default function EnviarPedidos() {
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
-  const [dateFilter, setDateFilter] = useState(new Date());
-
-  const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
-  const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
-
+  const [pedidosModalData, setPedidosModalData] = useState({});
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
 
-  const dataFormatoMoment = moment(dateFilter);
+  const dataFormatoMoment = moment(new Date());
   const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
 
   useEffect(() => {
@@ -88,7 +85,8 @@ export default function EnviarPedidos() {
     }
   }, [user]);
 
-  const handleOpenClose = () => setOpen(!open);
+  const handleOpenCloseModalDetalhes = () =>
+    setOpenModalDetalhes(!openModalDetalhes);
 
   const getPedidos = async () => {
     setLoading(true);
@@ -173,7 +171,7 @@ export default function EnviarPedidos() {
     return data;
   }
 
-  function addPedidoCarrinho(idPedido) {
+  function handlePedidosEnvioEntregador(idPedido) {
     if (pedidosParaEntrega.includes(idPedido)) {
       // Se o ID já estiver selecionado, remova-o do array
       setPedidosParaEntrega(
@@ -210,10 +208,6 @@ export default function EnviarPedidos() {
     );
     setEntregadoresAtivosFiltro(entregadores);
   }
-
-  const handleDialog = () => {
-    setOpenDialogRetirarPedido(!openDialogRetirarPedido);
-  };
 
   return (
     <>
@@ -313,7 +307,7 @@ export default function EnviarPedidos() {
                     DATA/HORA
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
-                    AÇÕES
+                    DETALHES
                   </CustomTableCellHeader>
                 </TableRow>
               </TableHead>
@@ -342,7 +336,7 @@ export default function EnviarPedidos() {
                       }}
                     >
                       <Checkbox
-                        onChange={() => addPedidoCarrinho(pedido.id)} // Passa o ID do pedido aqui
+                        onChange={() => handlePedidosEnvioEntregador(pedido.id)} // Passa o ID do pedido aqui
                         checked={pedidosParaEntrega.includes(pedido.id)} // Verifica se o pedido está selecionado
                       />
                     </TableCell>
@@ -403,7 +397,10 @@ export default function EnviarPedidos() {
                             border: "1px solid #b83e94",
                           },
                         }}
-                        onClick={handleOpenClose}
+                        onClick={() => {
+                          setPedidosModalData(pedido);
+                          handleOpenCloseModalDetalhes();
+                        }}
                       >
                         <ArticleOutlinedIcon
                           sx={{
@@ -660,50 +657,9 @@ export default function EnviarPedidos() {
         </Modal>
       </Paper>
 
-      <Dialog
-        open={openDialogRetirarPedido}
-        onClose={handleDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        sx={{ margin: "10px" }}
-      >
-        <DialogTitle id="alert-dialog-title">
-          Deletar pedido {pedidoParaDeletar?.id}?
-        </DialogTitle>
-
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDialog();
-              setTimeout(() => {
-                setPedidoParaDeletar(null);
-              }, 500);
-            }}
-            disableElevation
-            fullWidth
-          >
-            NÃO
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            onClick={() => {}}
-            autoFocus
-            disableElevation
-            fullWidth
-          >
-            SIM
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleOpenClose}
+      <Modal
+        open={openModalDetalhes}
+        onClose={handleOpenCloseModalDetalhes}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -712,7 +668,7 @@ export default function EnviarPedidos() {
           },
         }}
       >
-        <Fade in={open}>
+        <Fade in={openModalDetalhes}>
           <Box
             sx={{
               position: "absolute",
@@ -831,6 +787,7 @@ export default function EnviarPedidos() {
                 alignItems: "center",
                 alignItems: "center",
                 width: "100%",
+                mt: 2,
               }}
             >
               <TableContainer
@@ -864,7 +821,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -875,7 +832,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -898,7 +855,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -909,7 +866,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -931,7 +888,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -942,7 +899,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -966,7 +923,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -977,7 +934,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -1000,7 +957,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -1011,7 +968,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -1034,7 +991,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -1045,7 +1002,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -1068,7 +1025,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="left"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopLeftRadius: "2px",
                           borderBottomLeftRadius: "2px",
@@ -1079,7 +1036,7 @@ export default function EnviarPedidos() {
                       <TableCell
                         align="right"
                         sx={{
-                          fontSize: 10,
+                          fontSize: 12,
                           fontWeight: 400,
                           borderTopRightRadius: "2px",
                           borderBottomRightRadius: "2px",
@@ -1137,13 +1094,13 @@ export default function EnviarPedidos() {
                     <TableRow sx={{ "& td": { border: 0 } }}>
                       <TableCell
                         align="left"
-                        sx={{ fontSize: 10, fontWeight: 900 }}
+                        sx={{ fontSize: 12, fontWeight: 900 }}
                       >
                         PRODUTO(S)
                       </TableCell>
                       <TableCell
                         align="right"
-                        sx={{ fontSize: 10, fontWeight: 900 }}
+                        sx={{ fontSize: 12, fontWeight: 900 }}
                       >
                         N° PEDIDO
                       </TableCell>
@@ -1156,6 +1113,7 @@ export default function EnviarPedidos() {
                         sx={{
                           height: 20,
                           border: "none",
+                          backgroundColor: index % 2 ? "#f5f5f5" : "#fff",
                           ".MuiTableCell-root": {
                             borderBottom: "none",
                           },
@@ -1164,18 +1122,28 @@ export default function EnviarPedidos() {
                         <TableCell
                           align="left"
                           sx={{
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: 400,
                             borderTopLeftRadius: "2px",
                             borderBottomLeftRadius: "2px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
                           }}
                         >
+                          <Image
+                            src={`https://www.acaihomedelivery.com.br/sistema/images/arquivos/${produto?.imagem}`}
+                            alt={produto?.titulo}
+                            width={50}
+                            height={50}
+                          />
+                          <Box sx={{ ml: 1 }} />
                           {produto?.titulo}
                         </TableCell>
                         <TableCell
                           align="right"
                           sx={{
-                            fontSize: 10,
+                            fontSize: 12,
                             fontWeight: 400,
                             borderTopRightRadius: "2px",
                             borderBottomRightRadius: "2px",
@@ -1191,7 +1159,7 @@ export default function EnviarPedidos() {
             </Box>
           </Box>
         </Fade>
-      </Modal> */}
+      </Modal>
     </>
   );
 }

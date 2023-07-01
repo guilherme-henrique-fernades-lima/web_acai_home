@@ -63,8 +63,8 @@ export default function PedidosEmRota(props) {
   useEffect(() => {
     console.log("INIT SOCKET>>>>");
     if (evento.NEW_ORDER_DELIVERY) {
-      //Logica de negocio
-      console.log("EVENTO>>>", evento);
+      console.log("EVENTO: ", evento);
+      setPedidos((prevState) => [...prevState, evento]);
     }
   }, [evento]);
 
