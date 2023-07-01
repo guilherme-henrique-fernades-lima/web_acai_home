@@ -6,6 +6,7 @@ import moment from "moment";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
+import useWebSocket from "@/hooks/useWebSocket";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -35,6 +36,7 @@ import { useRouter } from "next/router";
 
 export default function PedidosEmRota(props) {
   const { user, logout } = useContext(AuthContext);
+  const { evento } = useWebSocket();
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
@@ -54,6 +56,14 @@ export default function PedidosEmRota(props) {
       router.push("/home");
     }
   }, [user]);
+
+  useEffect(() => {
+    console.log("INIT SOCKET>>>>")
+    if (evento.NEW_ORDER_DELIVERY) {
+      //Logica de negocio
+      console.log("EVENTO>>>", evento);
+    } 
+  }, [evento]);
 
   const handleOpenAndCloseModal = () => setOpen(!open);
 

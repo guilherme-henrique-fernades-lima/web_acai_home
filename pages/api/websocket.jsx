@@ -13,8 +13,16 @@ const SocketHandler = (req, res) => {
 
         io.on('connection', (socket) => {
 
-            socket.on('NOVO_PEDIDO', value => {
-                socket.broadcast.emit('NOVO_PEDIDO', value)
+            socket.on('NEW_ORDER_DELIVERY', value => {
+                socket.broadcast.emit('NEW_ORDER_DELIVERY', value)
+            })
+
+            socket.on('REMOVE_ORDER_DELIVERY', value => {
+                socket.broadcast.emit('REMOVE_ORDER_DELIVERY', value)
+            })
+
+            socket.on('FINISH_ORDER_DELIVERY', value => {
+                socket.broadcast.emit('FINISH_ORDER_DELIVERY', value)
             })
 
         });

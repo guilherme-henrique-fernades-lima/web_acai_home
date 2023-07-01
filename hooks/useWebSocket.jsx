@@ -16,10 +16,21 @@ const WebSocket = () => {
         console.log("Socket Conectado!");
       });
 
-      socket.on("NOVO_PEDIDO", (value) => {
-        console.log("recebendo new event...", value);
-        setEvento({ NOVO_PEDIDO: value });
+      socket.on("NEW_ORDER_DELIVERY", (value) => {
+        console.log("Atribuindo um novo pedido ao motorista...", value);
+        setEvento({ NEW_ORDER_DELIVERY: value });
       });
+
+      socket.on("REMOVE_ORDER_DELIVERY", (value) => {
+        console.log("Removendo um pedido do motorista...", value);
+        setEvento({ REMOVE_ORDER_DELIVERY: value });
+      });
+
+      socket.on("FINISH_ORDER_DELIVERY", (value) => {
+        console.log("Fenalizando um pedido do motorista...", value);
+        setEvento({ FINISH_ORDER_DELIVERY: value });
+      });
+
     };
 
     // End WebSocket

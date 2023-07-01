@@ -73,7 +73,7 @@ export default function Home() {
   const { evento } = useWebSocket();
 
   useEffect(() => {
-    if (evento.NOVO_PEDIDO) {
+    if (evento) {
       //Logica de negocio
       console.log("EVENTO>>>", evento);
     }
