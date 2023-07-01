@@ -7,8 +7,6 @@ export default function Home() {
 export const getServerSideProps = ({ req, res }) => {
   const token = getCookiesServerSide("@acai:user", { req, res });
 
-  console.log("token: ", token);
-
   if (token) {
     if (token.funcao == "entregador") {
       return {

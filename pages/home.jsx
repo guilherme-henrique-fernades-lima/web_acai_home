@@ -58,11 +58,7 @@ import {
   formatarValorBRL,
   renderTextStatusPedido,
 } from "@/helpers/utils";
-import {
-  FORMA_PAGAMENTO,
-  STATUS_PEDIDO,
-  ZONA_ENTREGA,
-} from "@/helpers/constants";
+import { FORMA_PAGAMENTO, STATUS_PEDIDO } from "@/helpers/constants";
 
 const fetcher = (url, token) =>
   fetch(url, { headers: { Authorization: token } }).then((res) => res.json());
@@ -235,29 +231,6 @@ export default function Home() {
               />
             )}
             <Grid container spacing={1}>
-              {/* <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                <TextField
-                  id="zona_entrega"
-                  select
-                  fullWidth
-                  placeholder="Zona de entrega"
-                  label="Zona de entrega"
-                  size="small"
-                  value={zonaEntrega}
-                  onChange={(e) => {
-                    setZonaEntrega(e.target.value);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  autoComplete="off"
-                >
-                  {ZONA_ENTREGA.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid> */}
-
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 {loading ? (
                   <Skeleton variant="rounded" width={"100%"} height={38} />
@@ -1070,6 +1043,7 @@ function RenderModoPagamento(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
           border: `1px solid ${formaPagamento == "PIX" ? "red" : "#20202033"}`,
           borderRadius: "8px",
           width: "60px",
@@ -1079,6 +1053,17 @@ function RenderModoPagamento(props) {
         <PixIcon
           sx={{ color: formaPagamento == "PIX" ? "red" : "#20202033" }}
         />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "PIX" ? "red" : "#20202033",
+          }}
+        >
+          Pix
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -1086,6 +1071,7 @@ function RenderModoPagamento(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
           border: `1px solid ${
             formaPagamento == "DEBITO" ? "red" : "#20202033"
           }`,
@@ -1097,6 +1083,17 @@ function RenderModoPagamento(props) {
         <CreditCardIcon
           sx={{ color: formaPagamento == "DEBITO" ? "red" : "#20202033" }}
         />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "DEBITO" ? "red" : "#20202033",
+          }}
+        >
+          Débito
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -1104,6 +1101,7 @@ function RenderModoPagamento(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
           border: `1px solid ${
             formaPagamento == "CREDITO" ? "red" : "#20202033"
           }`,
@@ -1115,6 +1113,17 @@ function RenderModoPagamento(props) {
         <CreditCardIcon
           sx={{ color: formaPagamento == "CREDITO" ? "red" : "#20202033" }}
         />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "CREDITO" ? "red" : "#20202033",
+          }}
+        >
+          Crédito
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -1122,6 +1131,7 @@ function RenderModoPagamento(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
           border: `1px solid ${
             formaPagamento == "DINHEIRO" ? "red" : "#20202033"
           }`,
@@ -1133,6 +1143,17 @@ function RenderModoPagamento(props) {
         <LocalAtmIcon
           sx={{ color: formaPagamento == "DINHEIRO" ? "red" : "#20202033" }}
         />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "DINHEIRO" ? "red" : "#20202033",
+          }}
+        >
+          Dinheiro
+        </Typography>
       </Box>
 
       <Box
@@ -1141,6 +1162,7 @@ function RenderModoPagamento(props) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          flexDirection: "column",
           border: `1px solid ${
             formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033"
           }`,
@@ -1149,16 +1171,36 @@ function RenderModoPagamento(props) {
           margin: "3px",
         }}
       >
-        <LocalAtmIcon
+        <Box
           sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+        >
+          <LocalAtmIcon
+            sx={{
+              color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
+            }}
+          />
+          <CreditCardIcon
+            sx={{
+              color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
+            }}
+          />
+        </Box>
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
             color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
           }}
-        />
-        <CreditCardIcon
-          sx={{
-            color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
-          }}
-        />
+        >
+          Misto
+        </Typography>
       </Box>
     </Box>
   );

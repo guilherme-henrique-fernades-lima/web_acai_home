@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 //Third party libs
 import toast, { Toaster } from "react-hot-toast";
@@ -6,6 +6,8 @@ import moment from "moment";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
+
+//Hooks
 import useWebSocket from "@/hooks/useWebSocket";
 
 import Box from "@mui/material/Box";
@@ -47,23 +49,35 @@ export default function PedidosEmRota(props) {
   const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
   const [alturaPagina, setAlturaPagina] = useState(0);
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
+
   var dataAtual = new Date();
   const dataFormatoMoment = moment(dataAtual);
   const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (user?.funcao == "admin") {
       router.push("/home");
     }
   }, [user]);
 
   useEffect(() => {
-    console.log("INIT SOCKET>>>>")
+    console.log("INIT SOCKET>>>>");
     if (evento.NEW_ORDER_DELIVERY) {
       //Logica de negocio
       console.log("EVENTO>>>", evento);
-    } 
+    }
   }, [evento]);
+
+  useEffect(() => {
+    if (user?.token) {
+      getPedidosParaEntrega();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const alturaViewport = window.innerHeight;
+    setAlturaPagina(alturaViewport);
+  }, []);
 
   const handleOpenAndCloseModal = () => setOpen(!open);
 
@@ -78,17 +92,6 @@ export default function PedidosEmRota(props) {
   const handleOpenCallNumber = (number) => {
     window.open(`tel:+55${number}`, "_blank");
   };
-
-  useEffect(() => {
-    if (user?.token) {
-      getPedidosParaEntrega();
-    }
-  }, [user]);
-
-  useEffect(() => {
-    const alturaViewport = window.innerHeight;
-    setAlturaPagina(alturaViewport);
-  }, []);
 
   const handlePedidosExibidos = (event, newAlignment) => {
     if (newAlignment !== null) {
@@ -200,9 +203,6 @@ export default function PedidosEmRota(props) {
               <Typography sx={{ fontWeight: 900, fontSize: 18, color: "#fff" }}>
                 {user?.username?.toUpperCase()}
               </Typography>
-              {/* <Typography sx={{ fontWeight: 400, fontSize: 14, color: "#fff" }}>
-                (86) 99999-9999
-              </Typography> */}
             </Box>
           </Box>
         </Box>

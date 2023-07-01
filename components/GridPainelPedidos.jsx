@@ -20,6 +20,7 @@ import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 export default function GridPainelPedidos(props) {
   const { status, entregadores, loading } = props;
+  console.log(status);
 
   return (
     <Grid container>
@@ -459,7 +460,7 @@ export default function GridPainelPedidos(props) {
                   color: "#36b5ad",
                 }}
               >
-                {entregadores?.length}
+                {status?.AGUARDANDO_PAGAMENTO ?? 0}
               </Typography>
             </CustomBox>
           </CustomGrid>

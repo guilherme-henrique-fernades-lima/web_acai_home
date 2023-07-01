@@ -43,6 +43,10 @@ import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import PixIcon from "@mui/icons-material/Pix";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
+
 //Custon components
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
 import {
@@ -50,7 +54,6 @@ import {
   formatarData,
   formatarValorBRL,
   renderTextStatusPedido,
-  RenderModoPagamento,
 } from "@/helpers/utils";
 import DatepickerField from "@/components/DatepickerField";
 import WarningNoDataFound from "@/components/WarningNoDataFound";
@@ -1270,5 +1273,186 @@ function SkeletonTable() {
         )
       )}
     </Paper>
+  );
+}
+
+function RenderModoPagamento(props) {
+  const { formaPagamento } = props;
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexWrap: "wrap",
+      }}
+    >
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          border: `1px solid ${formaPagamento == "PIX" ? "red" : "#20202033"}`,
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <PixIcon
+          sx={{ color: formaPagamento == "PIX" ? "red" : "#20202033" }}
+        />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "PIX" ? "red" : "#20202033",
+          }}
+        >
+          Pix
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          border: `1px solid ${
+            formaPagamento == "DEBITO" ? "red" : "#20202033"
+          }`,
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <CreditCardIcon
+          sx={{ color: formaPagamento == "DEBITO" ? "red" : "#20202033" }}
+        />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "DEBITO" ? "red" : "#20202033",
+          }}
+        >
+          Débito
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          border: `1px solid ${
+            formaPagamento == "CREDITO" ? "red" : "#20202033"
+          }`,
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <CreditCardIcon
+          sx={{ color: formaPagamento == "CREDITO" ? "red" : "#20202033" }}
+        />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "CREDITO" ? "red" : "#20202033",
+          }}
+        >
+          Crédito
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          border: `1px solid ${
+            formaPagamento == "DINHEIRO" ? "red" : "#20202033"
+          }`,
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <LocalAtmIcon
+          sx={{ color: formaPagamento == "DINHEIRO" ? "red" : "#20202033" }}
+        />
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "DINHEIRO" ? "red" : "#20202033",
+          }}
+        >
+          Dinheiro
+        </Typography>
+      </Box>
+
+      <Box
+        sx={{
+          padding: "10px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          border: `1px solid ${
+            formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033"
+          }`,
+          borderRadius: "8px",
+          width: "60px",
+          margin: "3px",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+          }}
+        >
+          <LocalAtmIcon
+            sx={{
+              color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
+            }}
+          />
+          <CreditCardIcon
+            sx={{
+              color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
+            }}
+          />
+        </Box>
+        <Typography
+          variant="span"
+          component="span"
+          sx={{
+            fontWeight: 400,
+            fontSize: 10,
+            color: formaPagamento == "DINHEIRO_CARTAO" ? "red" : "#20202033",
+          }}
+        >
+          Misto
+        </Typography>
+      </Box>
+    </Box>
   );
 }

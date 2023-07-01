@@ -4,7 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
-//Mui icons
+//Mui Components
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -29,13 +29,13 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 //Custom components
 import { formatarData, formatCpf } from "@/helpers/utils";
-import DatepickerField from "@/components/DatepickerField";
 import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function PedidosEmRota() {
   const { user } = useContext(AuthContext);
 
   const [pedidos, setPedidos] = useState([]);
+  console.log("pedidos >>>> ", pedidos);
   const [loading, setLoading] = useState(true);
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
@@ -74,6 +74,7 @@ export default function PedidosEmRota() {
     if (response.status == 404) {
       setLoading(false);
       setShowMenssagemSemPedidos(true);
+      setPedidos([]);
     }
   };
 
