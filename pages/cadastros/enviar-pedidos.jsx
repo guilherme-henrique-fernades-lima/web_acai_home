@@ -47,10 +47,10 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
 import {
   StatusPedido,
-  BadgeZonaEntrega,
   formatarData,
   formatarValorBRL,
   renderTextStatusPedido,
+  RenderModoPagamento,
 } from "@/helpers/utils";
 import DatepickerField from "@/components/DatepickerField";
 import WarningNoDataFound from "@/components/WarningNoDataFound";
@@ -69,8 +69,6 @@ export default function EnviarPedidos() {
   const [cards, setCards] = useState([]);
   const [entregadorSelecionado, setEntregadorSelecionado] = useState(null);
   const [dateFilter, setDateFilter] = useState(new Date());
-
-  console.log("pedidos........: ", pedidos);
 
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
@@ -306,9 +304,6 @@ export default function EnviarPedidos() {
                     FORM. PAGAMENTO
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
-                    ZONA
-                  </CustomTableCellHeader>
-                  <CustomTableCellHeader align="center">
                     STATUS
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
@@ -364,10 +359,7 @@ export default function EnviarPedidos() {
                         formaPagamento={pedido.formaPagamento}
                       />
                     </CustomTableCellBody>
-                    <CustomTableCellBody align="center">
-                      {/* <BadgeZonaEntrega zona="norte">NORTE</BadgeZonaEntrega> */}
-                      ---
-                    </CustomTableCellBody>
+
                     <CustomTableCellBody align="center">
                       <StatusPedido status={pedido.status}>
                         {renderTextStatusPedido(pedido.status)}
@@ -704,7 +696,7 @@ export default function EnviarPedidos() {
         </DialogActions>
       </Dialog>
 
-      <Modal
+      {/* <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={open}
@@ -1196,7 +1188,7 @@ export default function EnviarPedidos() {
             </Box>
           </Box>
         </Fade>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

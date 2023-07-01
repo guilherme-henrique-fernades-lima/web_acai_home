@@ -12,7 +12,7 @@ const TextStatusPedido = styled(Typography)((props) => ({
 
   ...(props.status == "ABERTO" && {
     color: "#B83E94",
-    backgroundColor: "#f8e8ff",
+    backgroundColor: "#e4ceed",
   }),
 
   ...(props.status == "EM_PRODUCAO" && {

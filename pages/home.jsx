@@ -81,6 +81,11 @@ export default function Home() {
 
   const [open, setOpen] = useState(false); //State para controle do modal
   const [pedidos, setPedidos] = useState([]);
+
+  for (var i; i < pedidos.length; i++) {
+    console.log(pedidos[i]["status"]);
+  }
+
   const [cards, setCards] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
@@ -121,10 +126,10 @@ export default function Home() {
 
   const { data, error } = useSWR("/api/home/", fetcher);
 
-  console.log("tokenUser: ", tokenUser);
+  // console.log("tokenUser: ", tokenUser);
 
-  console.log("DATA SWR...: ", data);
-  console.log("ERRO SWR...: ", error);
+  // console.log("DATA SWR...: ", data);
+  // console.log("ERRO SWR...: ", error);
 
   const getPedidos = async () => {
     setLoading(true);
@@ -132,7 +137,7 @@ export default function Home() {
     const response = await fetch(
       `/api/home/?date=${dataFormatada}&tp_pag=${
         formaPagamento == "TODAS" ? "" : formaPagamento
-      }&status=${statusPedido == "TODAS" ? "" : statusPedido}&zona=`,
+      }&status=${statusPedido == "TODAS" ? "" : statusPedido}`,
       {
         method: "GET",
         headers: {
@@ -253,28 +258,32 @@ export default function Home() {
                 </TextField>
               </Grid> */}
 
-              {/* <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                <TextField
-                  id="status_pedido"
-                  select
-                  fullWidth
-                  placeholder="Status do pedido"
-                  label="Status do pedido"
-                  size="small"
-                  value={statusPedido}
-                  onChange={(e) => {
-                    setStatusPedido(e.target.value);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  autoComplete="off"
-                >
-                  {STATUS_PEDIDO.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid> */}
+              <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+                {loading ? (
+                  <Skeleton variant="rounded" width={"100%"} height={38} />
+                ) : (
+                  <TextField
+                    id="status_pedido"
+                    select
+                    fullWidth
+                    placeholder="Status do pedido"
+                    label="Status do pedido"
+                    size="small"
+                    value={statusPedido}
+                    onChange={(e) => {
+                      setStatusPedido(e.target.value);
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    autoComplete="off"
+                  >
+                    {STATUS_PEDIDO.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                )}
+              </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
                 {loading ? (

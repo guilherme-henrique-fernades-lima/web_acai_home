@@ -38,24 +38,28 @@ export const ZONA_ENTREGA = [
 
 export const STATUS_PEDIDO = [
   {
-    value: "1",
+    value: "ABERTO",
     label: "ABERTO",
   },
   {
-    value: "2",
-    label: "AGUARDANDO",
+    value: "EM_PRODUCAO",
+    label: "EM PRODUÇÃO",
   },
   {
-    value: "3",
-    label: "PENDENTE",
+    value: "ENVIADO",
+    label: "ENVIADO",
   },
   {
-    value: "4",
+    value: "CANCELADO",
     label: "CANCELADO",
   },
   {
-    value: "5",
+    value: "CONCLUIDO",
     label: "CONCLUÍDO",
+  },
+  {
+    value: "AGUARDANDO_PAGAMENTO",
+    label: "AGUARDANDO PAG.",
   },
   {
     value: "TODAS",

@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
+
+//Third party libs
 import toast, { Toaster } from "react-hot-toast";
+import moment from "moment";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
@@ -38,18 +41,19 @@ export default function PedidosEmRota(props) {
   const [loading, setLoading] = useState(true);
   const [observacao, setObservacao] = useState("");
   const [pedidos, setPedidos] = useState([]);
-  const [pedidoParaConcluir, setPedidoParaConcluir] = useState([]);
+  const [pedidoParaConcluir, setPedidoParaConcluir] = useState({});
   const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
   const [alturaPagina, setAlturaPagina] = useState(0);
   const [openDialogSairSistema, setOpenDialogSairSistema] = useState(false);
+  var dataAtual = new Date();
+  const dataFormatoMoment = moment(dataAtual);
+  const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
 
-  console.log("pedidos....:", pedidoParaConcluir);
-
-  // useLayoutEffect(() => {
-  //   if (user?.funcao == "admin") {
-  //     router.push("/home");
-  //   }
-  // }, [user]);
+  useLayoutEffect(() => {
+    if (user?.funcao == "admin") {
+      router.push("/home");
+    }
+  }, [user]);
 
   const handleOpenAndCloseModal = () => setOpen(!open);
 
@@ -87,42 +91,16 @@ export default function PedidosEmRota(props) {
       idPedido: pedidoParaConcluir?.idPedido,
       cpf_motorista: pedidoParaConcluir?.cpf_motorista,
       motorista: pedidoParaConcluir?.motorista,
-      observacao: observacao ? observacao : "",
+      observacao: observacao ? observacao : null,
     };
 
     return data;
   }
 
-  async function concluirEntrega() {
-    const payload = getPayload();
-
-    console.log("Entrou na função de concluir entrega");
-    console.log("PAYLOAD: ", payload);
-
-    const response = await fetch(`/api/entregadores/pedidos-em-rota`, {
-      method: "POST",
-      headers: {
-        Authorization: user.token,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    console.log(response);
-
-    if (response.ok) {
-      const res = await response.json();
-      toast.success("Pedido finalizado com sucesso!");
-      handleOpenAndCloseModal();
-      getPedidosParaEntrega();
-    } else {
-      toast.error("Não foi possível concluir a entrega");
-    }
-  }
-
   async function getPedidosParaEntrega() {
     setLoading(true);
     const response = await fetch(
-      `/api/entregadores/pedidos-em-rota/?date=2023-06-29&cpf_motorista=05251596308`,
+      `/api/entregadores/pedidos-em-rota/?date=${dataFormatada}&cpf_motorista=${user?.cpf}`,
       {
         method: "GET",
         headers: {
@@ -135,6 +113,30 @@ export default function PedidosEmRota(props) {
       const res = await response.json();
       setPedidos(res);
       setLoading(false);
+    }
+
+    if (response.status == 404) {
+    }
+  }
+
+  async function concluirEntrega() {
+    const payload = getPayload();
+
+    const response = await fetch(`/api/entregadores/pedidos-em-rota`, {
+      method: "POST",
+      headers: {
+        Authorization: user.token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      toast.success("Pedido finalizado com sucesso");
+      handleOpenAndCloseModal();
+      getPedidosParaEntrega();
+      setPedidoParaConcluir({});
+    } else {
+      toast.error("Não foi possível concluir a entrega");
     }
   }
 
@@ -258,6 +260,23 @@ export default function PedidosEmRota(props) {
                 },
               }}
             >
+              {pedidos?.pendentes?.length == 0 && !loading && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <Typography
+                    sx={{ fontWeight: 900, fontSize: 16, textAlign: "center" }}
+                  >
+                    Sem pedidos, atualize a página se necessário.
+                  </Typography>
+                </Box>
+              )}
               {loading ? (
                 <>
                   {[1, 2, 3, 4].map((item, index) => (
@@ -467,7 +486,7 @@ export default function PedidosEmRota(props) {
         ) : (
           <>
             <Box
-              id="pedidosPendentes"
+              id="pedidosConcluidos"
               sx={{
                 p: 1,
                 width: "100%",
@@ -495,6 +514,24 @@ export default function PedidosEmRota(props) {
                 },
               }}
             >
+              {pedidos?.concluidos?.length == 0 && !loading && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <Typography
+                    sx={{ fontWeight: 900, fontSize: 16, textAlign: "center" }}
+                  >
+                    Sem pedidos, atualize a página se necessário.
+                  </Typography>
+                </Box>
+              )}
+
               {loading ? (
                 <>
                   {[1, 2, 3, 4].map((item, index) => (
@@ -750,7 +787,7 @@ export default function PedidosEmRota(props) {
               disableElevation
               fullWidth
               sx={{ fontWeight: 400, fontSize: 12 }}
-              onClick={() => concluirEntrega()}
+              onClick={concluirEntrega}
             >
               CONFIRMAR
             </Button>

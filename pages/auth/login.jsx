@@ -32,17 +32,17 @@ export default function SingIn() {
   const [lembrarCpf, setLembrarCpf] = useState(false);
 
   useEffect(() => {
-    const getCpfLocalStorage = () => {
-      const cpf = localStorage.getItem("@acaihomedelivery");
-
-      if (cpf) {
-        setLembrarCpf(true);
-        setCpf(cpf);
-      }
-    };
-
     getCpfLocalStorage();
-  });
+  }, []);
+
+  const getCpfLocalStorage = () => {
+    const cpf = localStorage.getItem("@acaihomedelivery");
+
+    if (cpf) {
+      setLembrarCpf(true);
+      setCpf(JSON.parse(cpf));
+    }
+  };
 
   function handleSaveCpfLocalStorage() {
     if (lembrarCpf) {
@@ -73,10 +73,6 @@ export default function SingIn() {
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
-
-  // const [remember, setRemember] = useState(false);
-  // localStorage.setItem("@atomus.email", JSON.stringify(email));
-  // !save ? localStorage.removeItem("@atomus.email") : null;
 
   return (
     <>
@@ -236,11 +232,16 @@ export default function SingIn() {
                 control={
                   <Checkbox
                     sx={{
-                      color: "#842E6B",
+                      color: "#fff",
                       "&.Mui-checked": {
                         color: "#fff",
                       },
-                      // "& .MuiSvgIcon-root": { fontSize: 50 },
+                      ["@media (min-width:601px)"]: {
+                        color: "#842E6B",
+                        "&.Mui-checked": {
+                          color: "#842E6B",
+                        },
+                      },
                     }}
                     checked={lembrarCpf}
                     onChange={handleSaveCpfLocalStorage}
@@ -248,7 +249,14 @@ export default function SingIn() {
                 }
                 label={
                   <Typography
-                    sx={{ fontWeight: 700, fontSize: 10, color: "#fff" }}
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: 10,
+                      color: "#fff",
+                      ["@media (min-width:601px)"]: {
+                        color: "#B83E94",
+                      },
+                    }}
                   >
                     Lembrar CPF?
                   </Typography>
@@ -278,7 +286,7 @@ export default function SingIn() {
           <Button
             variant="contained"
             disableElevation
-            sx={{ borderRadius: 28, width: 240, height: 40, marginTop: "30px" }}
+            sx={{ borderRadius: 28, width: 280, height: 40, marginTop: "30px" }}
             color="success"
             onClick={handleLogin}
           >
