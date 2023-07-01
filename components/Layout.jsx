@@ -155,7 +155,7 @@ export default function Layout(props) {
                   window.open("https://wa.me/5586988676076", "_blank");
                 }}
               >
-                Desenvolvido por: GTECH SERVIÇOS
+                Desenvolvido por: GTECH
               </Typography>
             </Toolbar>
           </AppBar>

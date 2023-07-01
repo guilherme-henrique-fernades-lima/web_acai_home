@@ -693,13 +693,33 @@ export default function EnviarPedidos() {
               overflowX: "hidden",
             }}
           >
-            <Typography
-              variant="h6"
-              component="h3"
-              sx={{ color: "#B83E94", fontWeight: 900, fontSize: 16 }}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                position: "relative",
+                width: "100%",
+              }}
             >
-              Detalhes do pedido
-            </Typography>
+              <IconButton
+                size="medium"
+                color="error"
+                onClick={handleOpenCloseModalDetalhes}
+                sx={{ position: "absolute", right: 0 }}
+              >
+                <CloseIcon fontSize="inherit" sx={{ color: "red" }} />
+              </IconButton>
+
+              <Typography
+                variant="h6"
+                component="h3"
+                sx={{ color: "#B83E94", fontWeight: 900, fontSize: 16 }}
+              >
+                Detalhes do pedido
+              </Typography>
+            </Box>
 
             <Divider sx={{ width: "100%", marginBottom: 2, marginTop: 2 }} />
 
@@ -1102,7 +1122,7 @@ export default function EnviarPedidos() {
                         align="right"
                         sx={{ fontSize: 12, fontWeight: 900 }}
                       >
-                        N° PEDIDO
+                        QUANTIDADE
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -1175,7 +1195,7 @@ function RenderUserRow(props) {
         justifyContent: "center",
       }}
     >
-      <AccountCircleIcon sx={{ fontSize: 40, color: "#616161" }} />
+      <AccountCircleIcon sx={{ fontSize: 40, color: "#842E6B" }} />
 
       <Box
         sx={{

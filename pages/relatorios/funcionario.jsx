@@ -36,6 +36,7 @@ import { formatCpf } from "@/helpers/utils";
 import EditIcon from "@mui/icons-material/Edit";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockResetIcon from "@mui/icons-material/LockReset";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import WarningNoDataFound from "@/components/WarningNoDataFound";
 
@@ -50,10 +51,18 @@ export default function RelacaoFuncionario() {
   const [userChangePassword, setUserChangePassword] = useState({});
 
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogExcluirUsuario, setOpenDialogExcluirUsuario] =
+    useState(false);
   const [newPassword, setNewPassword] = useState("");
+
+  const [funcionarioParaDeletar, setFuncionarioParaDeletar] = useState(null);
 
   const handleDialog = () => {
     setOpenDialog(!openDialog);
+  };
+
+  const handleDialogExcluirUsuario = () => {
+    setOpenDialogExcluirUsuario(!openDialogExcluirUsuario);
   };
 
   useEffect(() => {
@@ -61,6 +70,28 @@ export default function RelacaoFuncionario() {
       getUsersData();
     }
   }, [user]);
+
+  async function deletarUsuario() {
+    console.log("Entrou na funcao deletar");
+    const response = await fetch(
+      `/api/relatorios/funcionario/?id=${funcionarioParaDeletar?.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: user.token,
+        },
+      }
+    );
+
+    console.log(response);
+
+    if (response.ok) {
+      toast.success("Usuário excluído com sucesso");
+      handleDialogExcluirUsuario();
+      setFuncionarioParaDeletar(null);
+      getUsersData();
+    }
+  }
 
   async function getUsersData() {
     setOpenDialog(false);
@@ -161,7 +192,7 @@ export default function RelacaoFuncionario() {
                     TELEFONE
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
-                    AÇÃO
+                    AÇÕES
                   </CustomTableCellHeader>
                 </TableRow>
               </TableHead>
@@ -181,7 +212,7 @@ export default function RelacaoFuncionario() {
                   >
                     <CustomTableCellBody align="center">
                       <AccountCircleIcon
-                        sx={{ fontSize: 40, color: "#616161" }}
+                        sx={{ fontSize: 40, color: "#842E6B" }}
                       />
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
@@ -250,7 +281,6 @@ export default function RelacaoFuncionario() {
                         >
                           <IconButton
                             sx={{
-                              ml: 1,
                               "&:hover": { svg: { color: "#842E6B" } },
                             }}
                             onClick={() => {
@@ -259,6 +289,24 @@ export default function RelacaoFuncionario() {
                             }}
                           >
                             <LockResetIcon sx={{ fontSize: 30 }} />
+                          </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Excluir funcionário" placement="top">
+                          <IconButton
+                            sx={{
+                              "&:hover": { svg: { color: "#842E6B" } },
+                            }}
+                            onClick={() => {
+                              handleDialogExcluirUsuario();
+                              setFuncionarioParaDeletar(funcionario);
+                            }}
+                          >
+                            <DeleteForeverIcon
+                              sx={{
+                                fontSize: 24,
+                              }}
+                            />
                           </IconButton>
                         </Tooltip>
                       </Stack>
@@ -330,6 +378,48 @@ export default function RelacaoFuncionario() {
             SALVAR
           </Button>
         </Box>
+      </Dialog>
+
+      <Dialog
+        open={openDialogExcluirUsuario}
+        onClose={handleDialogExcluirUsuario}
+        sx={{ margin: "10px" }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          Excluir usuário {funcionarioParaDeletar?.username}?
+        </DialogTitle>
+
+        <Stack
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "100%",
+            p: 1,
+            flexDirection: "row",
+          }}
+        >
+          <Button
+            variant="contained"
+            disableElevation
+            fullWidth
+            sx={{ m: 1 }}
+            onClick={handleDialogExcluirUsuario}
+            color="error"
+          >
+            NÃO
+          </Button>
+
+          <Button
+            variant="contained"
+            color="success"
+            disableElevation
+            fullWidth
+            onClick={deletarUsuario}
+          >
+            SIM
+          </Button>
+        </Stack>
       </Dialog>
     </Container>
   );

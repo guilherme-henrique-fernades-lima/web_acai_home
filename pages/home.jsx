@@ -46,6 +46,7 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PixIcon from "@mui/icons-material/Pix";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 import MarkUnreadChatAltIcon from "@mui/icons-material/MarkUnreadChatAlt";
+import CloseIcon from "@mui/icons-material/Close";
 
 //Custom components
 import GridPainelPedidos from "components/GridPainelPedidos";
@@ -55,8 +56,6 @@ import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
 import WarningNoDataFound from "@/components/WarningNoDataFound";
 import {
   StatusPedido,
-  BadgeZonaEntrega,
-  BadgeStatusEntregador,
   formatarData,
   formatarValorBRL,
   renderTextStatusPedido,
@@ -113,20 +112,31 @@ export default function Home() {
     }
   }, [user]);
 
-  const fetcher = (url) =>
-    fetch("/api/home/", {
+  //SWR inicio -------------------------
+
+  const getTokenUser = async () => {
+    var token = tokenUser;
+    return token;
+  };
+
+  const fetcher = async (url) => {
+    const token = await getTokenUser();
+    console.log("token: ", token);
+    fetch(`/api/home/?date=${dataFormatada}`, {
       method: "GET",
       headers: {
-        Authorization: tokenUser,
+        Authorization: token,
       },
     }).then((res) => res.json());
+  };
 
-  const { data, error } = useSWR("/api/home/", fetcher);
+  const { data, error } = useSWR(`/api/home/?date=${dataFormatada}`, fetcher);
 
-  // console.log("tokenUser: ", tokenUser);
+  console.log("tokenUser: ", tokenUser);
+  console.log("DATA SWR...: ", data);
+  console.log("ERRO SWR...: ", error);
 
-  // console.log("DATA SWR...: ", data);
-  // console.log("ERRO SWR...: ", error);
+  //SWR FIM -------------------------
 
   const getPedidos = async () => {
     setLoading(true);
@@ -592,13 +602,33 @@ export default function Home() {
               overflowX: "hidden",
             }}
           >
-            <Typography
-              variant="h6"
-              component="h3"
-              sx={{ color: "#B83E94", fontWeight: 900, fontSize: 16 }}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                position: "relative",
+                width: "100%",
+              }}
             >
-              Detalhes do pedido
-            </Typography>
+              <IconButton
+                size="medium"
+                color="error"
+                onClick={handleClose}
+                sx={{ position: "absolute", right: 0 }}
+              >
+                <CloseIcon fontSize="inherit" sx={{ color: "red" }} />
+              </IconButton>
+
+              <Typography
+                variant="h6"
+                component="h3"
+                sx={{ color: "#B83E94", fontWeight: 900, fontSize: 16 }}
+              >
+                Detalhes do pedido
+              </Typography>
+            </Box>
 
             <Divider sx={{ width: "100%", marginBottom: 2, marginTop: 2 }} />
 
@@ -1001,7 +1031,7 @@ export default function Home() {
                         align="right"
                         sx={{ fontSize: 12, fontWeight: 900 }}
                       >
-                        N° PEDIDO
+                        QUANTIDADE
                       </TableCell>
                     </TableRow>
                   </TableHead>

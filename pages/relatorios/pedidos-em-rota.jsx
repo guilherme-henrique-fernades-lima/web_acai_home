@@ -206,7 +206,7 @@ export default function PedidosEmRota() {
                     N° PEDIDO
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
-                    MOTORISTA
+                    ENTREGADOR
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
                     CLIENTE
@@ -251,7 +251,7 @@ export default function PedidosEmRota() {
                       {pedido.motorista}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
-                      NOME DO CLIENTE
+                      {pedido.cliente.toUpperCase()}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
                       {formatarData(pedido.data)}

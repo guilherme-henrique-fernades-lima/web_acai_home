@@ -171,7 +171,7 @@ function RenderUser(props) {
         width: "100%",
       }}
     >
-      <AccountCircleIcon sx={{ fontSize: 40, color: "#616161" }} />
+      <AccountCircleIcon sx={{ fontSize: 40, color: "#842E6B" }} />
       <Box
         sx={{
           display: "flex",

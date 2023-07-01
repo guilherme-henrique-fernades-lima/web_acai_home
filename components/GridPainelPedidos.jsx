@@ -20,7 +20,6 @@ import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 export default function GridPainelPedidos(props) {
   const { status, entregadores, loading } = props;
-  console.log(status);
 
   return (
     <Grid container>

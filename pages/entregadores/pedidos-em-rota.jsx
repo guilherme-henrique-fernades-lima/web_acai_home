@@ -148,6 +148,7 @@ export default function PedidosEmRota(props) {
       handleOpenAndCloseModal();
       getPedidosParaEntrega();
       setPedidoParaConcluir({});
+      setObservacao("");
     } else {
       toast.error("Não foi possível concluir a entrega");
     }
@@ -315,6 +316,21 @@ export default function PedidosEmRota(props) {
                         border: "1px solid #ccc",
                       }}
                     >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          color: "#842E6B",
+                          position: "absolute",
+                          left: 10,
+                          top: 10,
+                          padding: "2px 10px",
+                          border: "2px solid #842E6B",
+                          fontSize: 12,
+                          borderRadius: "18px",
+                        }}
+                      >
+                        N° Pedido: {pedido?.idPedido}
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -322,7 +338,7 @@ export default function PedidosEmRota(props) {
                           justifyContent: "center",
                           flexDirection: "row",
                           position: "absolute",
-                          top: 10,
+                          top: 5,
                           right: 10,
                         }}
                       >
@@ -364,7 +380,7 @@ export default function PedidosEmRota(props) {
                           justifyContent: "flex-start",
                           flexDirection: "row",
                           marginBottom: "10px",
-                          marginTop: 4,
+                          marginTop: 5,
                         }}
                       >
                         <Box
@@ -429,7 +445,7 @@ export default function PedidosEmRota(props) {
                                 align="right"
                                 sx={{ fontSize: 10, fontWeight: 900 }}
                               >
-                                N° PEDIDO
+                                QUANTIDADE
                               </TableCell>
                             </TableRow>
                           </TableHead>
@@ -570,6 +586,21 @@ export default function PedidosEmRota(props) {
                         border: "1px solid #ccc",
                       }}
                     >
+                      <Typography
+                        sx={{
+                          fontWeight: 700,
+                          color: "#842E6B",
+                          position: "absolute",
+                          left: 10,
+                          top: 10,
+                          padding: "2px 10px",
+                          border: "2px solid #842E6B",
+                          fontSize: 12,
+                          borderRadius: "18px",
+                        }}
+                      >
+                        N° Pedido: {pedido?.idPedido}
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -577,7 +608,7 @@ export default function PedidosEmRota(props) {
                           justifyContent: "center",
                           flexDirection: "row",
                           position: "absolute",
-                          top: 10,
+                          top: 5,
                           right: 10,
                         }}
                       >
@@ -619,7 +650,7 @@ export default function PedidosEmRota(props) {
                           justifyContent: "flex-start",
                           flexDirection: "row",
                           marginBottom: "10px",
-                          marginTop: 4,
+                          marginTop: 5,
                         }}
                       >
                         <Box
@@ -684,7 +715,7 @@ export default function PedidosEmRota(props) {
                                 align="right"
                                 sx={{ fontSize: 10, fontWeight: 900 }}
                               >
-                                N° PEDIDO
+                                QUANTIDADE
                               </TableCell>
                             </TableRow>
                           </TableHead>
