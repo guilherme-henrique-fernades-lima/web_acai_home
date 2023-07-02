@@ -35,7 +35,6 @@ export default function PedidosEmRota() {
   const { user } = useContext(AuthContext);
 
   const [pedidos, setPedidos] = useState([]);
-  console.log("pedidos >>>> ", pedidos);
   const [loading, setLoading] = useState(true);
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);

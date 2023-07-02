@@ -103,7 +103,6 @@ export default function EnviarPedidos() {
 
     if (response.ok) {
       const res = await response.json();
-      console.log("RES PEDIDOS: ", res);
       setPedidos(res.data);
       setCards(res.status);
       setLoading(false);

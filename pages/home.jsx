@@ -88,8 +88,6 @@ export default function Home() {
   const dataFormatoMoment = moment(dateFilter);
   const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
 
-  const [tokenUser, setTokenUser] = useState("");
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -99,44 +97,46 @@ export default function Home() {
 
   useEffect(() => {
     if (evento) {
-      //Logica de negocio
-      console.log("EVENTO>>>", evento);
     }
   }, [evento]);
 
   useEffect(() => {
     if (user?.token) {
-      setTokenUser(user?.token);
       getPedidos();
       getEntregadoresDisponiveis();
     }
   }, [user]);
 
-  //SWR inicio -------------------------
+  useEffect(() => {
+    setInterval(() => {
+      const getPedidos = async () => {
+        const response = await fetch(
+          `/api/home/?date=${dataFormatada}&tp_pag=${
+            formaPagamento == "TODAS" ? "" : formaPagamento
+          }&status=${statusPedido == "TODAS" ? "" : statusPedido}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: user.token,
+            },
+          }
+        );
 
-  const getTokenUser = async () => {
-    var token = tokenUser;
-    return token;
-  };
+        if (response.ok) {
+          const res = await response.json();
+          setShowMenssagemSemPedidos(false);
+          setPedidos(res.data);
+          setCards(res.status);
+        }
 
-  const fetcher = async (url) => {
-    const token = await getTokenUser();
-    console.log("token: ", token);
-    fetch(`/api/home/?date=${dataFormatada}`, {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    }).then((res) => res.json());
-  };
-
-  const { data, error } = useSWR(`/api/home/?date=${dataFormatada}`, fetcher);
-
-  console.log("tokenUser: ", tokenUser);
-  console.log("DATA SWR...: ", data);
-  console.log("ERRO SWR...: ", error);
-
-  //SWR FIM -------------------------
+        if (response.status == 404) {
+          setShowMenssagemSemPedidos(true);
+          setPedidos([]);
+          setCards([]);
+        }
+      };
+    }, 15000);
+  }, []);
 
   const getPedidos = async () => {
     setLoading(true);
