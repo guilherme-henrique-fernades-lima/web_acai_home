@@ -63,8 +63,10 @@ export default function PedidosEmRota(props) {
 
   useEffect(() => {
     if (evento.NEW_ORDER_DELIVERY) {
+      console.log("NEW_ORDER_DELIVERY >>> ", evento);
       setPedidos((prevState) => [...prevState, evento]);
     } else if (evento.REMOVE_ORDER_DELIVERY) {
+      console.log("REMOVE_ORDER_DELIVERY >>> ", evento);
       setPedidos((prevPedidos) =>
         prevPedidos?.pendentes?.filter(
           (pedido) => pedido !== evento?.payload[0]
