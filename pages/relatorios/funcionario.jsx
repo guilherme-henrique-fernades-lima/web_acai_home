@@ -30,7 +30,7 @@ import TextField from "@mui/material/TextField";
 import DialogTitle from "@mui/material/DialogTitle";
 
 //Formatters
-import { formatCpf } from "@/helpers/utils";
+import { formatCpf, formatarTelefone } from "@/helpers/utils";
 
 //Icons
 import EditIcon from "@mui/icons-material/Edit";
@@ -244,7 +244,9 @@ export default function RelacaoFuncionario() {
                       )}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
-                      {funcionario?.celular}
+                      {funcionario?.celular
+                        ? formatarTelefone(funcionario?.celular)
+                        : ""}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
                       <Stack

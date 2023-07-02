@@ -4,13 +4,9 @@ import Image from "next/image";
 
 //Third party libs
 import moment from "moment";
-import useSWR from "swr";
 
 //Context
 import { AuthContext } from "@/context/AuthContext";
-
-//Hooks
-import useWebSocket from "@/hooks/useWebSocket";
 
 //Mui components
 import Grid from "@mui/material/Grid";
@@ -65,8 +61,6 @@ import { FORMA_PAGAMENTO, STATUS_PEDIDO } from "@/helpers/constants";
 export default function Home() {
   const { user } = useContext(AuthContext);
 
-  const { evento } = useWebSocket();
-
   const [open, setOpen] = useState(false); //State para controle do modal
   const [pedidos, setPedidos] = useState([]);
   const [cards, setCards] = useState([]);
@@ -94,11 +88,6 @@ export default function Home() {
   const handleDialog = () => {
     setOpenDialog(!openDialog);
   };
-
-  useEffect(() => {
-    if (evento) {
-    }
-  }, [evento]);
 
   useEffect(() => {
     if (user?.token) {
@@ -229,98 +218,74 @@ export default function Home() {
             }}
             elevation={0}
           >
-            {loading ? (
-              <Skeleton
-                variant="rounded"
-                width={38}
-                height={38}
-                sx={{ marginLeft: "20px", marginRight: "20px" }}
-              />
-            ) : (
-              <FilterListIcon
-                sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
-              />
-            )}
+            <FilterListIcon
+              sx={{ fontSize: 40, marginLeft: "20px", marginRight: "20px" }}
+            />
+
             <Grid container spacing={1}>
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                {loading ? (
-                  <Skeleton variant="rounded" width={"100%"} height={38} />
-                ) : (
-                  <TextField
-                    id="status_pedido"
-                    select
-                    fullWidth
-                    placeholder="Status do pedido"
-                    label="Status do pedido"
-                    size="small"
-                    value={statusPedido}
-                    onChange={(e) => {
-                      setStatusPedido(e.target.value);
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                    autoComplete="off"
-                  >
-                    {STATUS_PEDIDO.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                )}
+                <TextField
+                  id="status_pedido"
+                  select
+                  fullWidth
+                  placeholder="Status do pedido"
+                  label="Status do pedido"
+                  size="small"
+                  value={statusPedido}
+                  onChange={(e) => {
+                    setStatusPedido(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                >
+                  {STATUS_PEDIDO.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                {loading ? (
-                  <Skeleton variant="rounded" width={"100%"} height={38} />
-                ) : (
-                  <TextField
-                    id="forma_pagamento"
-                    select
-                    fullWidth
-                    placeholder="Forma de pagamento"
-                    label="Forma de pagamento"
-                    size="small"
-                    value={formaPagamento}
-                    onChange={(e) => {
-                      setFormaPagamento(e.target.value);
-                    }}
-                    InputLabelProps={{ shrink: true }}
-                    autoComplete="off"
-                  >
-                    {FORMA_PAGAMENTO.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                )}
+                <TextField
+                  id="forma_pagamento"
+                  select
+                  fullWidth
+                  placeholder="Forma de pagamento"
+                  label="Forma de pagamento"
+                  size="small"
+                  value={formaPagamento}
+                  onChange={(e) => {
+                    setFormaPagamento(e.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  autoComplete="off"
+                >
+                  {FORMA_PAGAMENTO.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                {loading ? (
-                  <Skeleton variant="rounded" width={"100%"} height={38} />
-                ) : (
-                  <DatepickerField
-                    value={dateFilter}
-                    textLabel="Data dos pedidos"
-                    onChange={setDateFilter}
-                  />
-                )}
+                <DatepickerField
+                  value={dateFilter}
+                  textLabel="Data dos pedidos"
+                  onChange={setDateFilter}
+                />
               </Grid>
 
               <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
-                {loading ? (
-                  <Skeleton variant="rounded" width={"100%"} height={38} />
-                ) : (
-                  <Button
-                    variant="contained"
-                    disableElevation
-                    fullWidth
-                    onClick={getPedidos}
-                  >
-                    FILTRAR
-                  </Button>
-                )}
+                <Button
+                  variant="contained"
+                  disableElevation
+                  fullWidth
+                  onClick={getPedidos}
+                >
+                  FILTRAR
+                </Button>
               </Grid>
             </Grid>
           </Paper>

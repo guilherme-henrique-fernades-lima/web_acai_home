@@ -48,9 +48,12 @@ export default function SingIn() {
       localStorage.removeItem("@acaihomedelivery");
       setLembrarCpf(false);
     } else {
-      localStorage.setItem("@acaihomedelivery", JSON.stringify(cpf));
       setLembrarCpf(true);
     }
+  }
+
+  function salvarCpfLocalStorage() {
+    localStorage.setItem("@acaihomedelivery", JSON.stringify(cpf));
   }
 
   const handleDialog = () => {
@@ -86,12 +89,6 @@ export default function SingIn() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-
-          // "-webkit-filter": "blur(5px)",
-          // "-moz-filter": "blur(5px)",
-          // "-o-filter": "blur(5px)",
-          // "-ms-filter": "blur(5px)",
-          // filter: "blur(5px)",
         }}
       >
         <Box
@@ -121,8 +118,6 @@ export default function SingIn() {
           <Image
             src="/img/acai_login.svg"
             alt="Imagem logo de uma fruta açai"
-            // layout="fill"
-            // objectFit="contain"
             width="200"
             height="200"
           />
@@ -287,7 +282,12 @@ export default function SingIn() {
             disableElevation
             sx={{ borderRadius: 28, width: 280, height: 40, marginTop: "30px" }}
             color="success"
-            onClick={handleLogin}
+            onClick={() => {
+              if (lembrarCpf) {
+                salvarCpfLocalStorage();
+              }
+              handleLogin();
+            }}
           >
             ACESSAR
           </Button>

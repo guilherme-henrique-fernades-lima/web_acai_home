@@ -228,3 +228,26 @@ export function formatarCPFSemAnonimidade(cpf) {
 
   return cpf;
 }
+
+export function formatarTelefone(telefone) {
+  // Remover todos os caracteres não numéricos do número de telefone
+  const numeroLimpo = telefone.replace(/\D/g, "");
+
+  // Verificar se o número de telefone possui o formato correto (11 dígitos)
+  if (numeroLimpo.length !== 11) {
+    throw new Error(
+      "Número de telefone inválido. Certifique-se de que o número contenha 11 dígitos."
+    );
+  }
+
+  // Formatar o número de telefone no formato desejado
+  const codigoArea = numeroLimpo.slice(0, 2);
+  const digito9 = numeroLimpo.slice(2, 3);
+  const digitosRestantes = numeroLimpo.slice(3);
+  const telefoneFormatado = `(${codigoArea}) ${digito9} ${digitosRestantes.slice(
+    0,
+    4
+  )}-${digitosRestantes.slice(4)}`;
+
+  return telefoneFormatado;
+}
