@@ -45,6 +45,7 @@ export default function PedidosEmRota(props) {
   const [loading, setLoading] = useState(true);
   const [observacao, setObservacao] = useState("");
   const [pedidos, setPedidos] = useState([]);
+  console.log(pedidos);
 
   const [pedidoParaConcluir, setPedidoParaConcluir] = useState({});
   const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
@@ -69,7 +70,7 @@ export default function PedidosEmRota(props) {
       console.log("REMOVE_ORDER_DELIVERY >>> ", evento);
       setPedidos((prevPedidos) =>
         prevPedidos?.pendentes?.filter(
-          (pedido) => pedido !== evento?.payload[0]
+          (pedido) => pedido?.idPedido !== evento?.payload[0]
         )
       );
     }

@@ -7,6 +7,11 @@ async function getPedidos(req, res) {
   var tp_pag = req.query.tp_pag ?? "";
   var zona = req.query.zona ?? "";
 
+  console.log("date: ", date);
+  console.log("status: ", status);
+  console.log("tp_pag: ", tp_pag);
+  console.log("zona: ", zona);
+
   const result = await fetch(
     `${process.env.NEXT_URL_BACKEND}/pedidos/?date=${date}&status=${status}&tp_pag=${tp_pag}&zona=${zona}`,
     {

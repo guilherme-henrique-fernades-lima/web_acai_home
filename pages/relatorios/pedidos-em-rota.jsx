@@ -4,6 +4,9 @@ import toast, { Toaster } from "react-hot-toast";
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
+//Hooks
+import useWebSocket from "@/hooks/useWebSocket";
+
 //Mui Components
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -33,6 +36,7 @@ import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function PedidosEmRota() {
   const { user } = useContext(AuthContext);
+  const { evento } = useWebSocket();
 
   const [pedidos, setPedidos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +48,16 @@ export default function PedidosEmRota() {
   const handleDialog = () => {
     setOpenDialogRetirarPedido(!openDialogRetirarPedido);
   };
+
+  useEffect(() => {
+    if (evento.FINISH_ORDER_DELIVERY) {
+      console.log("FINISH_ORDER_DELIVERY >>> ", evento);
+
+      setPedidos((prevState) =>
+        prevState.filter((pedido) => pedido.idPedido !== evento?.payload[0])
+      );
+    }
+  }, [evento]);
 
   useEffect(() => {
     if (user?.token) {

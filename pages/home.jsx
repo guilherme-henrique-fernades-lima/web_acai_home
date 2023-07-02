@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useMemo } from "react";
 
 import Image from "next/image";
 
@@ -34,6 +34,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Tooltip from "@mui/material/Tooltip";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
 
 //Mui icons
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -66,6 +67,7 @@ export default function Home() {
   const [cards, setCards] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
   const [pedidosModalData, setPedidosModalData] = useState({}); //State pra armazenar os dados do modal
+  const [detalhesEntrega, setDetalhesEntrega] = useState({});
 
   //States para Filtros
   const [loading, setLoading] = useState(true);
@@ -86,6 +88,9 @@ export default function Home() {
   const handleClose = () => setOpen(false);
 
   const handleDialog = () => {
+    if (openDialog) {
+      setDetalhesEntrega({});
+    }
     setOpenDialog(!openDialog);
   };
 
@@ -96,36 +101,58 @@ export default function Home() {
     }
   }, [user]);
 
-  useEffect(() => {
-    setInterval(() => {
-      const getPedidos = async () => {
-        const response = await fetch(
-          `/api/home/?date=${dataFormatada}&tp_pag=${
-            formaPagamento == "TODAS" ? "" : formaPagamento
-          }&status=${statusPedido == "TODAS" ? "" : statusPedido}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: user.token,
-            },
-          }
-        );
+  setInterval(() => {
+    getPedidosSemLoading();
+  }, 5000);
 
-        if (response.ok) {
-          const res = await response.json();
-          setShowMenssagemSemPedidos(false);
-          setPedidos(res.data);
-          setCards(res.status);
-        }
+  const getPedidosSemLoading = async () => {
+    console.log("Entrou no sem loading");
 
-        if (response.status == 404) {
-          setShowMenssagemSemPedidos(true);
-          setPedidos([]);
-          setCards([]);
+    if (formaPagamento == "TODAS") {
+      const response = await fetch(
+        `/api/home/?date=${dataFormatada}&tp_pag=${
+          formaPagamento == "TODAS" ? "" : formaPagamento
+        }&status=${statusPedido == "TODAS" ? "" : statusPedido}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: user.token,
+          },
         }
-      };
-    }, 15000);
-  }, []);
+      );
+
+      if (response.ok) {
+        const res = await response.json();
+        setPedidos(res.data);
+        setCards(res.status);
+      }
+
+      if (response.status == 404) {
+        setShowMenssagemSemPedidos(true);
+        setPedidos([]);
+        setCards([]);
+      }
+    }
+  };
+
+  async function getEntregadoresDisponiveisSemLoading() {
+    console.log("RELOAD ENTREGADORES");
+    const response = await fetch(`/api/home/entregadores`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
+    if (response.ok) {
+      const res = await response.json();
+      setEntregadores(res);
+      setShowMenssagemSemEntregadores(false);
+    }
+
+    if (response.status == 404) {
+      setShowMenssagemSemEntregadores(true);
+    }
+  }
 
   const getPedidos = async () => {
     setLoading(true);
@@ -334,7 +361,6 @@ export default function Home() {
                       <CustomTableCellHeader align="center">
                         FORM. PAGAMENTO
                       </CustomTableCellHeader>
-
                       <CustomTableCellHeader align="center">
                         STATUS
                       </CustomTableCellHeader>
@@ -342,10 +368,10 @@ export default function Home() {
                         DATA/HORA
                       </CustomTableCellHeader>
                       <CustomTableCellHeader align="center">
-                        OBS ENTREGA
+                        DETALHES ENTREGA
                       </CustomTableCellHeader>
                       <CustomTableCellHeader align="center">
-                        DETALHES
+                        DETALHES PEDIDO
                       </CustomTableCellHeader>
                     </TableRow>
                   </TableHead>
@@ -407,7 +433,7 @@ export default function Home() {
                           </Stack>
                         </CustomTableCellBody>
                         <CustomTableCellBody align="center">
-                          {pedido?.observacao ? (
+                          {pedido.entrega?.idPedido ? (
                             <Tooltip
                               title="Visualizar observação sob entrega"
                               placement="top"
@@ -424,6 +450,7 @@ export default function Home() {
                                 }}
                                 onClick={() => {
                                   setObservacaoSobreEntrega(pedido?.observacao);
+                                  setDetalhesEntrega(pedido?.entrega);
                                   handleDialog();
                                 }}
                               >
@@ -1063,8 +1090,190 @@ export default function Home() {
         sx={{ margin: "10px" }}
       >
         <DialogTitle id="alert-dialog-title">
-          Obs.: {observacaoSobreEntrega}
+          Pedido: {detalhesEntrega?.idPedido}
         </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <TableContainer
+              sx={{
+                mt: 1,
+                mb: 1,
+                border: "1px solid #ebebeb",
+                borderRadius: "8px",
+              }}
+            >
+              <Table
+                size="small"
+                sx={{
+                  width: "100%",
+                  borderRadius: "8px",
+                  "& .tableCellClasses.root": {
+                    borderBottom: "none",
+                  },
+                }}
+              >
+                <TableBody>
+                  <TableRow
+                    sx={{
+                      height: 20,
+                      border: "none",
+                      backgroundColor: "#fff",
+                      ".MuiTableCell-root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <TableCell
+                      align="left"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopLeftRadius: "2px",
+                        borderBottomLeftRadius: "2px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      Entregador
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopRightRadius: "2px",
+                        borderBottomRightRadius: "2px",
+                      }}
+                    >
+                      {detalhesEntrega?.motorista}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow
+                    sx={{
+                      height: 20,
+                      border: "none",
+                      backgroundColor: "#f5f5f5",
+                      ".MuiTableCell-root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <TableCell
+                      align="left"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopLeftRadius: "2px",
+                        borderBottomLeftRadius: "2px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      Data de entrega
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopRightRadius: "2px",
+                        borderBottomRightRadius: "2px",
+                      }}
+                    >
+                      {detalhesEntrega?.data
+                        ? formatarData(detalhesEntrega?.data)
+                        : ""}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow
+                    sx={{
+                      height: 20,
+                      border: "none",
+                      backgroundColor: "#fff",
+                      ".MuiTableCell-root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <TableCell
+                      align="left"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopLeftRadius: "2px",
+                        borderBottomLeftRadius: "2px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      Hora da entrega
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopRightRadius: "2px",
+                        borderBottomRightRadius: "2px",
+                      }}
+                    >
+                      {detalhesEntrega?.hora}
+                    </TableCell>
+                  </TableRow>
+
+                  <TableRow
+                    sx={{
+                      height: 20,
+                      border: "none",
+                      backgroundColor: "#f5f5f5",
+                      ".MuiTableCell-root": {
+                        borderBottom: "none",
+                      },
+                    }}
+                  >
+                    <TableCell
+                      align="left"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopLeftRadius: "2px",
+                        borderBottomLeftRadius: "2px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                    >
+                      Observação sobre entrega
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 400,
+                        borderTopRightRadius: "2px",
+                        borderBottomRightRadius: "2px",
+                      }}
+                    >
+                      {observacaoSobreEntrega}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </DialogContent>
       </Dialog>
     </>
   );

@@ -306,7 +306,7 @@ export default function EnviarPedidos() {
                     DATA/HORA
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
-                    DETALHES
+                    DETALHES PEDIDO
                   </CustomTableCellHeader>
                 </TableRow>
               </TableHead>
