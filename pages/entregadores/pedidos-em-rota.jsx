@@ -45,6 +45,7 @@ export default function PedidosEmRota(props) {
   const [loading, setLoading] = useState(true);
   const [observacao, setObservacao] = useState("");
   const [pedidos, setPedidos] = useState([]);
+
   const [pedidoParaConcluir, setPedidoParaConcluir] = useState({});
   const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
   const [alturaPagina, setAlturaPagina] = useState(0);
@@ -61,10 +62,14 @@ export default function PedidosEmRota(props) {
   }, [user]);
 
   useEffect(() => {
-    console.log("INIT SOCKET>>>>");
     if (evento.NEW_ORDER_DELIVERY) {
-      console.log("EVENTO: ", evento);
       setPedidos((prevState) => [...prevState, evento]);
+    } else if (evento.REMOVE_ORDER_DELIVERY) {
+      setPedidos((prevPedidos) =>
+        prevPedidos?.pendentes?.filter(
+          (pedido) => pedido !== evento?.payload[0]
+        )
+      );
     }
   }, [evento]);
 
