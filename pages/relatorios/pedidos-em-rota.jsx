@@ -51,14 +51,14 @@ export default function PedidosEmRota() {
 
   useEffect(() => {
     if (evento.FINISH_ORDER_DELIVERY) {
-      const filter = pedidos.filter(
-        (pedido) => pedido.idPedido !== evento?.payload?.idPedido
+      console.log("FINISH_ORDER_DELIVERY >>> ", evento);
+      setPedidos((prevPedidos) =>
+        prevPedidos?.pendentes?.filter(
+          (pedido) => pedido?.idPedido !== evento?.payload?.idPedido
+        )
       );
 
-      if (filter.length > 0) {
-        setPedidos(filter);
-      } else {
-        setPedidos([]);
+      if (pedidos.length == 0) {
         setShowMenssagemSemPedidos(true);
       }
     }
