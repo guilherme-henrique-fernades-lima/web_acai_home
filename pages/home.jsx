@@ -101,12 +101,12 @@ export default function Home() {
     }
   }, [user]);
 
-  setInterval(() => {
-    getPedidosSemLoading();
-  }, 5000);
+  // setInterval(() => {
+  //   getPedidosSemLoading();
+  // }, 5000);
 
   const getPedidosSemLoading = async () => {
-    console.log("Entrou no sem loading");
+    console.log("Entrou na função carregar sem loading");
 
     if (formaPagamento == "TODAS") {
       const response = await fetch(
