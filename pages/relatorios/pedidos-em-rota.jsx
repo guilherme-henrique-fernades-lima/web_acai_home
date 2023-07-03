@@ -61,10 +61,6 @@ export default function PedidosEmRota() {
         )
       );
     }
-
-    if (pedidos.length == 0) {
-      setShowMenssagemSemPedidos(true);
-    }
   }, [evento]);
 
   useEffect(() => {
@@ -311,7 +307,8 @@ export default function PedidosEmRota() {
           </TableContainer>
         )}
 
-        {showMenssagemSemPedidos && <WarningNoDataFound />}
+        {showMenssagemSemPedidos ||
+          (pedidos?.length == 0 && <WarningNoDataFound />)}
       </Paper>
 
       <Dialog
