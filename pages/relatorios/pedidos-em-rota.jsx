@@ -53,7 +53,7 @@ export default function PedidosEmRota() {
     if (evento.FINISH_ORDER_DELIVERY) {
       console.log("FINISH_ORDER_DELIVERY >>> ", evento);
       setPedidos((prevPedidos) =>
-        prevPedidos?.pendentes?.filter(
+        prevPedidos?.filter(
           (pedido) => pedido?.idPedido !== evento?.payload?.idPedido
         )
       );
