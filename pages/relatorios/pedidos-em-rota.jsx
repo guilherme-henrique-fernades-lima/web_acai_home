@@ -57,7 +57,8 @@ export default function PedidosEmRota() {
 
       setPedidos((prevPedidos) =>
         prevPedidos?.filter(
-          (pedido) => pedido?.idPedido !== evento?.payload?.idPedido
+          (pedido) =>
+            pedido?.idPedido !== evento?.FINISH_ORDER_DELIVERY.payload?.idPedido
         )
       );
 
