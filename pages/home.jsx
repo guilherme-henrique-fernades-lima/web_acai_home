@@ -75,8 +75,7 @@ export default function Home() {
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [dateFilter, setDateFilter] = useState(new Date());
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
-  const [showMenssagemSemEntregadores, setShowMenssagemSemEntregadores] =
-    useState(false);
+  const [showMenssagemSemEntregadores, setShowMenssagemSemEntregadores] = useState(false);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [observacaoSobreEntrega, setObservacaoSobreEntrega] = useState("");
@@ -101,42 +100,50 @@ export default function Home() {
     }
   }, [user]);
 
-  // setInterval(() => {
-  //   getPedidosSemLoading();
-  // }, 5000);
+  useEffect(() => {
+    // Cria uma revalidação dos dados a cada 30 segundos;
 
-  const getPedidosSemLoading = async () => {
-    console.log("Entrou na função carregar sem loading");
+    const intervalID = setInterval(() => {
+      getPedidosSemLoading(formaPagamento, dataFormatada, statusPedido);
+      getEntregadoresDisponiveisSemLoading();
+    }, 30000);
+  
+    return () => {
+      clearInterval(intervalID);
+    };
 
-    if (formaPagamento == "TODAS") {
-      const response = await fetch(
-        `/api/home/?date=${dataFormatada}&tp_pag=${
-          formaPagamento == "TODAS" ? "" : formaPagamento
-        }&status=${statusPedido == "TODAS" ? "" : statusPedido}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: user.token,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const res = await response.json();
-        setPedidos(res.data);
-        setCards(res.status);
+  }, [loading]);
+  
+  const getPedidosSemLoading = async (formaPagamento, dataFormatada, statusPedido) => {
+  
+    const response = await fetch(
+      `/api/home/?date=${dataFormatada}&tp_pag=${
+        formaPagamento === "TODAS" ? "" : formaPagamento
+      }&status=${statusPedido === "TODAS" ? "" : statusPedido}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user.token,
+        },
       }
-
-      if (response.status == 404) {
-        setShowMenssagemSemPedidos(true);
-        setPedidos([]);
-        setCards([]);
-      }
+    );
+  
+    if (response.ok) {
+      const res = await response.json();
+      setPedidos(res.data);
+      setCards(res.status);
+    }
+  
+    if (response.status === 404) {
+      setShowMenssagemSemPedidos(true);
+      setPedidos([]);
+      setCards([]);
     }
   };
+  
 
   async function getEntregadoresDisponiveisSemLoading() {
-    console.log("RELOAD ENTREGADORES");
+
     const response = await fetch(`/api/home/entregadores`, {
       method: "GET",
       headers: {
