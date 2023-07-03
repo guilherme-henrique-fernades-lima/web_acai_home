@@ -53,7 +53,6 @@ export default function PedidosEmRota() {
   useEffect(() => {
     if (evento.FINISH_ORDER_DELIVERY) {
       console.log("FINISH_ORDER_DELIVERY >>> ", evento);
-      console.log("PEDIDO: ", evento?.payload?.idPedido);
 
       setPedidos((prevPedidos) =>
         prevPedidos?.filter(
@@ -61,12 +60,10 @@ export default function PedidosEmRota() {
             pedido?.idPedido !== evento?.FINISH_ORDER_DELIVERY.payload?.idPedido
         )
       );
+    }
 
-      console.log("pedidos lenght: ", pedidos.length);
-
-      if (pedidos.length == 0) {
-        setShowMenssagemSemPedidos(true);
-      }
+    if (pedidos.length == 0) {
+      setShowMenssagemSemPedidos(true);
     }
   }, [evento]);
 
