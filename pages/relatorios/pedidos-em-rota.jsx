@@ -39,7 +39,6 @@ export default function PedidosEmRota() {
   const { evento } = useWebSocket();
 
   const [pedidos, setPedidos] = useState([]);
-  console.log(pedidos);
   const [loading, setLoading] = useState(true);
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
@@ -52,10 +51,8 @@ export default function PedidosEmRota() {
 
   useEffect(() => {
     if (evento.FINISH_ORDER_DELIVERY) {
-      console.log("FINISH_ORDER_DELIVERY >>> ", evento);
-
       const filter = pedidos.filter(
-        (pedido) => pedido.idPedido !== evento?.payload[0]
+        (pedido) => pedido.idPedido !== evento?.payload?.idPedido
       );
 
       if (filter.length > 0) {
