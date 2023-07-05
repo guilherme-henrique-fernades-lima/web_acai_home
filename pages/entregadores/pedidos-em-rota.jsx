@@ -35,6 +35,7 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { useRouter } from "next/router";
+import { formatarValorBRL } from "@/helpers/utils";
 
 export default function PedidosEmRota(props) {
   const { user, logout } = useContext(AuthContext);
@@ -331,9 +332,9 @@ export default function PedidosEmRota(props) {
                           position: "absolute",
                           left: 10,
                           top: 10,
-                          padding: "2px 10px",
+                          padding: "0px 5px",
                           border: "2px solid #842E6B",
-                          fontSize: 12,
+                          fontSize: 14,
                           borderRadius: "18px",
                         }}
                       >
@@ -399,19 +400,19 @@ export default function PedidosEmRota(props) {
                             flexDirection: "column",
                           }}
                         >
-                          <Typography sx={{ fontWeight: 900, fontSize: 12 }}>
+                          <Typography sx={{ fontWeight: 900, fontSize: 14 }}>
                             CLIENTE: {pedido.cliente}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Forma de pagamento: {pedido.formaPagamento}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Endereço: {pedido.logradouro}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Complemento: {pedido.numLogr}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Bairro: {pedido.bairro}
                           </Typography>
                         </Box>
@@ -445,13 +446,19 @@ export default function PedidosEmRota(props) {
                             <TableRow sx={{ "& td": { border: 0 } }}>
                               <TableCell
                                 align="left"
-                                sx={{ fontSize: 10, fontWeight: 900 }}
+                                sx={{ fontSize: 12, fontWeight: 900 }}
                               >
                                 PRODUTO(S)
                               </TableCell>
                               <TableCell
+                                align="center"
+                                sx={{ fontSize: 12, fontWeight: 900 }}
+                              >
+                                VLR. UNI.
+                              </TableCell>
+                              <TableCell
                                 align="right"
-                                sx={{ fontSize: 10, fontWeight: 900 }}
+                                sx={{ fontSize: 12, fontWeight: 900 }}
                               >
                                 QUANTIDADE
                               </TableCell>
@@ -472,7 +479,7 @@ export default function PedidosEmRota(props) {
                                 <TableCell
                                   align="left"
                                   sx={{
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     fontWeight: 400,
                                     borderTopLeftRadius: "2px",
                                     borderBottomLeftRadius: "2px",
@@ -481,9 +488,20 @@ export default function PedidosEmRota(props) {
                                   {produto.titulo}
                                 </TableCell>
                                 <TableCell
+                                  align="center"
+                                  sx={{
+                                    fontSize: 12,
+                                    fontWeight: 400,
+                                    borderTopLeftRadius: "2px",
+                                    borderBottomLeftRadius: "2px",
+                                  }}
+                                >
+                                  {formatarValorBRL(produto.valorTotal)}
+                                </TableCell>
+                                <TableCell
                                   align="right"
                                   sx={{
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     fontWeight: 400,
                                     borderTopRightRadius: "2px",
                                     borderBottomRightRadius: "2px",
@@ -669,19 +687,19 @@ export default function PedidosEmRota(props) {
                             flexDirection: "column",
                           }}
                         >
-                          <Typography sx={{ fontWeight: 900, fontSize: 12 }}>
+                          <Typography sx={{ fontWeight: 900, fontSize: 14 }}>
                             CLIENTE: {pedido.cliente}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Forma de pagamento: {pedido.formaPagamento}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Endereço: {pedido.logradouro}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Complemento: {pedido.numLogr}
                           </Typography>
-                          <Typography sx={{ fontWeight: 400, fontSize: 10 }}>
+                          <Typography sx={{ fontWeight: 400, fontSize: 13 }}>
                             Bairro: {pedido.bairro}
                           </Typography>
                         </Box>
@@ -715,13 +733,19 @@ export default function PedidosEmRota(props) {
                             <TableRow sx={{ "& td": { border: 0 } }}>
                               <TableCell
                                 align="left"
-                                sx={{ fontSize: 10, fontWeight: 900 }}
+                                sx={{ fontSize: 12, fontWeight: 900 }}
                               >
                                 PRODUTO(S)
                               </TableCell>
                               <TableCell
+                                align="center"
+                                sx={{ fontSize: 12, fontWeight: 900 }}
+                              >
+                                VLR. UNI.
+                              </TableCell>
+                              <TableCell
                                 align="right"
-                                sx={{ fontSize: 10, fontWeight: 900 }}
+                                sx={{ fontSize: 12, fontWeight: 900 }}
                               >
                                 QUANTIDADE
                               </TableCell>
@@ -742,7 +766,18 @@ export default function PedidosEmRota(props) {
                                 <TableCell
                                   align="left"
                                   sx={{
-                                    fontSize: 10,
+                                    fontSize: 12,
+                                    fontWeight: 400,
+                                    borderTopLeftRadius: "2px",
+                                    borderBottomLeftRadius: "2px",
+                                  }}
+                                >
+                                  {produto.titulo}
+                                </TableCell>
+                                <TableCell
+                                  align="center"
+                                  sx={{
+                                    fontSize: 12,
                                     fontWeight: 400,
                                     borderTopLeftRadius: "2px",
                                     borderBottomLeftRadius: "2px",
@@ -753,7 +788,7 @@ export default function PedidosEmRota(props) {
                                 <TableCell
                                   align="right"
                                   sx={{
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     fontWeight: 400,
                                     borderTopRightRadius: "2px",
                                     borderBottomRightRadius: "2px",

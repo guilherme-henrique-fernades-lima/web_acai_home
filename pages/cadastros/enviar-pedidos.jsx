@@ -32,17 +32,16 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Skeleton from "@mui/material/Skeleton";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
+import MenuItem from "@mui/material/MenuItem";
+import Autocomplete from "@mui/material/Autocomplete";
 
 //Icons
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-
+import FilterListIcon from "@mui/icons-material/FilterList";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import PixIcon from "@mui/icons-material/Pix";
 import LocalAtmIcon from "@mui/icons-material/LocalAtm";
@@ -57,6 +56,8 @@ import {
 } from "@/helpers/utils";
 import DatepickerField from "@/components/DatepickerField";
 import WarningNoDataFound from "@/components/WarningNoDataFound";
+
+import { FORMA_PAGAMENTO, STATUS_PEDIDO } from "@/helpers/constants";
 
 export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
@@ -211,6 +212,49 @@ export default function EnviarPedidos() {
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={true} />
+      <Paper
+        sx={{
+          width: "100%",
+          padding: "20px",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          marginBottom: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "row",
+        }}
+        elevation={0}
+      >
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+            <Autocomplete
+              options={FORMA_PAGAMENTO}
+              autoHighlight
+              getOptionLabel={(option) => option.label}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Escolha um bairro"
+                  size="small"
+                  InputLabelProps={{ shrink: true }}
+                />
+              )}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={4} md={2} lg={1.5} xl={1.5}>
+            <Button
+              variant="contained"
+              disableElevation
+              fullWidth
+              onClick={() => {}}
+              endIcon={<FilterListIcon />}
+            >
+              FILTRAR
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
 
       <Paper
         elevation={0}
@@ -294,6 +338,9 @@ export default function EnviarPedidos() {
                     CLIENTE
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
+                    BAIRRO
+                  </CustomTableCellHeader>
+                  <CustomTableCellHeader align="center">
                     VALOR
                   </CustomTableCellHeader>
                   <CustomTableCellHeader align="center">
@@ -346,6 +393,9 @@ export default function EnviarPedidos() {
                     </CustomTableCellBody>
                     <CustomTableCellBody align="left">
                       {pedido?.nome.toUpperCase()}
+                    </CustomTableCellBody>
+                    <CustomTableCellBody align="center">
+                      {pedido?.bairro.toUpperCase()}
                     </CustomTableCellBody>
                     <CustomTableCellBody align="center">
                       {formatarValorBRL(pedido.valor)}

@@ -75,7 +75,8 @@ export default function Home() {
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [dateFilter, setDateFilter] = useState(new Date());
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
-  const [showMenssagemSemEntregadores, setShowMenssagemSemEntregadores] = useState(false);
+  const [showMenssagemSemEntregadores, setShowMenssagemSemEntregadores] =
+    useState(false);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [observacaoSobreEntrega, setObservacaoSobreEntrega] = useState("");
@@ -107,15 +108,17 @@ export default function Home() {
       getPedidosSemLoading(formaPagamento, dataFormatada, statusPedido);
       getEntregadoresDisponiveisSemLoading();
     }, 30000);
-  
+
     return () => {
       clearInterval(intervalID);
     };
-
   }, [loading]);
-  
-  const getPedidosSemLoading = async (formaPagamento, dataFormatada, statusPedido) => {
-  
+
+  const getPedidosSemLoading = async (
+    formaPagamento,
+    dataFormatada,
+    statusPedido
+  ) => {
     const response = await fetch(
       `/api/home/?date=${dataFormatada}&tp_pag=${
         formaPagamento === "TODAS" ? "" : formaPagamento
@@ -127,23 +130,21 @@ export default function Home() {
         },
       }
     );
-  
+
     if (response.ok) {
       const res = await response.json();
       setPedidos(res.data);
       setCards(res.status);
     }
-  
+
     if (response.status === 404) {
       setShowMenssagemSemPedidos(true);
       setPedidos([]);
       setCards([]);
     }
   };
-  
 
   async function getEntregadoresDisponiveisSemLoading() {
-
     const response = await fetch(`/api/home/entregadores`, {
       method: "GET",
       headers: {
@@ -317,6 +318,7 @@ export default function Home() {
                   disableElevation
                   fullWidth
                   onClick={getPedidos}
+                  endIcon={<FilterListIcon />}
                 >
                   FILTRAR
                 </Button>

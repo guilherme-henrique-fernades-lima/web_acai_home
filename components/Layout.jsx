@@ -44,6 +44,7 @@ import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import SendIcon from "@mui/icons-material/Send";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 
 //Contexto
 import { AuthContext } from "@/context/AuthContext";
@@ -503,6 +504,49 @@ export default function Layout(props) {
                           }
                         >
                           Pedidos em trânsito
+                        </CustomTypography>
+                      }
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </CustomListItemButton>
+                </Link>
+
+                <Link href="/relatorios/entregas">
+                  <CustomListItemButton
+                    onClick={() => {
+                      setOpen(true);
+                      setActiveOption("entregas");
+                    }}
+                    sx={{
+                      justifyContent: open ? "initial" : "center",
+                    }}
+                    active={activeOption == "entregas" ? true : false}
+                    open={open}
+                  >
+                    <Tooltip
+                      title={open ? "" : "Relatório de entregas"}
+                      placement="right"
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <HowToRegIcon
+                          sx={{
+                            color: activeOption == "entregas" ? true : false,
+                          }}
+                        />
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText
+                      primary={
+                        <CustomTypography
+                          active={activeOption == "entregas" ? true : false}
+                        >
+                          Relação de entregas
                         </CustomTypography>
                       }
                       sx={{ opacity: open ? 1 : 0 }}

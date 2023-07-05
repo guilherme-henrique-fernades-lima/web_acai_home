@@ -39,7 +39,7 @@ export default function PedidosEmRota() {
   const { evento } = useWebSocket();
 
   const [pedidos, setPedidos] = useState([]);
-  console.log(pedidos);
+
   const [loading, setLoading] = useState(true);
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
