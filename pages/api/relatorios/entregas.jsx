@@ -10,7 +10,7 @@ async function getPedidos(req, res) {
   console.log("cpf_motorista: ", cpf_motorista);
 
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/concluidos/?date=2023-07-07&tp_pag=&cpf_motorista=05251596308`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/concluidos/?date=${date}&tp_pag=${tp_pag}&cpf_motorista=${cpf_motorista}`,
     {
       method: "GET",
       headers: {

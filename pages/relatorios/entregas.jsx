@@ -30,11 +30,14 @@ import TextField from "@mui/material/TextField";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
+import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
-import DatepickerField from "@/components/DatepickerField";
+import TablePagination from "@mui/material/TablePagination";
 
+import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
+import DatepickerField from "@/components/DatepickerField";
 //Formatters
-import { formatCpf, formatarTelefone } from "@/helpers/utils";
+import { formatarData, formatarValorBRL } from "@/helpers/utils";
 
 import { FORMA_PAGAMENTO } from "@/helpers/constants";
 
@@ -47,13 +50,11 @@ export default function Entregas() {
   const { user } = useContext(AuthContext);
   const [pedidos, setPedidos] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
-  console.log(pedidos);
 
   const [dateFilter, setDateFilter] = useState(new Date());
 
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [entregadorFilter, setEntregadorFilter] = useState(null);
-  console.log(entregadorFilter);
 
   useEffect(() => {
     if (user?.token) {
@@ -100,6 +101,16 @@ export default function Entregas() {
       setEntregadores(null);
     }
   };
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pedidos.length) : 0;
+  const displayedData = pedidos.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <>
@@ -196,12 +207,12 @@ export default function Entregas() {
         }}
         elevation={0}
       >
-        <TableContainer>
+        <TableContainer sx={{ width: "100%" }}>
           <Table
             size="small"
             sx={{
               width: "100%",
-
+              minWidth: 900,
               borderRadius: "8px",
               "& .tableCellClasses.root": {
                 borderBottom: "none",
@@ -223,52 +234,136 @@ export default function Entregas() {
                   N° PEDIDO
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  ENTREGADOR
-                </CustomTableCellHeader>
-                <CustomTableCellHeader align="center">
                   CLIENTE
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  DATA
+                  DATA DE ENTREGA
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  HORA
+                  FORM. PAGAMENTO
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  CPF
+                  ENTREGADOR
                 </CustomTableCellHeader>
                 <CustomTableCellHeader align="center">
-                  AÇÃO
+                  VLR. TOTAL PRODUTOS
+                </CustomTableCellHeader>
+                <CustomTableCellHeader align="center">
+                  VLR. TAXA DE ENTREGA
+                </CustomTableCellHeader>
+                <CustomTableCellHeader align="center">
+                  VLR TOTAL PEDIDO
+                </CustomTableCellHeader>
+                <CustomTableCellHeader align="center">
+                  OBS. ENTREGA
                 </CustomTableCellHeader>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow
-                sx={{
-                  transition: "all 0.3s ease",
-                  height: 50,
-                  border: "none",
-                  // backgroundColor: pedidosParaEntrega.includes(pedido.id)
-                  //   ? "#f8e8ff"
-                  //   : "transparent",
-                  "&:hover": { backgroundColor: "#f8e8ff" },
-                  ".MuiTableCell-root": {
-                    borderBottom: "none",
-                  },
-                }}
-              >
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center">-</CustomTableCellBody>
-                <CustomTableCellBody align="center"></CustomTableCellBody>
-              </TableRow>
+              {displayedData?.map((pedido, index) => (
+                <TableRow
+                  key={index}
+                  sx={{
+                    transition: "all 0.3s ease",
+                    height: 50,
+                    border: "none",
+                    "&:hover": { backgroundColor: "#f8e8ff" },
+                    ".MuiTableCell-root": {
+                      borderBottom: "none",
+                    },
+                  }}
+                >
+                  <TableCell
+                    align="center"
+                    sx={{
+                      borderTopLeftRadius: "4px",
+                      borderBottomLeftRadius: "4px",
+                    }}
+                  >
+                    {index + 1}
+                  </TableCell>
+                  <CustomTableCellBody align="center">
+                    {pedido?.idPedido}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    {pedido?.cliente.toUpperCase()}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    <Stack direction="column">
+                      <Typography
+                        variant="span"
+                        component="span"
+                        sx={{ fontWeight: 700, fontSize: 12 }}
+                      >
+                        {formatarData(pedido?.data)}
+                      </Typography>
+                      <Typography
+                        variant="span"
+                        component="span"
+                        sx={{ fontWeight: 400, fontSize: 10 }}
+                      >
+                        {pedido.hora}
+                      </Typography>
+                    </Stack>
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    <RenderIconFormaPagamento
+                      formaPagamento={pedido.formaPagamento}
+                    />
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    {pedido.motorista}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    {formatarValorBRL(pedido.valor - pedido.taxaentrega)}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    {formatarValorBRL(pedido.taxaentrega)}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody align="center">
+                    {formatarValorBRL(pedido.valor)}
+                  </CustomTableCellBody>
+                  <CustomTableCellBody
+                    align="center"
+                    sx={{
+                      borderTopRightRadius: "4px",
+                      borderBottomRightRadius: "4px",
+                    }}
+                  >
+                    {pedido.observacao}
+                  </CustomTableCellBody>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
+
+          {pedidos?.length == 0 && <WarningNoDataFound />}
+
+          <TablePagination
+            rowsPerPageOptions={[25, 50, 100, 150, 200]}
+            component="div"
+            count={pedidos.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={(event, newPage) => setPage(newPage)}
+            onRowsPerPageChange={(event) => {
+              setRowsPerPage(parseInt(event.target.value, 10));
+              setPage(0);
+            }}
+            labelRowsPerPage="Linhas por página:"
+            labelDisplayedRows={({ from, to, count }) =>
+              `${from}-${to} de ${count !== -1 ? count : "mais de " + to}`
+            }
+            labelPagination={(page) => `Página ${page + 1}`}
+            nextIconButtonProps={{
+              "aria-label": "Próxima página",
+              title: "Próxima página",
+            }}
+            previousIconButtonProps={{
+              "aria-label": "Página anterior",
+              title: "Página anterior",
+            }}
+          />
         </TableContainer>
       </Paper>
     </>

@@ -401,8 +401,8 @@ export default function Home() {
                         <TableCell
                           align="center"
                           sx={{
-                            borderTopLeftRadius: "30px",
-                            borderBottomLeftRadius: "30px",
+                            borderTopLeftRadius: "4px",
+                            borderBottomLeftRadius: "4px",
                           }}
                         >
                           {index + 1}
@@ -478,8 +478,8 @@ export default function Home() {
                         <CustomTableCellBody
                           align="center"
                           sx={{
-                            borderTopRightRadius: "30px",
-                            borderBottomRightRadius: "30px",
+                            borderTopRightRadius: "4px",
+                            borderBottomRightRadius: "4px",
                           }}
                         >
                           <Tooltip
