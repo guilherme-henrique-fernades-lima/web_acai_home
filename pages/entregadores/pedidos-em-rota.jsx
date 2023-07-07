@@ -47,7 +47,6 @@ export default function PedidosEmRota(props) {
   const [loading, setLoading] = useState(true);
   const [observacao, setObservacao] = useState("");
   const [pedidos, setPedidos] = useState([]);
-  console.log(pedidos);
 
   const [pedidoParaConcluir, setPedidoParaConcluir] = useState({});
   const [pedidosExibidos, setPedidosExibidos] = useState("pendentes");
@@ -334,7 +333,7 @@ export default function PedidosEmRota(props) {
                           position: "absolute",
                           left: 10,
                           top: 10,
-                          padding: "0px 5px",
+                          padding: "2px 10px",
                           border: "2px solid #842E6B",
                           fontSize: 14,
                           borderRadius: "18px",
@@ -747,7 +746,7 @@ export default function PedidosEmRota(props) {
                           top: 10,
                           padding: "2px 10px",
                           border: "2px solid #842E6B",
-                          fontSize: 12,
+                          fontSize: 14,
                           borderRadius: "18px",
                         }}
                       >
@@ -1236,6 +1235,109 @@ function SkeletonCards() {
           <Skeleton variant="rounded" width={180} height={14} sx={{ mt: 1 }} />
         </Box>
       </Box>
+
+      <TableContainer
+        sx={{
+          mt: 1,
+          mb: 1,
+        }}
+      >
+        <Table
+          size="small"
+          sx={{
+            width: "100%",
+            borderRadius: "8px",
+            "& .tableCellClasses.root": {
+              borderBottom: "none",
+            },
+          }}
+        >
+          <TableHead
+            sx={{
+              height: 20,
+              borderBottom: "1px solid #ccc",
+              overflow: "hidden",
+            }}
+          >
+            <TableRow sx={{ "& td": { border: 0 } }}>
+              <TableCell align="left" sx={{ fontSize: 10, fontWeight: 900 }}>
+                <Skeleton variant="rounded" width={"100%"} height={14} />
+              </TableCell>
+              <TableCell align="right" sx={{ fontSize: 10, fontWeight: 900 }}>
+                <Skeleton variant="rounded" width={"100%"} height={14} />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow
+              sx={{
+                height: 20,
+                border: "none",
+                ".MuiTableCell-root": {
+                  borderBottom: "none",
+                },
+              }}
+            >
+              <TableCell
+                align="left"
+                sx={{
+                  fontSize: 10,
+                  fontWeight: 400,
+                  borderTopLeftRadius: "2px",
+                  borderBottomLeftRadius: "2px",
+                }}
+              >
+                <Skeleton variant="rounded" width={"100%"} height={14} />
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{
+                  fontSize: 10,
+                  fontWeight: 400,
+                  borderTopRightRadius: "2px",
+                  borderBottomRightRadius: "2px",
+                }}
+              >
+                <Skeleton variant="rounded" width={"100%"} height={14} />
+              </TableCell>
+            </TableRow>
+
+            <TableRow
+              sx={{
+                height: 20,
+                border: "none",
+                borderTop: "1px solid #ccc",
+                ".MuiTableCell-root": {
+                  borderBottom: "none",
+                },
+              }}
+            >
+              <TableCell
+                align="left"
+                sx={{
+                  fontSize: 10,
+                  fontWeight: 400,
+                  borderTopLeftRadius: "2px",
+                  borderBottomLeftRadius: "2px",
+                }}
+              >
+                <Skeleton variant="rounded" width={"100%"} height={14} />
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{
+                  fontSize: 10,
+                  fontWeight: 400,
+                  borderTopRightRadius: "2px",
+                  borderBottomRightRadius: "2px",
+                }}
+              >
+                <Skeleton variant="rounded" width={"100%"} height={14} />
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       <TableContainer
         sx={{
