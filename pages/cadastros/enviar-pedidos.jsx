@@ -33,6 +33,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import Skeleton from "@mui/material/Skeleton";
 import Grid from "@mui/material/Grid";
+1;
 import MenuItem from "@mui/material/MenuItem";
 import Autocomplete from "@mui/material/Autocomplete";
 
@@ -54,19 +55,17 @@ import {
   formatarValorBRL,
   renderTextStatusPedido,
 } from "@/helpers/utils";
-import DatepickerField from "@/components/DatepickerField";
-import WarningNoDataFound from "@/components/WarningNoDataFound";
 
-import { FORMA_PAGAMENTO, STATUS_PEDIDO } from "@/helpers/constants";
+import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function EnviarPedidos() {
   const { user } = useContext(AuthContext);
 
-  const [open, setOpen] = useState(false);
   const [openModalDetalhes, setOpenModalDetalhes] = useState(false);
   const [loading, setLoading] = useState(true);
   const [entregadoresAtivos, setEntregadoresAtivos] = useState([]);
   const [entregadoresAtivosFiltro, setEntregadoresAtivosFiltro] = useState([]);
+
   const [openModalEnvio, setOpenModalEnvio] = useState(false);
   const [radioSelected, setRadioSelected] = useState(null);
   const [pedidosParaEntrega, setPedidosParaEntrega] = useState([]);
@@ -76,24 +75,45 @@ export default function EnviarPedidos() {
   const [pedidosModalData, setPedidosModalData] = useState({});
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
 
-  const dataFormatoMoment = moment(new Date());
-  const dataFormatada = dataFormatoMoment.format("YYYY-MM-DD");
+  const [bairros, setBairros] = useState([]);
+  const [bairroFilter, setBairroFilter] = useState(null);
 
   useEffect(() => {
     if (user?.token) {
       getEntregadoresDisponiveis();
       getPedidos();
+      getBairros();
     }
   }, [user]);
 
   const handleOpenCloseModalDetalhes = () =>
     setOpenModalDetalhes(!openModalDetalhes);
 
+  const getBairros = async () => {
+    const response = await fetch(`/api/cadastros/listagem-bairros`, {
+      method: "GET",
+      headers: {
+        Authorization: user.token,
+      },
+    });
+
+    if (response.ok) {
+      const res = await response.json();
+      setBairros(res);
+    }
+
+    if (response.status == 404) {
+      setBairros(null);
+    }
+  };
+
   const getPedidos = async () => {
     setLoading(true);
     setShowMenssagemSemPedidos(false);
     const response = await fetch(
-      `/api/cadastros/enviar-pedidos/?date=${dataFormatada}`,
+      `/api/cadastros/enviar-pedidos/?bairro=${
+        bairroFilter == null ? "" : bairroFilter?.nome
+      }`,
       {
         method: "GET",
         headers: {
@@ -134,6 +154,7 @@ export default function EnviarPedidos() {
 
   async function enviarPedidosEntregador() {
     const payload = getPayloadPedidosEnvio();
+    console.log(payload);
 
     const response = await fetch(`/api/cadastros/enviar-pedidos`, {
       method: "POST",
@@ -150,10 +171,12 @@ export default function EnviarPedidos() {
         toast.success("Pedido enviado com sucesso!");
       }
 
-      getPedidos();
-      handleOpenCloseModalEnvio();
       setRadioSelected(null);
       setEntregadorSelecionado(null);
+      setPedidosParaEntrega([]);
+
+      handleOpenCloseModalEnvio();
+      getPedidos();
     }
   }
 
@@ -226,28 +249,34 @@ export default function EnviarPedidos() {
         elevation={0}
       >
         <Grid container spacing={1}>
-          <Grid item xs={12} sm={4} md={3} lg={2.4} xl={2.4}>
+          <Grid item xs={12} sm={6} md={3} lg={2.4} xl={2.4}>
             <Autocomplete
-              options={FORMA_PAGAMENTO}
+              options={bairros}
               autoHighlight
-              getOptionLabel={(option) => option.label}
+              getOptionLabel={(option) => option?.nome}
+              value={bairroFilter}
+              onChange={(event, newValue) => {
+                setBairroFilter(newValue);
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Escolha um bairro"
+                  label="Selecione o bairro"
                   size="small"
-                  InputLabelProps={{ shrink: true }}
                 />
               )}
             />
           </Grid>
 
-          <Grid item xs={12} sm={4} md={2} lg={1.5} xl={1.5}>
+          <Grid item xs={12} sm={6} md={2} lg={1.5} xl={1.5}>
             <Button
               variant="contained"
               disableElevation
               fullWidth
-              onClick={() => {}}
+              onClick={() => {
+                setPedidosParaEntrega([]);
+                getPedidos();
+              }}
               endIcon={<FilterListIcon />}
             >
               FILTRAR

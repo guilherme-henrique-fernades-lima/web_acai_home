@@ -4,9 +4,6 @@ import toast, { Toaster } from "react-hot-toast";
 //Context
 import { AuthContext } from "@/context/AuthContext";
 
-//Hooks
-import useWebSocket from "@/hooks/useWebSocket";
-
 //Mui Components
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -26,9 +23,14 @@ import Tooltip from "@mui/material/Tooltip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
+import Grid from "@mui/material/Grid";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 //Icons
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 //Custom components
 import { formatarData, formatCpf } from "@/helpers/utils";
@@ -36,13 +38,18 @@ import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function PedidosEmRota() {
   const { user } = useContext(AuthContext);
-  const { evento } = useWebSocket();
 
   const [pedidos, setPedidos] = useState([]);
 
+  const [entregadores, setEntregadores] = useState([]);
+  const [entregadorFilter, setEntregadorFilter] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [openDialogRetirarPedido, setOpenDialogRetirarPedido] = useState(false);
+  const [openDialogFinalizarEntrega, setOpenDialogFinalizarEntrega] =
+    useState(false);
   const [pedidoParaDeletar, setPedidoParaDeletar] = useState(null);
+  const [pedidoParaFinalizar, setPedidoParaFinalizar] = useState(null);
 
   const [showMenssagemSemPedidos, setShowMenssagemSemPedidos] = useState(false);
 
@@ -50,34 +57,48 @@ export default function PedidosEmRota() {
     setOpenDialogRetirarPedido(!openDialogRetirarPedido);
   };
 
-  useEffect(() => {
-    if (evento.FINISH_ORDER_DELIVERY) {
-      console.log("FINISH_ORDER_DELIVERY >>> ", evento);
-
-      setPedidos((prevPedidos) =>
-        prevPedidos?.filter(
-          (pedido) =>
-            pedido?.idPedido !== evento?.FINISH_ORDER_DELIVERY.payload?.idPedido
-        )
-      );
-    }
-  }, [evento]);
+  const handleDialogFinalizarEntrega = () => {
+    setOpenDialogFinalizarEntrega(!openDialogFinalizarEntrega);
+  };
 
   useEffect(() => {
     if (user?.token) {
       getPedidos();
+      getEntregadoresAtivos();
     }
   }, [user]);
 
-  const getPedidos = async () => {
-    setLoading(true);
-    setShowMenssagemSemPedidos(false);
-    const response = await fetch(`/api/relatorios/pedidos-em-rota`, {
+  const getEntregadoresAtivos = async () => {
+    const response = await fetch(`/api/relatorios/entregadores-ativos`, {
       method: "GET",
       headers: {
         Authorization: user.token,
       },
     });
+
+    if (response.ok) {
+      const res = await response.json();
+      setEntregadores(res);
+    }
+    if (response.status == 404) {
+      setEntregadores(null);
+    }
+  };
+
+  const getPedidos = async () => {
+    setLoading(true);
+    setShowMenssagemSemPedidos(false);
+    const response = await fetch(
+      `/api/relatorios/pedidos-em-rota/?cpf_motorista=${
+        entregadorFilter == null ? "" : entregadorFilter?.cpf
+      }`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: user.token,
+        },
+      }
+    );
 
     if (response.ok) {
       const res = await response.json();
@@ -107,6 +128,42 @@ export default function PedidosEmRota() {
     return data;
   }
 
+  function getPayloadFinalizarPedido() {
+    const data = {
+      idPedido: pedidoParaFinalizar?.idPedido,
+      cpf_motorista: pedidoParaFinalizar?.cpf_motorista,
+      motorista: pedidoParaFinalizar?.motorista,
+    };
+
+    return data;
+  }
+
+  async function finalizarEntregaDoPedido() {
+    const payload = getPayloadFinalizarPedido();
+    console.log(payload);
+
+    const response = await fetch(`/api/relatorios/finalizar-entrega`, {
+      method: "POST",
+      headers: {
+        Authorization: user.token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      toast.success(
+        `Entrega do pedido ${payload.idPedido} finalizada com sucesso!`
+      );
+      getPedidos();
+      handleDialogFinalizarEntrega();
+      setPedidoParaFinalizar(null);
+    } else {
+      toast.error(
+        `Erro ao finalizar pedido, tente novamente ou recarregue a página.`
+      );
+    }
+  }
+
   async function retirarPedidosEntregador() {
     const payload = getPayloadPedidosEnvio();
 
@@ -133,6 +190,56 @@ export default function PedidosEmRota() {
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={true} />
+
+      <Paper
+        sx={{
+          width: "100%",
+          padding: "20px",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          marginBottom: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "row",
+        }}
+        elevation={0}
+      >
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={6} md={6} lg={4} xl={3}>
+            <Autocomplete
+              options={entregadores}
+              autoHighlight
+              getOptionLabel={(option) => option?.username}
+              value={entregadorFilter}
+              onChange={(event, newValue) => {
+                setEntregadorFilter(newValue);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Selecione o entregador"
+                  size="small"
+                  //InputLabelProps={{ shrink: true }}
+                />
+              )}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3} lg={2} xl={1.5}>
+            <Button
+              variant="contained"
+              disableElevation
+              fullWidth
+              onClick={() => {
+                getPedidos();
+              }}
+              endIcon={<FilterListIcon />}
+            >
+              FILTRAR
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
 
       <Paper
         elevation={0}
@@ -234,7 +341,6 @@ export default function PedidosEmRota() {
                   <CustomTableCellHeader align="center">
                     HORA
                   </CustomTableCellHeader>
-
                   <CustomTableCellHeader align="center">
                     CPF
                   </CustomTableCellHeader>
@@ -281,6 +387,22 @@ export default function PedidosEmRota() {
                     </CustomTableCellBody>
 
                     <CustomTableCellBody align="center">
+                      <Tooltip title="Finalizar entrega" placement="top">
+                        <IconButton
+                          color="success"
+                          onClick={() => {
+                            handleDialogFinalizarEntrega();
+                            setPedidoParaFinalizar(pedido);
+                          }}
+                        >
+                          <TaskAltIcon
+                            sx={{
+                              fontSize: 24,
+                            }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+
                       <Tooltip
                         title="Retirar pedido do entregador"
                         placement="top"
@@ -307,8 +429,7 @@ export default function PedidosEmRota() {
           </TableContainer>
         )}
 
-        {showMenssagemSemPedidos ||
-          (pedidos?.length == 0 && <WarningNoDataFound />)}
+        {pedidos?.length == 0 && <WarningNoDataFound />}
       </Paper>
 
       <Dialog
@@ -336,6 +457,50 @@ export default function PedidosEmRota() {
             variant="contained"
             color="success"
             onClick={retirarPedidosEntregador}
+            autoFocus
+            disableElevation
+            fullWidth
+          >
+            SIM
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDialogFinalizarEntrega}
+        onClose={handleDialogFinalizarEntrega}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        sx={{ margin: "10px" }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          Finalizar entrega do pedido:{" "}
+          <strong>{pedidoParaFinalizar?.idPedido}</strong>
+        </DialogTitle>
+        <DialogTitle sx={{ mt: -3 }}>
+          Cliente: {pedidoParaFinalizar?.cliente}
+        </DialogTitle>
+
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              handleDialogFinalizarEntrega();
+
+              setTimeout(() => {
+                setPedidoParaFinalizar(null);
+              }, 500);
+            }}
+            disableElevation
+            fullWidth
+          >
+            NÃO
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={finalizarEntregaDoPedido}
             autoFocus
             disableElevation
             fullWidth

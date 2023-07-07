@@ -28,6 +28,7 @@ import Modal from "@mui/material/Modal";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
+
 //Icons
 import CallIcon from "@mui/icons-material/Call";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
@@ -166,6 +167,7 @@ export default function PedidosEmRota(props) {
   return (
     <>
       <Toaster position="bottom-center" reverseOrder={true} />
+
       <Box
         sx={{
           display: "flex",
@@ -417,6 +419,130 @@ export default function PedidosEmRota(props) {
                           </Typography>
                         </Box>
                       </Box>
+
+                      <TableContainer
+                        sx={{
+                          mt: 1,
+                          mb: 1,
+                        }}
+                      >
+                        <Table
+                          size="small"
+                          sx={{
+                            width: "100%",
+                            borderRadius: "8px",
+                            "& .tableCellClasses.root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableBody>
+                            <TableRow
+                              sx={{
+                                height: 20,
+                                border: "none",
+                                ".MuiTableCell-root": {
+                                  borderBottom: "none",
+                                },
+                              }}
+                            >
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopLeftRadius: "2px",
+                                  borderBottomLeftRadius: "2px",
+                                }}
+                              >
+                                Valor total produtos
+                              </TableCell>
+
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopRightRadius: "2px",
+                                  borderBottomRightRadius: "2px",
+                                }}
+                              >
+                                {formatarValorBRL(
+                                  pedido?.valor - pedido?.taxaentrega
+                                )}
+                              </TableCell>
+                            </TableRow>
+                            <TableRow
+                              sx={{
+                                height: 20,
+                                border: "none",
+                                ".MuiTableCell-root": {
+                                  borderBottom: "none",
+                                },
+                              }}
+                            >
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopLeftRadius: "2px",
+                                  borderBottomLeftRadius: "2px",
+                                }}
+                              >
+                                Taxa de entrega
+                              </TableCell>
+
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopRightRadius: "2px",
+                                  borderBottomRightRadius: "2px",
+                                }}
+                              >
+                                {formatarValorBRL(pedido?.taxaentrega)}
+                              </TableCell>
+                            </TableRow>
+
+                            <TableRow
+                              sx={{
+                                height: 20,
+                                border: "none",
+                                borderTop: "1px solid #ccc",
+                                ".MuiTableCell-root": {
+                                  borderBottom: "none",
+                                },
+                              }}
+                            >
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                  borderTopLeftRadius: "2px",
+                                  borderBottomLeftRadius: "2px",
+                                }}
+                              >
+                                Valor total do pedido
+                              </TableCell>
+
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                  borderTopRightRadius: "2px",
+                                  borderBottomRightRadius: "2px",
+                                }}
+                              >
+                                {formatarValorBRL(pedido?.valor)}
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
 
                       <TableContainer
                         sx={{
@@ -704,6 +830,130 @@ export default function PedidosEmRota(props) {
                           </Typography>
                         </Box>
                       </Box>
+
+                      <TableContainer
+                        sx={{
+                          mt: 1,
+                          mb: 1,
+                        }}
+                      >
+                        <Table
+                          size="small"
+                          sx={{
+                            width: "100%",
+                            borderRadius: "8px",
+                            "& .tableCellClasses.root": {
+                              borderBottom: "none",
+                            },
+                          }}
+                        >
+                          <TableBody>
+                            <TableRow
+                              sx={{
+                                height: 20,
+                                border: "none",
+                                ".MuiTableCell-root": {
+                                  borderBottom: "none",
+                                },
+                              }}
+                            >
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopLeftRadius: "2px",
+                                  borderBottomLeftRadius: "2px",
+                                }}
+                              >
+                                Valor total produtos
+                              </TableCell>
+
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopRightRadius: "2px",
+                                  borderBottomRightRadius: "2px",
+                                }}
+                              >
+                                {formatarValorBRL(
+                                  pedido?.valor - pedido?.taxaentrega
+                                )}
+                              </TableCell>
+                            </TableRow>
+                            <TableRow
+                              sx={{
+                                height: 20,
+                                border: "none",
+                                ".MuiTableCell-root": {
+                                  borderBottom: "none",
+                                },
+                              }}
+                            >
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopLeftRadius: "2px",
+                                  borderBottomLeftRadius: "2px",
+                                }}
+                              >
+                                Taxa de entrega
+                              </TableCell>
+
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 400,
+                                  borderTopRightRadius: "2px",
+                                  borderBottomRightRadius: "2px",
+                                }}
+                              >
+                                {formatarValorBRL(pedido?.taxaentrega)}
+                              </TableCell>
+                            </TableRow>
+
+                            <TableRow
+                              sx={{
+                                height: 20,
+                                border: "none",
+                                borderTop: "1px solid #ccc",
+                                ".MuiTableCell-root": {
+                                  borderBottom: "none",
+                                },
+                              }}
+                            >
+                              <TableCell
+                                align="left"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                  borderTopLeftRadius: "2px",
+                                  borderBottomLeftRadius: "2px",
+                                }}
+                              >
+                                Valor total do pedido
+                              </TableCell>
+
+                              <TableCell
+                                align="right"
+                                sx={{
+                                  fontSize: 14,
+                                  fontWeight: 700,
+                                  borderTopRightRadius: "2px",
+                                  borderBottomRightRadius: "2px",
+                                }}
+                              >
+                                {formatarValorBRL(pedido?.valor)}
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
 
                       <TableContainer
                         sx={{

@@ -1,8 +1,10 @@
 async function getPedidosDisponiveis(req, res) {
   const token = req.headers.authorization;
 
+  const bairro = req.query.bairro ?? "";
+
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/pendentes/`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/pendentes/?bairro=${bairro}`,
     {
       method: "GET",
       headers: {

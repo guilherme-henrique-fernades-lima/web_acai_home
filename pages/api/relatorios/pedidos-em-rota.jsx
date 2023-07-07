@@ -1,8 +1,10 @@
 async function listarPedidosEmRotaDeEntrega(req, res) {
   const token = req.headers.authorization;
 
+  var cpf_motorista = req.query.cpf_motorista ?? "";
+
   const result = await fetch(
-    `${process.env.NEXT_URL_BACKEND}/pedidos/entrega/`,
+    `${process.env.NEXT_URL_BACKEND}/pedidos/entrega/?cpf_motorista=${cpf_motorista}`,
     {
       method: "GET",
       headers: {
