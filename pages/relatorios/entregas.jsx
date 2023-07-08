@@ -9,11 +9,8 @@ import moment from "moment";
 import { AuthContext } from "@/context/AuthContext";
 
 //Mui components
-import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -22,12 +19,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import Chip from "@mui/material/Chip";
-import Skeleton from "@mui/material/Skeleton";
-import Dialog from "@mui/material/Dialog";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import Autocomplete from "@mui/material/Autocomplete";
 import Typography from "@mui/material/Typography";
@@ -36,29 +29,33 @@ import TablePagination from "@mui/material/TablePagination";
 
 import RenderIconFormaPagamento from "@/components/RenderIconFormaPagamento";
 import DatepickerField from "@/components/DatepickerField";
+
 //Formatters
 import { formatarData, formatarValorBRL } from "@/helpers/utils";
 
+//Constants
 import { FORMA_PAGAMENTO } from "@/helpers/constants";
 
 //Icons
 import FilterListIcon from "@mui/icons-material/FilterList";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import PixIcon from "@mui/icons-material/Pix";
+import LocalAtmIcon from "@mui/icons-material/LocalAtm";
 
 import WarningNoDataFound from "@/components/WarningNoDataFound";
 
 export default function Entregas() {
   const { user } = useContext(AuthContext);
   const [pedidos, setPedidos] = useState([]);
+  const [indicadores, setIndicadores] = useState([]);
   const [entregadores, setEntregadores] = useState([]);
 
   const [dateFilter, setDateFilter] = useState(new Date());
-
   const [formaPagamento, setFormaPagamento] = useState("TODAS");
   const [entregadorFilter, setEntregadorFilter] = useState(null);
 
   useEffect(() => {
     if (user?.token) {
-      getPedidos();
       getEntregadoresAtivos();
     }
   }, [user]);
@@ -81,7 +78,14 @@ export default function Entregas() {
 
     if (response.ok) {
       const res = await response.json();
-      setPedidos(res);
+      setPedidos(res.data);
+      setIndicadores(res.indicadores);
+    }
+
+    if (response.status == 400) {
+      const res = await response.json();
+      setPedidos(res.data);
+      setIndicadores(res.indicadores);
     }
   }
 
@@ -192,6 +196,468 @@ export default function Entregas() {
             </Button>
           </Grid>
         </Grid>
+      </Paper>
+
+      <Paper
+        sx={{
+          width: "100%",
+          padding: "10px",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          marginBottom: 1,
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+        elevation={0}
+      >
+        {/* <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: 16,
+            color: "#842E6B",
+          }}
+        >
+          Quantidade de pedidos por forma de pagamento
+        </Typography>
+
+        <Divider sx={{ width: "100%" }} /> */}
+
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: 16,
+
+            color: "#842E6B",
+          }}
+        >
+          Quantidade total de pedidos: {indicadores?.total_pedidos || 0}
+        </Typography>
+
+        <Grid container spacing={0}>
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2.4}
+            xl={2.4}
+            sx={{ height: 90, p: 1 }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid #842E6B",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: "4px",
+                padding: "0 20px",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <PixIcon sx={{ color: "#842E6B", fontSize: 32 }} />
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontWeight: 700,
+                    fontSize: 16,
+                    color: "#842E6B",
+                  }}
+                >
+                  PIX
+                </Typography>
+              </Stack>
+
+              <Typography
+                sx={{
+                  ml: 1,
+                  fontWeight: 700,
+                  fontSize: 16,
+                  color: "#842E6B",
+                }}
+              >
+                {indicadores?.formas_pagamento?.pix || 0}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2.4}
+            xl={2.4}
+            sx={{ height: 90, p: 1 }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid #842E6B",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: "4px",
+                padding: "0 20px",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <CreditCardIcon sx={{ color: "#842E6B", fontSize: 32 }} />
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontWeight: 700,
+                    fontSize: 16,
+                    color: "#842E6B",
+                  }}
+                >
+                  CRÉDITO
+                </Typography>
+              </Stack>
+
+              <Typography
+                sx={{
+                  ml: 1,
+                  fontWeight: 700,
+                  fontSize: 16,
+                  color: "#842E6B",
+                }}
+              >
+                {indicadores?.formas_pagamento?.credito || 0}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2.4}
+            xl={2.4}
+            sx={{ height: 90, p: 1 }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid #842E6B",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: "4px",
+                padding: "0 20px",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <CreditCardIcon sx={{ color: "#842E6B", fontSize: 32 }} />
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontWeight: 700,
+                    fontSize: 16,
+                    color: "#842E6B",
+                  }}
+                >
+                  DÉBITO
+                </Typography>
+              </Stack>
+
+              <Typography
+                sx={{
+                  ml: 1,
+                  fontWeight: 700,
+                  fontSize: 16,
+                  color: "#842E6B",
+                }}
+              >
+                {indicadores?.formas_pagamento?.debito || 0}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2.4}
+            xl={2.4}
+            sx={{ height: 90, p: 1 }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid #842E6B",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: "4px",
+                padding: "0 20px",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <LocalAtmIcon sx={{ color: "#842E6B", fontSize: 32 }} />
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontWeight: 700,
+                    fontSize: 16,
+                    color: "#842E6B",
+                  }}
+                >
+                  DINHEIRO
+                </Typography>
+              </Stack>
+
+              <Typography
+                sx={{
+                  ml: 1,
+                  fontWeight: 700,
+                  fontSize: 16,
+                  color: "#842E6B",
+                }}
+              >
+                {indicadores?.formas_pagamento?.dinheiro || 0}
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sm={6}
+            md={4}
+            lg={2.4}
+            xl={2.4}
+            sx={{ height: 90, p: 1 }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                height: "100%",
+                border: "1px solid #842E6B",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: "4px",
+                padding: "0 20px",
+              }}
+            >
+              <Stack
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                }}
+              >
+                <LocalAtmIcon sx={{ color: "#842E6B", fontSize: 32 }} />
+                <CreditCardIcon sx={{ color: "#842E6B", fontSize: 32 }} />
+
+                <Typography
+                  sx={{
+                    ml: 1,
+                    fontWeight: 700,
+                    fontSize: 16,
+                    color: "#842E6B",
+                  }}
+                >
+                  DINHEIRO E CARTÃO
+                </Typography>
+              </Stack>
+
+              <Typography
+                sx={{
+                  ml: 1,
+                  fontWeight: 700,
+                  fontSize: 16,
+                  color: "#842E6B",
+                }}
+              >
+                {indicadores?.formas_pagamento?.dinheiro_cartao || 0}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+
+      <Paper
+        sx={{
+          width: "100%",
+          padding: "10px",
+          boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+          marginBottom: 1,
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+        elevation={0}
+      >
+        {/* <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: 16,
+            color: "#842E6B",
+          }}
+        >
+          Totalizadores de valores
+        </Typography>
+
+        <Divider sx={{ width: "100%" }} /> */}
+
+        <TableContainer
+          sx={{
+            mt: 1,
+            mb: 1,
+          }}
+        >
+          <Table
+            size="small"
+            sx={{
+              width: "100%",
+              borderRadius: "8px",
+              "& .tableCellClasses.root": {
+                borderBottom: "none",
+              },
+            }}
+          >
+            <TableBody>
+              <TableRow
+                sx={{
+                  height: 20,
+                  border: "none",
+                  ".MuiTableCell-root": {
+                    borderBottom: "none",
+                  },
+                }}
+              >
+                <TableCell
+                  align="left"
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 400,
+                    borderTopLeftRadius: "2px",
+                    borderBottomLeftRadius: "2px",
+                  }}
+                >
+                  Valor total produtos
+                </TableCell>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 400,
+                  }}
+                >
+                  {indicadores?.valor_total_produtos
+                    ? formatarValorBRL(indicadores?.valor_total_produtos)
+                    : formatarValorBRL(0)}
+                </TableCell>
+              </TableRow>
+              <TableRow
+                sx={{
+                  height: 20,
+                  border: "none",
+                  ".MuiTableCell-root": {
+                    borderBottom: "none",
+                  },
+                }}
+              >
+                <TableCell
+                  align="left"
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 400,
+                    borderTopLeftRadius: "2px",
+                    borderBottomLeftRadius: "2px",
+                  }}
+                >
+                  Taxa de entrega
+                </TableCell>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 400,
+                  }}
+                >
+                  {indicadores?.valor_total_taxa_entrega
+                    ? formatarValorBRL(indicadores?.valor_total_taxa_entrega)
+                    : formatarValorBRL(0)}
+                </TableCell>
+              </TableRow>
+
+              <TableRow
+                sx={{
+                  height: 20,
+                  border: "none",
+                  borderTop: "1px solid #ccc",
+                  ".MuiTableCell-root": {
+                    borderBottom: "none",
+                  },
+                }}
+              >
+                <TableCell
+                  align="left"
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 700,
+                  }}
+                >
+                  Valor total dos pedidos
+                </TableCell>
+
+                <TableCell
+                  align="right"
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 900,
+                  }}
+                >
+                  {indicadores?.valor_total_pedidos
+                    ? formatarValorBRL(indicadores?.valor_total_pedidos)
+                    : formatarValorBRL(0)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Paper>
 
       <Paper

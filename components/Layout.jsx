@@ -546,7 +546,7 @@ export default function Layout(props) {
                         <CustomTypography
                           active={activeOption == "entregas" ? true : false}
                         >
-                          Relação de entregas
+                          Relatório de entregas
                         </CustomTypography>
                       }
                       sx={{ opacity: open ? 1 : 0 }}
